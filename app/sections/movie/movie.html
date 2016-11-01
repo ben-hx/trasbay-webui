@@ -1,0 +1,51 @@
+<!-- Notes Section -->
+<section id="notes">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-heading">
+                    Movies
+                    <button type="button" class="btn btn-primary" ng-click="addNote()"><i class="fa fa-plus"></i></button>
+                </h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4" ng-repeat="movie in movies">
+                movie.title
+                <!--
+                <div class="panel panel-note" ng-mouseenter="edit(note, true)" ng-mouseleave="edit(note, false)">
+                    <div class="panel-body">
+
+                        <button class="btn-link pull-right" ng-click="deleteNote(note)"><i class="fa fa-trash fa-3"></i></button>
+                        <div contenteditable class='no-border' placeholder="note-text" ng-model="note.text" ng-change="changeNote(note)">{{movie.title}}</div>
+
+                        <div class="separator"> URLs </div>
+
+                        <div class="row" ng-repeat="url in note.urls.slice(0, maxNodeUrls) track by $index">
+                            <div class="col-md-12">
+                                <button type="button" class="btn-link right-margin" ng-click="deleteNoteUrl(note, $index)"><i class="fa fa-times"></i></button>
+                                <div class="note-url-text"><img class="note-url-icon" ng-src="{{getFaviconUrlForUrl(url, faviconSize)}}"> {{url}}</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <form name='form' class="col-md-12">
+                                <button type="button" class="btn-link right-margin" ng-show="!note.newUrlInputVisible" ng-click="showNewUrlInput(note)"><i class="fa fa-plus"></i></button>
+                                <button type="button" class="btn-link right-margin" ng-show="note.newUrlInputVisible" ng-disabled='!form.$valid' ng-click="addNewUrl(note, note.newUrl)"><i class="fa fa-plus"></i></button>
+                                <input type="text" class="note-url-input" placeholder="note-url" ng-show="note.newUrlInputVisible" ng-model="note.newUrl" required focus-on-show>
+                                </input>
+                            </form>
+                        </div>
+
+                        <div class="separator show-more-animate" ng-show="note.editing">
+                            <button type="button" class="btn btn-primary btn-xs" ng-click="editNote(note)"><i class="fa fa-plus"> Show More</i></button>
+                        </div>
+
+                    </div>
+                </div>
+                -->
+            </div>
+        </div>
+    </div>
+</section>
