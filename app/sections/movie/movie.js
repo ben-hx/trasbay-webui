@@ -14,14 +14,35 @@ app.config(['$stateProvider', function ($stateProvider) {
     });
 }]);
 
-app.controller('MovieCtrl', ['$scope', '$timeout', 'MovieRepository', function ($scope, $timeout, MovieRepository) {
+app.controller('MovieCtrl', ['$scope', '$state', 'MovieRepository', function ($scope, $state, MovieRepository) {
 
-    $scope.loadData = function () {
+    $scope.reload = function () {
         MovieRepository.getAll().then(function (movies) {
             $scope.movies = movies;
+            $scope.extendMoviesWithWatched(movies);
         });
     };
 
-    $scope.loadData();
+    $scope.update = function (movie) {
+        var destinationState = {name: 'movies'};
+        $state.go('updatemovie', {movieId: movie.id, destinationState: destinationState}, {reload: true});
+    };
+
+    $scope.reload();
+
+    $scope.extendMoviesWithWatched = function (movies) {
+        angular.forEach(movies, function (movie) {
+            MovieRepository.getWatched(movie).then(function (data) {
+                movie = angular.extend(movie, data);
+            });
+        });
+    };
+
+    $scope.setWatched = function (movie) {
+        MovieRepository.setWatched(movie, movie.hasWatched).then(function (data) {
+            movie.hasWatched = data.hasWatched;
+            movie.hasWatched ? movie.usersWatched++ : movie.usersWatched--;
+        });
+    };
 
 }]);

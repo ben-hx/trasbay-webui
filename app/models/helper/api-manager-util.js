@@ -75,6 +75,22 @@ app.factory ('ApiManagerUtil', ['$q', 'Restangular' ,'ErrorHandler', function ($
             });
             return deferred.promise;
         },
+        set: function (resourceBaseURI, responseSuccessInterceptor, responseErrorInterceptior) {
+            var deferred = $q.defer();
+            var self = this;
+            var dao = Restangular.one(resourceBaseURI);
+            dao.put().then(function(response) {
+                if (responseSuccessInterceptor) {
+                    deferred.resolve(responseSuccessInterceptor(response));
+                }
+            }, function (error) {
+                if (responseErrorInterceptior) {
+                    responseErrorInterceptior(error);
+                }
+                deferred.reject(ErrorHandler.getErrorFromResponse(error));
+            });
+            return deferred.promise;
+        },
         update: function (resourceBaseURI, data, responseSuccessInterceptor, responseErrorInterceptior) {
             var deferred = $q.defer();
             var self = this;

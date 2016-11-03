@@ -14,6 +14,7 @@ angular.module('myApp', [
     'myApp.services',
     'myApp.movie',
     'myApp.add-movie',
+    'myApp.update-movie',
     'myApp.landingpage',
     'myApp.config'
 ]).config(['RestangularProvider', 'cfpLoadingBarProvider', function (RestangularProvider, cfpLoadingBarProvider) {

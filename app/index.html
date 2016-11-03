@@ -32,6 +32,7 @@
     <link href="css/agency.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/note.css" rel="stylesheet">
+    <link href="css/movie.css" rel="stylesheet">
     <link href="css/taginput.css" rel="stylesheet">
     <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
 </head>
@@ -66,8 +67,13 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 <li class="page-scroll" ng-repeat="element in navigationElements()">
+                    <a href="" ng-click="element.clickHandler()">
+                        {{element.caption}}
+                    </a>
+                    <!--
                     <a ng-click="element.clickHandler()"
-                       ng-attr-ui-sref="{{ element.goToState ? element.goToState : 'landingpage' }}">{{element.caption}}</a>
+                      ng-attr-ui-sref="{{ element.goToState ? element.goToState : 'landingpage' }}">{{element.caption}}</a>
+                      -->
                 </li>
 
             </ul>
@@ -149,4 +155,5 @@
 <script src="sections/note/note.js"></script>
 <script src="sections/movie/movie.js"></script>
 <script src="sections/movie/add-movie/add-movie.js"></script>
+<script src="sections/movie/update-movie/update-movie.js"></script>
 </body>

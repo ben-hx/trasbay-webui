@@ -28,14 +28,35 @@ app.factory('MovieRepository', ['ErrorHandler', 'Movie', 'ApiManagerUtil', funct
         getById: function (id) {
             return ApiManagerUtil.getSingleById('movies', id, this.createFromResponse);
         },
-        create: function (data) {
-            return ApiManagerUtil.create('movies', data, this.createFromResponse);
+        create: function (movie) {
+            return ApiManagerUtil.create('movies', movie, this.createFromResponse);
         },
-        update: function (data) {
-            return ApiManagerUtil.update('movies', data, this.createFromResponse);
+        update: function (movie) {
+            return ApiManagerUtil.update('movies', movie, this.createFromResponse);
         },
-        delete: function (data) {
-            return ApiManagerUtil.delete('movies', data, this.createFromResponse);
-        }
+        delete: function (movie) {
+            return ApiManagerUtil.delete('movies', movie, this.createFromResponse);
+        },
+        getWatched: function (movie) {
+            return ApiManagerUtil.getSingle('movies/'+movie.id+'/watched', function (data) {
+                var usersWatched = data.users.length;
+                if (data.watched) {
+                    usersWatched++;
+                }
+                return {
+                    hasWatched: data.watched,
+                    users: data.users,
+                    usersWatched: usersWatched
+                };
+            });
+        },
+        setWatched: function (movie, hasWatched) {
+            var url = (hasWatched ? 'watched' : 'unwatched');
+            return ApiManagerUtil.set('movies/'+movie.id+'/'+url, function (data) {
+                return {
+                    hasWatched: data.watched
+                }
+            });
+        },
     };
 }]);

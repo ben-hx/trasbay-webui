@@ -19,9 +19,14 @@ app.factory('NavigationElement', function () {
         this.clickHandler = data.clickHandler;
     }
 
+    NavigationElement.prototype.changeRoute = function () {
+        return (this.goToState ? true : false);
+    };
+
     NavigationElement.build = function (data) {
         return new NavigationElement(data);
     };
+
     return NavigationElement;
 });
 
@@ -30,11 +35,14 @@ app.factory('NavigationService', ['$state', 'NavigationElement', 'Authentication
 
     var moviesElement = NavigationElement.build({
         name: 'movies', caption: 'Movies', goToState: 'movies', clickHandler: function () {
+            $state.go('movies', {}, {reload: true});
         }
     });
 
     var addMovieElement = NavigationElement.build({
         name: 'addmovie', caption: 'add Move', goToState: 'addmovie', clickHandler: function () {
+            var destinationState = {name: 'movies'};
+            $state.go('addmovie', {destinationState: destinationState}, {reload: true});
         }
     });
 

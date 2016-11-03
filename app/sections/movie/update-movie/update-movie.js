@@ -1,40 +1,31 @@
 'use strict';
 
-var app = angular.module('myApp.add-movie', ['myApp.model', 'ui.bootstrap', 'ngTagsInput']);
+var app = angular.module('myApp.update-movie', ['myApp.model', 'ui.bootstrap', 'ngTagsInput']);
 
 app.config(['$stateProvider', function ($stateProvider) {
-    $stateProvider.state('addmovie', {
-        url: '/addmovie',
+    $stateProvider.state('updatemovie', {
+        url: '/movies/:movieId',
         params: {
             destinationState: null
         },
         views: {
             "main": {
-                templateUrl: 'sections/movie/add-movie/add-movie.html',
-                controller: 'AddMovieCtrl'
+                templateUrl: 'sections/movie/update-movie/update-movie.html',
+                controller: 'UpdateMovieCtrl'
             }
         }
     });
 }]);
 
-app.controller('AddMovieCtrl', ['$scope', '$state', 'MovieDatabaseRepository', 'MovieRepository', function ($scope, $state, MovieDatabaseRepository, MovieRepository) {
+app.controller('UpdateMovieCtrl', ['$scope', '$timeout', '$state', 'MovieRepository', function ($scope, $timeout, $state, MovieRepository) {
 
-    $scope.getTitles = function (searchText) {
-        return MovieDatabaseRepository.getShortMoviesByText(searchText).then(function (shortMovies) {
-            return shortMovies;
+    $scope.reload = function () {
+        MovieRepository.getById($state.params.movieId).then(function (movie) {
+            $scope.movie = movie;
         });
     };
 
-    $scope.titleOnSelect = function (shortMovie) {
-        return MovieDatabaseRepository.getByImdbId(shortMovie.imdbId).then(function (movie) {
-            $scope.fillModelFromMovieDatabase(movie);
-        });
-    };
-
-    $scope.fillModelFromMovieDatabase = function (movie) {
-        $scope.movie = movie;
-        $scope.movie.year = new Date(movie.year);
-    };
+    $scope.reload();
 
     $scope.getPosterUrl = function (movie) {
         if (movie) {
