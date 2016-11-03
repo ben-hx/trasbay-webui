@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('myApp.login', ['ngRoute', 'myApp.authentication']);
+var app = angular.module('myApp.login', ['myApp.authentication']);
 
 app.factory('LoginViewManager', ['$q', '$location', '$uibModal', function($q, $location, $uibModal) {
     var deferredResult = null;

@@ -2,9 +2,9 @@
 
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
-    'ngRoute',
     'ngAnimate',
     'duScroll',
+    'ui.router',
     'angular-loading-bar',
     'myApp.directives',
     'myApp.authentication',

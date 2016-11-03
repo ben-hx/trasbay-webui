@@ -2,12 +2,14 @@
 
 var app = angular.module('myApp.home', ['ngRoute', 'myApp.model', 'myApp.favicon', 'myApp.note-view-service']);
 
+/*
 app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/home', {
         templateUrl: 'sections/home/home.html',
         controller: 'HomeCtrl'
     });
 }]);
+*/
 
 app.controller('HomeCtrl', ['$scope', '$timeout', 'FaviconService', 'NoteRepository', 'NoteViewManager', function ($scope, $timeout, FaviconService, NoteRepository, NoteViewManager) {
 

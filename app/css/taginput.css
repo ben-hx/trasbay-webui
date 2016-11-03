@@ -1,0 +1,59 @@
+
+tags-input .tags {
+    background-color: inherit;
+    border: inherit;
+    box-shadow: inherit;
+    height: inherit;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    border-radius: inherit;
+    -webkit-box-shadow: inherit;
+    -moz-box-shadow: inherit;
+    -webkit-transition: inherit;
+    -moz-transition: inherit;
+    transition: inherit;
+    padding: inherit;
+    overflow: hidden;
+}
+
+tags-input .tags.focused {
+    outline: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+tags-input .tags .input {
+    border: 0;
+    outline: none;
+    margin: 2px;
+    padding: 0;
+    padding-left: inherit;
+    float: left;
+    height: inherit;
+    font: inherit;
+}
+
+tags-input .host {
+    margin-top: inherit;
+    margin-bottom: inherit;
+    height: auto;
+}
+
+tags-input .tags .tag-item {
+    margin: 2px;
+    padding: 0 5px;
+    display: inline-block;
+    float: left;
+    font: inherit;
+/*    height: 26px; */
+/*    line-height: 25px; */
+    border: 1px solid #acacac;
+    border-radius: 3px;
+    background: white;
+}
+
+.form-group-lg .form-control {
+    height: auto;
+}

@@ -1,9 +1,27 @@
-
 'use strict';
 
 /* Directives */
 
 var app = angular.module('myApp.directives', []);
+
+
+app.directive("tagInput", function ($compile) {
+    return {
+        restrict: 'E',
+        replace: true,
+        link: function (scope, elem, attr) {
+            var wrapper = angular.element(
+                '<tags-input></tags-input>'
+            );
+            wrapper.addClass(elem.attr('class'));
+            wrapper.attr('ng-model', elem.attr('ng-model'));
+            wrapper.attr('placeholder', elem.attr('placeholder'));
+            elem.before(wrapper);
+            $compile(wrapper)(scope);
+            wrapper.append(elem);
+        }
+    };
+});
 
 /**
  * directive to validate passwords in the html-view
@@ -61,13 +79,13 @@ app.directive("dropdownNoRouteChange", function () {
     }
 });
 
-app.directive('focus', function($timeout) {
+app.directive('focus', function ($timeout) {
     return {
-        scope: { trigger: '@focus' },
-        link: function(scope, element) {
-            scope.$watch('trigger', function(value) {
-                if(value === "true") {
-                    $timeout(function() {
+        scope: {trigger: '@focus'},
+        link: function (scope, element) {
+            scope.$watch('trigger', function (value) {
+                if (value === "true") {
+                    $timeout(function () {
                         element[0].focus();
                     });
                 }
@@ -76,23 +94,23 @@ app.directive('focus', function($timeout) {
     };
 });
 
-app.directive('focusOnShow', function($timeout) {
+app.directive('focusOnShow', function ($timeout) {
     return {
         restrict: 'A',
-        link: function($scope, $element, $attr) {
-            if ($attr.ngShow){
-                $scope.$watch($attr.ngShow, function(newValue){
-                    if(newValue){
-                        $timeout(function(){
+        link: function ($scope, $element, $attr) {
+            if ($attr.ngShow) {
+                $scope.$watch($attr.ngShow, function (newValue) {
+                    if (newValue) {
+                        $timeout(function () {
                             $element[0].focus();
                         }, 0);
                     }
                 })
             }
-            if ($attr.ngHide){
-                $scope.$watch($attr.ngHide, function(newValue){
-                    if(!newValue){
-                        $timeout(function(){
+            if ($attr.ngHide) {
+                $scope.$watch($attr.ngHide, function (newValue) {
+                    if (!newValue) {
+                        $timeout(function () {
                             $element[0].focus();
                         }, 0);
                     }
@@ -103,24 +121,25 @@ app.directive('focusOnShow', function($timeout) {
     };
 })
 
-app.directive('contenteditable', function() {
+app.directive('contenteditable', function () {
     return {
         require: 'ngModel',
         restrict: 'A',
-        link: function(scope, elm, attr, ngModel) {
+        link: function (scope, elm, attr, ngModel) {
 
             function updateViewValue() {
                 ngModel.$setViewValue(this.innerHTML);
             }
+
             //Binding it to keyup, lly bind it to any other events of interest
             //like change etc..
             elm.on('keyup', updateViewValue);
 
-            scope.$on('$destroy', function() {
+            scope.$on('$destroy', function () {
                 elm.off('keyup', updateViewValue);
             });
 
-            ngModel.$render = function(){
+            ngModel.$render = function () {
                 elm.html(ngModel.$viewValue);
             }
         }

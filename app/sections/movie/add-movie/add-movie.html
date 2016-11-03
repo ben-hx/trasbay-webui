@@ -1,15 +1,123 @@
 <!-- Notes Section -->
-<section id="movie">
+<section id="addmovie">
     <div class="container">
-        <form class="bs-example bs-example-form" data-example-id="input-group-sizing">
-            <div class="input-group input-group-lg"><span class="input-group-addon" id="sizing-addon1">@</span> <input
-                    class="form-control" placeholder="Username" aria-describedby="sizing-addon1"></div>
-            <br>
-            <div class="input-group"><span class="input-group-addon" id="sizing-addon2">@</span> <input
-                    class="form-control" placeholder="Username" aria-describedby="sizing-addon2"></div>
-            <br>
-            <div class="input-group input-group-sm"><span class="input-group-addon" id="sizing-addon3">@</span> <input
-                    class="form-control" placeholder="Username" aria-describedby="sizing-addon3"></div>
+
+        <!-- Project Four -->
+        <form class="row form-horizontal" ng-submit="save(movie)">
+
+            <div class="col-md-3">
+                <a>
+                    <img class="img-responsive" ng-src="{{getPoster(movie)}}" alt="">
+                </a>
+            </div>
+            <div class="col-md-9">
+
+                <div class="form-group form-group-lg">
+                    <label class="col-sm-2 control-label" for="title">Title</label>
+                    <div class="col-sm-10">
+                        <input class="form-control"
+                               type="text"
+                               id="title"
+                               placeholder="add title"
+                               ng-model="movie.title"
+                               uib-typeahead="state as state.title for state in getTitle($viewValue) | limitTo:10"
+                               typeahead-on-select="titleOnSelect($item)"
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group form-group-lg">
+                    <label class="col-sm-2 control-label" for="plot">Plot</label>
+                    <div class="col-sm-10">
+                    <textarea class="form-control" rows="3" id="plot" placeholder="add some plot"
+                              ng-model="movie.plot"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group form-group-lg">
+
+                    <label class="col-sm-2 control-label" for="year">Year</label>
+                    <div class="col-sm-3">
+                        <p class="input-group">
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="add the released year"
+                                   id="year"
+                                   uib-datepicker-popup="{{format}}"
+                                   is-open="popup.opened"
+                                   datepicker-options="dateOptions"
+                                   current-text="This Year"
+                                   ng-required="true"
+                                   close-text="Close"
+                                   alt-input-formats="altInputFormats"
+                                   popup-placement="auto bottom-right"
+                                   ng-model="movie.year"
+                            />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-lg btn-default" ng-click="open()"><i
+                                        class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+
+                    <label class="col-sm-1 control-label" for="runtime">Runtime</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" type="text" id="runtime" placeholder="add the runtime"
+                               ng-model="movie.runtime">
+                    </div>
+
+                    <label class="col-sm-1 control-label" for="country">Country</label>
+                    <div class="col-sm-3">
+                        <input class="form-control" type="text" id="country" placeholder="add the country"
+                               ng-model="movie.country">
+                    </div>
+                </div>
+
+                <div class="form-group form-group-lg">
+                    <label class="col-sm-2 control-label" for="languages">Languages</label>
+                    <div class="col-sm-10">
+                        <tag-input class="form-control" id="languages" ng-model="movie.languages"
+                                   placeholder="add the different languages"></tag-input>
+                    </div>
+                </div>
+
+                <div class="form-group form-group-lg">
+                    <label class="col-sm-2 control-label" for="genres">Genres</label>
+                    <div class="col-sm-10">
+                        <tag-input class="form-control" id="genres" ng-model="movie.genres"
+                                   placeholder="add the different genres"></tag-input>
+                    </div>
+                </div>
+
+                <div class="form-group form-group-lg">
+                    <label class="col-sm-2 control-label" for="directors">Directors</label>
+                    <div class="col-sm-10">
+                        <tag-input class="form-control" id="directors" ng-model="movie.directors"
+                                   placeholder="add the different directors"></tag-input>
+                    </div>
+                </div>
+
+                <div class="form-group form-group-lg">
+                    <label class="col-sm-2 control-label" for="writers">Writers</label>
+                    <div class="col-sm-10">
+                        <tag-input class="form-control" id="writers" ng-model="movie.writers"
+                                   placeholder="add the different writers"></tag-input>
+                    </div>
+                </div>
+
+                <div class="form-group form-group-lg">
+                    <label class="col-sm-2 control-label" for="actors">Actors</label>
+                    <div class="col-sm-10">
+                        <tag-input class="form-control" id="actors" ng-model="movie.actors"
+                                   placeholder="add the different actors"></tag-input>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Save</button>
+
+            </div>
         </form>
+        <!-- /.row -->
+
     </div>
 </section>

@@ -1,11 +1,16 @@
 'use strict';
 
-var app = angular.module('myApp.movie', ['ngRoute', 'myApp.model']);
+var app = angular.module('myApp.movie', ['myApp.model']);
 
-app.config(['$routeProvider', function ($routeProvider) {
-    $routeProvider.when('/movies', {
-        templateUrl: 'sections/movie/movie.html',
-        controller: 'MovieCtrl'
+app.config(['$stateProvider', function ($stateProvider) {
+    $stateProvider.state('movies', {
+        url: '/movies',
+        views: {
+            "main": {
+                templateUrl: 'sections/movie/movie.html',
+                controller: 'MovieCtrl'
+            }
+        }
     });
 }]);
 

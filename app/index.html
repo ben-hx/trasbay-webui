@@ -7,9 +7,11 @@
     <title>Trashbay.org</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/">
 
     <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
     <link href="bower_components/angular-loading-bar/build/loading-bar.css" rel="stylesheet">
+    <link href="bower_components/ng-tags-input/ng-tags-input.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -30,6 +32,7 @@
     <link href="css/agency.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/note.css" rel="stylesheet">
+    <link href="css/taginput.css" rel="stylesheet">
     <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
 </head>
 <body id="page-top" class="index">
@@ -62,13 +65,11 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-                <li class="hidden">
-                    <a href="#page-top"></a>
+                <li class="page-scroll" ng-repeat="element in navigationElements()">
+                    <a ng-click="element.clickHandler()"
+                       ng-attr-ui-sref="{{ element.goToState ? element.goToState : 'landingpage' }}">{{element.caption}}</a>
                 </li>
-                <li ng-repeat="element in navigationElements()">
-                    <a class="page-scroll" ng-click="element.clickHandler()" ng-href="#{{element.anchor}}"
-                       du-smooth-scroll>{{element.caption}}</a>
-                </li>
+
             </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -82,7 +83,9 @@
 <![endif]-->
 
 
-<div ng-view class="view-animate" autoscroll></div>
+<!--<div ng-view class="view-animate" autoscroll></div>-->
+<div ui-view="main" class="view-animate" autoscroll></div>
+
 <ng-include src="'./sections/footer/footer.html'"></ng-include>
 
 
@@ -93,13 +96,14 @@
 <script src="bower_components/underscore/underscore.js"></script>
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 <script src="bower_components/angular-animate/angular-animate.js"></script>
 <script src="bower_components/angular-resource/angular-resource.js"></script>
 <script src="bower_components/angular-cookies/angular-cookies.js"></script>
 <script src="bower_components/restangular/dist/restangular.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/ng-tags-input/ng-tags-input.js"></script>
 <script src="bower_components/angular-scroll/angular-scroll.js"></script>
 <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
 
@@ -116,9 +120,10 @@
 <script src="services/authentication/authentication-service.js"></script>
 <script src="services/favicon/favicon-service.js"></script>
 <script src="services/navigation/navigation.js"></script>
+<script src="services/navigation/navigation-service.js"></script>
+<script src="services/navigation/navigation-history.js"></script>
 <script src="services/splashscreen/splash-screen.js"></script>
 <script src="services/login/login.js"></script>
-<script src="services/landingpage/landingpage.js"></script>
 
 <script src="errors/error.js"></script>
 <script src="errors/error-handler.js"></script>
@@ -136,11 +141,12 @@
 <script src="models/category/category-repository.js"></script>
 <script src="models/movie/movie.js"></script>
 <script src="models/movie/movie-repository.js"></script>
+<script src="models/movie/movie-short.js"></script>
+<script src="models/movie/movie-database-repository.js"></script>
 
 <script src="sections/home/home.js"></script>
+<script src="sections/landingpage/landingpage.js"></script>
 <script src="sections/note/note.js"></script>
 <script src="sections/movie/movie.js"></script>
 <script src="sections/movie/add-movie/add-movie.js"></script>
-
 </body>
-</html>

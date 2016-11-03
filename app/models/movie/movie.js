@@ -7,9 +7,9 @@ app.factory('Movie', function () {
             value: id
         });
         this.id = id;
-        this.text = title;
-        this.category = year;
-        this.urls = runtime;
+        this.title = title;
+        this.year = year;
+        this.runtime = runtime;
         this.genres = genres;
         this.directors = directors;
         this.writers = writers;

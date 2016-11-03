@@ -2,7 +2,7 @@
 
 var app = angular.module('myApp.model');
 
-app.factory ('MovieRepository', ['Movie' ,'ApiManagerUtil', function (Movie, ApiManagerUtil) {
+app.factory('MovieRepository', ['ErrorHandler', 'Movie', 'ApiManagerUtil', function (ErrorHandler, Movie, ApiManagerUtil) {
     return {
         createFromResponse: function (data) {
             var id = data._id || data.id;
@@ -29,13 +29,13 @@ app.factory ('MovieRepository', ['Movie' ,'ApiManagerUtil', function (Movie, Api
             return ApiManagerUtil.getSingleById('movies', id, this.createFromResponse);
         },
         create: function (data) {
-            return ApiManagerUtil.create('notes', data, this.createFromResponse);
+            return ApiManagerUtil.create('movies', data, this.createFromResponse);
         },
-        update: function (note) {
-            return ApiManagerUtil.update('movies', movie, this.createFromResponse);
+        update: function (data) {
+            return ApiManagerUtil.update('movies', data, this.createFromResponse);
         },
-        delete: function (note) {
-            return ApiManagerUtil.delete('movies', movie, this.createFromResponse);
+        delete: function (data) {
+            return ApiManagerUtil.delete('movies', data, this.createFromResponse);
         }
     };
 }]);

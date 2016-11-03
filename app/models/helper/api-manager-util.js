@@ -62,6 +62,7 @@ app.factory ('ApiManagerUtil', ['$q', 'Restangular' ,'ErrorHandler', function ($
         create: function (resourceBaseURI, data, responseSuccessInterceptor, responseErrorInterceptior) {
             var deferred = $q.defer();
             var self = this;
+            data = angular.toJson(data, true);
             Restangular.all(resourceBaseURI).post(data).then(function(response) {
                 if (responseSuccessInterceptor) {
                     deferred.resolve(responseSuccessInterceptor(response));
