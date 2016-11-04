@@ -7,118 +7,139 @@ app.factory ('ApiManagerUtil', ['$q', 'Restangular' ,'ErrorHandler', function ($
         setDefaultHeaders: function(header) {
             Restangular.setDefaultHeaders(header);
         },
-        getCollection: function (resourceBaseURI, params, responseSuccessSingleInterceptor, responseSuccessCollectionInterceptor, responseErrorInterceptior) {
+        getCollection: function (resourceBaseURI, params, options) {
             var deferred = $q.defer();
             var result = [];
             var self = this;
             Restangular.one(resourceBaseURI).get().then(function(response) {
-                if (responseSuccessSingleInterceptor) {
-                    _.forEach(response[resourceBaseURI], function(singleResponse) {
-                        result.push(responseSuccessSingleInterceptor(singleResponse));
+                if (options.responseSuccessSingleInterceptor) {
+                    if (options.responseBodyKey) {
+                        response = response[options.responseBodyKey]
+                    }
+                    _.forEach(response, function(singleResponse) {
+                        result.push(options.responseSuccessSingleInterceptor(singleResponse));
                     });
                 }
-                if (responseSuccessCollectionInterceptor) {
-                    responseSuccessCollectionInterceptor(response);
+                if (options.responseSuccessCollectionInterceptor) {
+                    options.responseSuccessCollectionInterceptor(response);
                 }
                 deferred.resolve(result);
             }, function (error) {
-                if (responseErrorInterceptior) {
-                    responseErrorInterceptior(error);
+                if (options.responseErrorInterceptior) {
+                    options.responseErrorInterceptior(error);
                 }
                 deferred.reject(ErrorHandler.getErrorFromResponse(error));
             });
             return deferred.promise;
         },
-        getSingle: function (resourceBaseURI, responseSuccessInterceptor, responseErrorInterceptior) {
+        getSingle: function (resourceBaseURI, options) {
             var deferred = $q.defer();
             var self = this;
             Restangular.one(resourceBaseURI).get().then(function(response) {
-                if (responseSuccessInterceptor) {
-                    deferred.resolve(responseSuccessInterceptor(response));
+                if (options.responseSuccessInterceptor) {
+                    if (options.responseBodyKey) {
+                        response = response[options.responseBodyKey]
+                    }
+                    deferred.resolve(options.responseSuccessInterceptor(response));
                 }
             }, function (error) {
-                if (responseErrorInterceptior) {
-                    responseErrorInterceptior(error);
+                if (options.responseErrorInterceptior) {
+                    options.responseErrorInterceptior(error);
                 }
                 deferred.reject(ErrorHandler.getErrorFromResponse(error));
             });
             return deferred.promise;
         },
-        getSingleById: function (resourceBaseURI, id, responseSuccessInterceptor, responseErrorInterceptior) {
+        getSingleById: function (resourceBaseURI, id, options) {
             var deferred = $q.defer();
             var self = this;
             Restangular.one(resourceBaseURI, id).get().then(function(response) {
-                if (responseSuccessInterceptor) {
-                    deferred.resolve(responseSuccessInterceptor(response));
+                if (options.responseSuccessInterceptor) {
+                    if (options.responseBodyKey) {
+                        response = response[options.responseBodyKey]
+                    }
+                    deferred.resolve(options.responseSuccessInterceptor(response));
                 }
             }, function (error) {
-                if (responseErrorInterceptior) {
-                    responseErrorInterceptior(error);
+                if (options.responseErrorInterceptior) {
+                    options.responseErrorInterceptior(error);
                 }
                 deferred.reject(ErrorHandler.getErrorFromResponse(error));
             });
             return deferred.promise;
         },
-        create: function (resourceBaseURI, data, responseSuccessInterceptor, responseErrorInterceptior) {
+        create: function (resourceBaseURI, data, options) {
             var deferred = $q.defer();
             var self = this;
             data = angular.toJson(data, true);
             Restangular.all(resourceBaseURI).post(data).then(function(response) {
-                if (responseSuccessInterceptor) {
-                    deferred.resolve(responseSuccessInterceptor(response));
+                if (options.responseSuccessInterceptor) {
+                    if (options.responseBodyKey) {
+                        response = response[options.responseBodyKey]
+                    }
+                    deferred.resolve(options.responseSuccessInterceptor(response));
                 }
             }, function (error) {
-                if (responseErrorInterceptior) {
-                    responseErrorInterceptior(error);
+                if (options.responseErrorInterceptior) {
+                    options.responseErrorInterceptior(error);
                 }
                 deferred.reject(ErrorHandler.getErrorFromResponse(error));
             });
             return deferred.promise;
         },
-        set: function (resourceBaseURI, responseSuccessInterceptor, responseErrorInterceptior) {
+        set: function (resourceBaseURI, options) {
             var deferred = $q.defer();
             var self = this;
             var dao = Restangular.one(resourceBaseURI);
             dao.put().then(function(response) {
-                if (responseSuccessInterceptor) {
-                    deferred.resolve(responseSuccessInterceptor(response));
+                if (options.responseSuccessInterceptor) {
+                    if (options.responseBodyKey) {
+                        response = response[options.responseBodyKey]
+                    }
+                    deferred.resolve(options.responseSuccessInterceptor(response));
                 }
             }, function (error) {
-                if (responseErrorInterceptior) {
-                    responseErrorInterceptior(error);
+                if (options.responseErrorInterceptior) {
+                    options.responseErrorInterceptior(error);
                 }
                 deferred.reject(ErrorHandler.getErrorFromResponse(error));
             });
             return deferred.promise;
         },
-        update: function (resourceBaseURI, data, responseSuccessInterceptor, responseErrorInterceptior) {
+        update: function (resourceBaseURI, data, options) {
             var deferred = $q.defer();
             var self = this;
             var dao = Restangular.one(resourceBaseURI, data.id);
             angular.extend(dao, data);
             dao.put().then(function(response) {
-                if (responseSuccessInterceptor) {
-                    deferred.resolve(responseSuccessInterceptor(response));
+                if (options.responseSuccessInterceptor) {
+                    if (options.responseBodyKey) {
+                        response = response[options.responseBodyKey]
+                    }
+                    deferred.resolve(options.responseSuccessInterceptor(response));
                 }
             }, function (error) {
-                if (responseErrorInterceptior) {
-                    responseErrorInterceptior(error);
+                if (options.responseErrorInterceptior) {
+                    options.responseErrorInterceptior(error);
                 }
                 deferred.reject(ErrorHandler.getErrorFromResponse(error));
             });
             return deferred.promise;
         },
-        delete: function (resourceBaseURI, data, responseSuccessInterceptor, responseErrorInterceptior) {
+        delete: function (resourceBaseURI, data, options) {
             var deferred = $q.defer();
             var self = this;
             var dao = Restangular.one(resourceBaseURI, data.id);
             dao.remove().then(function(response) {
-                if (responseSuccessInterceptor) {
-                    deferred.resolve(responseSuccessInterceptor(response));
+                if (options.responseSuccessInterceptor) {
+                    if (options.responseBodyKey) {
+                        response = response[options.responseBodyKey]
+                    }
+                    deferred.resolve(options.responseSuccessInterceptor(response));
                 }
             }, function (error) {
-                if (responseErrorInterceptior) {
-                    responseErrorInterceptior(error);
+                if (options.responseErrorInterceptior) {
+                    options.responseErrorInterceptior(error);
                 }
                 deferred.reject(ErrorHandler.getErrorFromResponse(error));
             });

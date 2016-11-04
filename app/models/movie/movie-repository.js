@@ -23,40 +23,66 @@ app.factory('MovieRepository', ['ErrorHandler', 'Movie', 'ApiManagerUtil', funct
             );
         },
         getAll: function () {
-            return ApiManagerUtil.getCollection('movies', {}, this.createFromResponse);
+            var options = {
+                responseBodyKey: 'movies',
+                responseSuccessSingleInterceptor: this.createFromResponse
+            };
+            return ApiManagerUtil.getCollection('movies', {}, options);
         },
         getById: function (id) {
-            return ApiManagerUtil.getSingleById('movies', id, this.createFromResponse);
+            var options = {
+                responseBodyKey: 'movie',
+                responseSuccessInterceptor: this.createFromResponse
+            };
+            return ApiManagerUtil.getSingleById('movies', id, options);
         },
         create: function (movie) {
-            return ApiManagerUtil.create('movies', movie, this.createFromResponse);
+            var options = {
+                responseBodyKey: 'movie',
+                responseSuccessInterceptor: this.createFromResponse
+            };
+            return ApiManagerUtil.create('movies', movie, options);
         },
         update: function (movie) {
-            return ApiManagerUtil.update('movies', movie, this.createFromResponse);
+            var options = {
+                responseBodyKey: 'movie',
+                responseSuccessInterceptor: this.createFromResponse
+            };
+            return ApiManagerUtil.update('movies', movie, options);
         },
         delete: function (movie) {
-            return ApiManagerUtil.delete('movies', movie, this.createFromResponse);
+            var options = {
+                responseBodyKey: 'movie',
+                responseSuccessInterceptor: this.createFromResponse
+            };
+            return ApiManagerUtil.delete('movies', movie, options);
         },
         getWatched: function (movie) {
-            return ApiManagerUtil.getSingle('movies/'+movie.id+'/watched', function (data) {
-                var usersWatched = data.users.length;
-                if (data.watched) {
-                    usersWatched++;
+            var options = {
+                responseSuccessInterceptor: function (data) {
+                    var usersWatched = data.users.length;
+                    if (data.watched) {
+                        usersWatched++;
+                    }
+                    return {
+                        hasWatched: data.watched,
+                        users: data.users,
+                        usersWatched: usersWatched
+                    };
                 }
-                return {
-                    hasWatched: data.watched,
-                    users: data.users,
-                    usersWatched: usersWatched
-                };
-            });
+            };
+            return ApiManagerUtil.getSingle('movies/' + movie.id + '/watched', options);
         },
         setWatched: function (movie, hasWatched) {
             var url = (hasWatched ? 'watched' : 'unwatched');
-            return ApiManagerUtil.set('movies/'+movie.id+'/'+url, function (data) {
-                return {
-                    hasWatched: data.watched
+            var options = {
+                responseSuccessInterceptor: function (data) {
+                    return {
+                        hasWatched: data.watched
+                    }
                 }
-            });
+            };
+            return ApiManagerUtil.set('movies/' + movie.id + '/' + url, options);
         },
     };
 }]);

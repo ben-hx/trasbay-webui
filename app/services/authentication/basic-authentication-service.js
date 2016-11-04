@@ -2,7 +2,7 @@
 
 var app = angular.module('myApp.basic-authentication', ['ngCookies', 'myApp.model']);
 
-app.service('BasicAuthenticationService', ['$cookieStore', 'UserRepository', 'ApiManagerUtil', function ($cookieStore, UserRepository, ApiManagerUtil) {
+app.service('BasicAuthenticationService', ['$cookieStore', '$q', 'UserRepository', 'ApiManagerUtil', function ($cookieStore, $q, UserRepository, ApiManagerUtil) {
     var loggedInUser = null;
     var currentUserCookieKey = "CurrentUser";
 
@@ -24,19 +24,27 @@ app.service('BasicAuthenticationService', ['$cookieStore', 'UserRepository', 'Ap
 
     return {
         login: function (username, password) {
+            var deferred = $q.defer();
             changeHeader(username, password);
-            return ApiManagerUtil.getSingle('me', function (response) {
-                changeLoggedInUser(UserRepository.createFromResponse(response.user), password);
+            UserRepository.getMe().then(function (user) {
+                changeLoggedInUser(UserRepository.createFromResponse(user), password);
+                deferred.resolve(user);
             }, function (error) {
                 clearLoggedInUser();
+                deferred.resolve(error);
             });
+            return deferred.promise;
         },
         register: function (username, password) {
-            return ApiManagerUtil.create('register', {username: username, password: password}, function (response) {
-                changeLoggedInUser(UserRepository.createFromResponse(response.user), password);
+            var deferred = $q.defer();
+            UserRepository.register(username, password).then(function (user) {
+                changeLoggedInUser(UserRepository.createFromResponse(user), password);
+                deferred.resolve(user);
             }, function (error) {
                 clearLoggedInUser();
+                deferred.resolve(error);
             });
+            return deferred.promise;
         },
         getLoggedInUser: function () {
             return loggedInUser;

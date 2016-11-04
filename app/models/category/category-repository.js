@@ -2,13 +2,16 @@
 
 var app = angular.module('myApp.model');
 
-app.factory ('CategoryRepository', ['ApiManagerUtil', function (ApiManagerUtil) {
+app.factory('CategoryRepository', ['ApiManagerUtil', function (ApiManagerUtil) {
     return {
-        createFromResponse: function (data) {
-            return data;
-        },
         getAll: function () {
-            return ApiManagerUtil.getCollection('categories', {}, this.createFromResponse);
+            var options = {
+                responseBodyKey: 'categories',
+                responseSuccessSingleInterceptor: function (data) {
+                    return data;
+                }
+            };
+            return ApiManagerUtil.getCollection('categories', {}, options);
         }
     };
 }]);

@@ -6,7 +6,8 @@ app.config(['$stateProvider', function ($stateProvider) {
     $stateProvider.state('updatemovie', {
         url: '/movies/:movieId',
         params: {
-            destinationState: null
+            destinationState: null,
+            movieId: null
         },
         views: {
             "main": {
@@ -21,7 +22,7 @@ app.controller('UpdateMovieCtrl', ['$scope', '$timeout', '$state', 'MovieReposit
 
     $scope.reload = function () {
         MovieRepository.getById($state.params.movieId).then(function (movie) {
-            $scope.movie = movie;
+            $scope.movie = $scope.modelToViewData(movie);
         });
     };
 
@@ -32,6 +33,12 @@ app.controller('UpdateMovieCtrl', ['$scope', '$timeout', '$state', 'MovieReposit
             return movie.poster;
         }
         return 'http://placehold.it/700x300';
+    };
+
+    $scope.modelToViewData = function (movie) {
+        var result = movie;
+        result.year = new Date(movie.year);
+        return result;
     };
 
     $scope.viewDataToModel = function (viewData) {
@@ -57,7 +64,7 @@ app.controller('UpdateMovieCtrl', ['$scope', '$timeout', '$state', 'MovieReposit
 
     $scope.save = function (movie) {
         if (movie) {
-            MovieRepository.create($scope.viewDataToModel(movie)).then(function () {
+            MovieRepository.update($scope.viewDataToModel(movie)).then(function () {
                 $state.go($state.params.destinationState.name, {}, {reload: true});
             });
         }
