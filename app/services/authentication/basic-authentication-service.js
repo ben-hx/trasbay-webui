@@ -9,11 +9,11 @@ app.service('BasicAuthenticationService', ['$cookieStore', '$q', 'UserRepository
     var changeLoggedInUser = function (user, password) {
         loggedInUser = user;
         $cookieStore.put(currentUserCookieKey, {user: user, password: password});
-        changeHeader(user.username, password);
+        changeHeader(user.email, password);
     };
 
-    var changeHeader = function (username, password) {
-        ApiManagerUtil.setDefaultHeaders({Authorization: 'Basic ' + btoa(username + ':' + password)});
+    var changeHeader = function (email, password) {
+        ApiManagerUtil.setDefaultHeaders({Authorization: 'Basic ' + btoa(email + ':' + password)});
     };
 
     var clearLoggedInUser = function () {
@@ -23,26 +23,26 @@ app.service('BasicAuthenticationService', ['$cookieStore', '$q', 'UserRepository
     };
 
     return {
-        login: function (username, password) {
+        login: function (email, password) {
             var deferred = $q.defer();
-            changeHeader(username, password);
+            changeHeader(email, password);
             UserRepository.getMe().then(function (user) {
-                changeLoggedInUser(UserRepository.createFromResponse(user), password);
+                changeLoggedInUser(user, password);
                 deferred.resolve(user);
             }, function (error) {
                 clearLoggedInUser();
-                deferred.resolve(error);
+                deferred.reject(error);
             });
             return deferred.promise;
         },
-        register: function (username, password) {
+        register: function (email, password) {
             var deferred = $q.defer();
-            UserRepository.register(username, password).then(function (user) {
-                changeLoggedInUser(UserRepository.createFromResponse(user), password);
-                deferred.resolve(user);
+            UserRepository.register(email, password).then(function (oasch) {
+                changeLoggedInUser(oasch, password);
+                deferred.resolve(oasch);
             }, function (error) {
                 clearLoggedInUser();
-                deferred.resolve(error);
+                deferred.reject(error);
             });
             return deferred.promise;
         },

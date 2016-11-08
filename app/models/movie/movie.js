@@ -20,12 +20,12 @@ app.factory('Movie', function () {
         this.poster = poster;
         this.userCreatedId = userCreatedId;
     }
-    
+
     Movie.prototype.getPosterUrl = function () {
         if (this.poster) {
             return this.poster;
         }
-        return 'http://placehold.it/700x300';
+        return './app/img/movie/movie-default-thumbnail.png';
     };
 
     return Movie;

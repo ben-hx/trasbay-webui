@@ -6,7 +6,7 @@ app.config(['$stateProvider', function ($stateProvider) {
     $stateProvider.state('updatemovie', {
         url: '/movies/:movieId',
         params: {
-            destinationState: null,
+            destinationState: {name: 'movies'},
             movieId: null
         },
         views: {
@@ -23,16 +23,47 @@ app.controller('UpdateMovieCtrl', ['$scope', '$timeout', '$state', 'MovieReposit
     $scope.reload = function () {
         MovieRepository.getById($state.params.movieId).then(function (movie) {
             $scope.movie = $scope.modelToViewData(movie);
+            $scope.extendMovieWithRating(movie);
+            $scope.extendMovieWithWatched(movie);
+        });
+    };
+    $scope.reload();
+
+    $scope.extendMovieWithRating = function (movie) {
+        MovieRepository.getRating(movie).then(function (data) {
+            movie = angular.extend(movie, data);
+            movie.oldAverageRating = data.averageRating;
         });
     };
 
-    $scope.reload();
+    $scope.extendMovieWithWatched = function (movie) {
+        MovieRepository.getWatched(movie).then(function (data) {
+            movie = angular.extend(movie, data);
+        });
+    };
 
-    $scope.getPosterUrl = function (movie) {
-        if (movie) {
-            return movie.poster;
+    $scope.setWatched = function (movie) {
+        MovieRepository.setWatched(movie, movie.hasWatched).then(function (data) {
+            movie.hasWatched = data.hasWatched;
+            movie.hasWatched ? movie.usersWatched++ : movie.usersWatched--;
+        });
+    };
+
+    $scope.setRating = function (movie, value) {
+        if ($scope.isMovieRateable(movie)) {
+            MovieRepository.setRating(movie, value).then(function (data) {
+                movie.ownRating = data.ownRating;
+                movie.oldAverageRating = data.averageRating;
+            });
         }
-        return 'http://placehold.it/700x300';
+    };
+
+    $scope.ratingOnLeave = function (movie) {
+        movie.averageRating = movie.oldAverageRating;
+    };
+
+    $scope.isMovieRateable = function (movie) {
+        return movie.hasWatched == true;
     };
 
     $scope.modelToViewData = function (movie) {
@@ -84,7 +115,7 @@ app.controller('UpdateMovieCtrl', ['$scope', '$timeout', '$state', 'MovieReposit
 
     $scope.formats = ['yyyy'];
     $scope.format = $scope.formats[0];
-    $scope.altInputFormats = ['M!/d!/yyyy'];
+    $scope.altInputFormats = 'yyyy';
 
     $scope.popup = {
         opened: false

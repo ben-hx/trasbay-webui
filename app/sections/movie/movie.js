@@ -19,16 +19,25 @@ app.controller('MovieCtrl', ['$scope', '$state', 'MovieRepository', function ($s
     $scope.reload = function () {
         MovieRepository.getAll().then(function (movies) {
             $scope.movies = movies;
+            $scope.extendMoviesWithRating(movies);
             $scope.extendMoviesWithWatched(movies);
         });
     };
+    $scope.reload();
 
     $scope.update = function (movie) {
         var destinationState = {name: 'movies'};
         $state.go('updatemovie', {movieId: movie.id, destinationState: destinationState}, {reload: true});
     };
 
-    $scope.reload();
+    $scope.extendMoviesWithRating = function (movies) {
+        angular.forEach(movies, function (movie) {
+            MovieRepository.getRating(movie).then(function (data) {
+                movie = angular.extend(movie, data);
+                movie.oldAverageRating = data.averageRating;
+            });
+        });
+    };
 
     $scope.extendMoviesWithWatched = function (movies) {
         angular.forEach(movies, function (movie) {
@@ -43,6 +52,23 @@ app.controller('MovieCtrl', ['$scope', '$state', 'MovieRepository', function ($s
             movie.hasWatched = data.hasWatched;
             movie.hasWatched ? movie.usersWatched++ : movie.usersWatched--;
         });
+    };
+
+    $scope.setRating = function (movie, value) {
+        if ($scope.isMovieRateable(movie)) {
+            MovieRepository.setRating(movie, value).then(function (data) {
+                movie.ownRating = data.ownRating;
+                movie.oldAverageRating = data.averageRating;
+            });
+        }
+    };
+
+    $scope.ratingOnLeave = function (movie) {
+        movie.averageRating = movie.oldAverageRating;
+    };
+
+    $scope.isMovieRateable = function (movie) {
+        return movie.hasWatched == true;
     };
 
 }]);

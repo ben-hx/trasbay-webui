@@ -2,21 +2,21 @@
 
 var app = angular.module('myApp.model');
 
-app.factory ('ApiManagerUtil', ['$q', 'Restangular' ,'ErrorHandler', function ($q, Restangular, ErrorHandler) {
+app.factory('ApiManagerUtil', ['$q', 'Restangular', 'ErrorHandler', function ($q, Restangular, ErrorHandler) {
     return {
-        setDefaultHeaders: function(header) {
+        setDefaultHeaders: function (header) {
             Restangular.setDefaultHeaders(header);
         },
         getCollection: function (resourceBaseURI, params, options) {
             var deferred = $q.defer();
             var result = [];
             var self = this;
-            Restangular.one(resourceBaseURI).get().then(function(response) {
+            Restangular.one(resourceBaseURI).get().then(function (response) {
                 if (options.responseSuccessSingleInterceptor) {
                     if (options.responseBodyKey) {
                         response = response[options.responseBodyKey]
                     }
-                    _.forEach(response, function(singleResponse) {
+                    _.forEach(response, function (singleResponse) {
                         result.push(options.responseSuccessSingleInterceptor(singleResponse));
                     });
                 }
@@ -35,7 +35,7 @@ app.factory ('ApiManagerUtil', ['$q', 'Restangular' ,'ErrorHandler', function ($
         getSingle: function (resourceBaseURI, options) {
             var deferred = $q.defer();
             var self = this;
-            Restangular.one(resourceBaseURI).get().then(function(response) {
+            Restangular.one(resourceBaseURI).get().then(function (response) {
                 if (options.responseSuccessInterceptor) {
                     if (options.responseBodyKey) {
                         response = response[options.responseBodyKey]
@@ -53,7 +53,7 @@ app.factory ('ApiManagerUtil', ['$q', 'Restangular' ,'ErrorHandler', function ($
         getSingleById: function (resourceBaseURI, id, options) {
             var deferred = $q.defer();
             var self = this;
-            Restangular.one(resourceBaseURI, id).get().then(function(response) {
+            Restangular.one(resourceBaseURI, id).get().then(function (response) {
                 if (options.responseSuccessInterceptor) {
                     if (options.responseBodyKey) {
                         response = response[options.responseBodyKey]
@@ -72,7 +72,7 @@ app.factory ('ApiManagerUtil', ['$q', 'Restangular' ,'ErrorHandler', function ($
             var deferred = $q.defer();
             var self = this;
             data = angular.toJson(data, true);
-            Restangular.all(resourceBaseURI).post(data).then(function(response) {
+            Restangular.all(resourceBaseURI).post(data).then(function (response) {
                 if (options.responseSuccessInterceptor) {
                     if (options.responseBodyKey) {
                         response = response[options.responseBodyKey]
@@ -91,7 +91,7 @@ app.factory ('ApiManagerUtil', ['$q', 'Restangular' ,'ErrorHandler', function ($
             var deferred = $q.defer();
             var self = this;
             var dao = Restangular.one(resourceBaseURI);
-            dao.put().then(function(response) {
+            dao.put().then(function (response) {
                 if (options.responseSuccessInterceptor) {
                     if (options.responseBodyKey) {
                         response = response[options.responseBodyKey]
@@ -109,9 +109,9 @@ app.factory ('ApiManagerUtil', ['$q', 'Restangular' ,'ErrorHandler', function ($
         update: function (resourceBaseURI, data, options) {
             var deferred = $q.defer();
             var self = this;
-            var dao = Restangular.one(resourceBaseURI, data.id);
+            var dao = Restangular.one(resourceBaseURI);
             angular.extend(dao, data);
-            dao.put().then(function(response) {
+            dao.put().then(function (response) {
                 if (options.responseSuccessInterceptor) {
                     if (options.responseBodyKey) {
                         response = response[options.responseBodyKey]
@@ -129,8 +129,8 @@ app.factory ('ApiManagerUtil', ['$q', 'Restangular' ,'ErrorHandler', function ($
         delete: function (resourceBaseURI, data, options) {
             var deferred = $q.defer();
             var self = this;
-            var dao = Restangular.one(resourceBaseURI, data.id);
-            dao.remove().then(function(response) {
+            var dao = Restangular.one(resourceBaseURI);
+            dao.remove().then(function (response) {
                 if (options.responseSuccessInterceptor) {
                     if (options.responseBodyKey) {
                         response = response[options.responseBodyKey]

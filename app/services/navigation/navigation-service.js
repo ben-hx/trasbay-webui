@@ -7,6 +7,28 @@ app.config(['$urlRouterProvider', '$locationProvider', function ($urlRouterProvi
     //$locationProvider.html5Mode(true);
 }]);
 
+app.run(['$rootScope', '$state', 'AuthenticationService', 'LoginViewManager', function ($rootScope, $state, AuthenticationService, LoginViewManager) {
+
+    $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+        var landingPageStateName = 'landingpage';
+        var stopEventPropagation = (fromState == toState);
+        if (fromState == toState) {
+            event.preventDefault();
+        }
+        if (!AuthenticationService.isLoggedIn() && !toState.name == landingPageStateName) {
+            stopEventPropagation = true;
+            LoginViewManager.login().then(function () {
+                $state.transitionTo(toState.name, toParams, {reload: true});
+            }, function () {
+                $state.transitionTo(landingPageStateName, toParams, {reload: true});
+            });
+        }
+        if (stopEventPropagation) {
+            event.preventDefault();
+        }
+    });
+}]);
+
 app.factory('NavigationElement', function () {
 
     function NavigationElement(data) {

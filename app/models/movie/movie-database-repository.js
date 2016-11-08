@@ -4,7 +4,7 @@ var app = angular.module('myApp.model');
 
 app.factory('MovieDatabaseRepository', ['$q', '$http', 'ErrorHandler', 'Movie', 'MovieShort', function ($q, $http, ErrorHandler, Movie, MovieShort) {
 
-    var splitCommaSeperatedStringToArray = function(str) {
+    var splitCommaSeperatedStringToArray = function (str) {
         return str.split(",");
     };
 

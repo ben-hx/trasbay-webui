@@ -6,7 +6,7 @@ app.config(['$stateProvider', function ($stateProvider) {
     $stateProvider.state('addmovie', {
         url: '/addmovie',
         params: {
-            destinationState: null
+            destinationState: {name: 'movies'}
         },
         views: {
             "main": {
@@ -34,13 +34,6 @@ app.controller('AddMovieCtrl', ['$scope', '$state', 'MovieDatabaseRepository', '
     $scope.fillModelFromMovieDatabase = function (movie) {
         $scope.movie = movie;
         $scope.movie.year = new Date(movie.year);
-    };
-
-    $scope.getPosterUrl = function (movie) {
-        if (movie) {
-            return movie.poster;
-        }
-        return 'http://placehold.it/700x300';
     };
 
     $scope.viewDataToModel = function (viewData) {

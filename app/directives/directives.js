@@ -5,6 +5,30 @@
 var app = angular.module('myApp.directives', []);
 
 
+app.directive('checkImage', function ($http) {
+
+    function setDefaultImageForElement(element) {
+        element.attr('src', '../img/movie/movie-default-thumbnail.png');
+    }
+
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            attrs.$observe('ngSrc', function (ngSrc) {
+                if (!ngSrc) {
+                    setDefaultImageForElement(element);
+                    return;
+                }
+                $http.get(ngSrc).success(function () {
+                }).error(function () {
+                    setDefaultImageForElement(element);
+                });
+
+            });
+        }
+    };
+});
+
 app.directive("tagInput", function ($compile) {
     return {
         restrict: 'E',
@@ -16,6 +40,29 @@ app.directive("tagInput", function ($compile) {
             wrapper.addClass(elem.attr('class'));
             wrapper.attr('ng-model', elem.attr('ng-model'));
             wrapper.attr('placeholder', elem.attr('placeholder'));
+            elem.before(wrapper);
+            $compile(wrapper)(scope);
+            wrapper.append(elem);
+        }
+    };
+});
+
+app.directive("rankingStars", function ($compile, config) {
+    //var titles = '["' + config.movieOptions.rankingTitles.join("", "") + "]'";
+    var titles = "['one','two','three']";
+    return {
+        restrict: 'E',
+        replace: true,
+        link: function (scope, elem, attr) {
+            var wrapper = angular.element(
+                '<span uib-rating max="10"></span>'
+            );
+            wrapper.addClass(elem.attr('class'));
+            wrapper.attr('ng-model', elem.attr('ng-model'));
+            wrapper.attr('ng-click', elem.attr('ng-click'));
+            wrapper.attr('read-only', elem.attr('read-only'));
+            wrapper.attr('on-leave', elem.attr('on-leave'));
+            wrapper.attr('titles', titles);
             elem.before(wrapper);
             $compile(wrapper)(scope);
             wrapper.append(elem);

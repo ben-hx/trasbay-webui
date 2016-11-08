@@ -48,14 +48,14 @@ app.factory('MovieRepository', ['ErrorHandler', 'Movie', 'ApiManagerUtil', funct
                 responseBodyKey: 'movie',
                 responseSuccessInterceptor: this.createFromResponse
             };
-            return ApiManagerUtil.update('movies', movie, options);
+            return ApiManagerUtil.update('movies/' + movie.id, movie, options);
         },
         delete: function (movie) {
             var options = {
                 responseBodyKey: 'movie',
                 responseSuccessInterceptor: this.createFromResponse
             };
-            return ApiManagerUtil.delete('movies', movie, options);
+            return ApiManagerUtil.delete('movies/' + movie.id, movie, options);
         },
         getWatched: function (movie) {
             var options = {
@@ -83,6 +83,29 @@ app.factory('MovieRepository', ['ErrorHandler', 'Movie', 'ApiManagerUtil', funct
                 }
             };
             return ApiManagerUtil.set('movies/' + movie.id + '/' + url, options);
+        },
+        getRating: function (movie) {
+            var options = {
+                responseSuccessInterceptor: function (data) {
+                    return {
+                        ownRating: data.ownRating,
+                        averageRating: data.averageRating,
+                        usersRating: data.usersRating
+                    };
+                }
+            };
+            return ApiManagerUtil.getSingle('movies/' + movie.id + '/rating', options);
+        },
+        setRating: function (movie, rating) {
+            var options = {
+                responseSuccessInterceptor: function (data) {
+                    return {
+                        ownRating: data.ownRating,
+                        averageRating: data.averageRating
+                    }
+                }
+            };
+            return ApiManagerUtil.update('movies/' + movie.id + '/rating', {value: rating}, options);
         },
     };
 }]);

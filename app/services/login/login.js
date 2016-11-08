@@ -2,7 +2,7 @@
 
 var app = angular.module('myApp.login', ['myApp.authentication']);
 
-app.factory('LoginViewManager', ['$q', '$location', '$uibModal', function($q, $location, $uibModal) {
+app.factory('LoginViewManager', ['$q', '$location', '$uibModal', function ($q, $location, $uibModal) {
     var deferredResult = null;
 
     var handleSuccessfulLogin = function () {
@@ -12,7 +12,7 @@ app.factory('LoginViewManager', ['$q', '$location', '$uibModal', function($q, $l
     var handleUnsuccessfulLogin = function () {
         deferredResult.reject();
     };
-    
+
     var handleRegister = function () {
         var modalInstance = $uibModal.open({
             animation: true,
@@ -67,7 +67,7 @@ app.controller('LoginCtrl', ['$scope', '$uibModalInstance', '$uibModal', 'Authen
 
     $scope.login = function (formData) {
         $scope.dataLoading = true;
-        AuthenticationService.login(formData.username, formData.password).then(function (user) {
+        AuthenticationService.login(formData.email, formData.password).then(function (user) {
             $uibModalInstance.close(user);
         }, function (error) {
             $scope.error.show = true;
@@ -94,7 +94,7 @@ app.controller('RegisterCtrl', ['$scope', '$uibModalInstance', 'AuthenticationSe
 
     $scope.login = function (formData) {
         $scope.dataLoading = true;
-        AuthenticationService.register(formData.username, formData.password).then(function (user) {
+        AuthenticationService.register(formData.email, formData.password).then(function (user) {
             $uibModalInstance.close(user);
         }, function (error) {
             $scope.error.show = true;

@@ -14,32 +14,30 @@
 
                 <div class="content-wrapper">
 
-                    <a class="img-wrapper" ng-click="update(movie)">
-                        <img class="img-movie-gallery" ng-src="{{movie.getPosterUrl(movie)}}"
+                    <a href="" class="img-wrapper" ng-click="update(movie)">
+                        <img class="img-movie-gallery" check-image ng-src="{{movie.poster}}"
                              alt="Image for {{movie.title}}">
                     </a>
 
-                    <div class="caption">
-                        <h4>{{movie.title}}</h4>
+                    <div class="caption-outer">
+                        <h4 class="caption-innner">{{movie.title}}</h4>
                     </div>
 
                     <div class="ratings">
-                        <p>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star-empty"></span>
-                            <span class="glyphicon glyphicon-star-empty"></span>
-                            <span>
-                                <button class="btn btn-default btn-lg btn-watched" ng-click="setWatched(movie)"
-                                        ng-model="movie.hasWatched" uib-btn-checkbox>
-                                    <span class="glyphicon glyphicon-camera"></span>
-                                </button>
-                                <span class="badge badge-notify">{{movie.usersWatched}}</span>
-                            </span>
-                        </p>
+                        <ranking-stars
+                                ng-model="movie.averageRating"
+                                ng-click="setRating(movie, movie.averageRating)"
+                                read-only="!isMovieRateable(movie)"
+                                on-leave="ratingOnLeave(movie)">
+                        </ranking-stars>
 
+                        <button class="btn btn-default btn-lg btn-watched" ng-click="setWatched(movie)"
+                                ng-model="movie.hasWatched" uib-btn-checkbox>
+                            <span class="glyphicon glyphicon-camera"></span>
+                        </button>
+                        <span class="badge badge-notify">{{movie.usersWatched}}</span>
                     </div>
+
                 </div>
 
             </div>

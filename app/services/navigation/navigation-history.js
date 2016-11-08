@@ -34,23 +34,6 @@ app.service("NavigationHistory", function ($state, $rootScope, $window) {
 });
 
 app.run(['$rootScope', '$state', 'AuthenticationService', 'NavigationHistory', function ($rootScope, $state, AuthenticationService, NavigationHistory) {
-    /*
-     $rootScope.$on("$locationChangeStart", function (event, next, current) {
-     $('.footer').hide();
-     if (!AuthenticationService.isLoggedIn()) {
-     //$location.path('/landingpage').hash('').replace();
-     $location.path('/landingpage').replace();
-     }
-     });
-
-     $rootScope.$on('$routeChangeSuccess', function (event) {
-     //$('.footer').show();
-     });
-
-     $('.view-animate').on('$animate:close', function (data) {
-     console.log("aloo");
-     });
-     */
 
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
         if (!fromState.abstract) {

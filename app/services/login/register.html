@@ -4,16 +4,16 @@
     </div>
     <div class="modal-body">
         <span ng-show="error.show" class="help-block">{{error.message}}</span>
-        <div class="form-group" ng-class="{ 'has-error': form.username.$dirty && form.username.$error.required}">
-            <label for="username">Username</label>
-            <input type="text" name="username" id="username" class="form-control" ng-model="vm.username" required />
-            <span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Username is required</span>
+        <div class="form-group" ng-class="{ 'has-error': form.email.$dirty && form.email.$error.required}">
+            <label for="email">E-Mail</label>
+            <input type="text" name="email" id="email" class="form-control" ng-model="vm.email" required/>
+            <span ng-show="form.email.$dirty && form.email.$error.required" class="help-block">EMail is required</span>
         </div>
         <div class="form-group has-feedback" ng-class="{
                 'has-error': form.password.$dirty && !form.confirmPassword.$valid,
                 'has-success': form.password.$valid && form.confirmPassword.$valid }">
             <label for="password">Password</label>
-            <input type="password" name="password" id="password" class="form-control" ng-model="vm.password" required />
+            <input type="password" name="password" id="password" class="form-control" ng-model="vm.password" required/>
             <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>
             <span class="form-control-feedback" ng-show='form.password.$valid && form.confirmPassword.$valid'>
                 <i class="fa fa-check"></i>
@@ -23,7 +23,8 @@
                 'has-error': form.password.$dirty && !form.confirmPassword.$valid,
                 'has-success': form.password.$valid && form.confirmPassword.$valid }">
             <label for="confirmPassword">Confirm Password</label>
-            <input type="password" name="confirmPassword" id="confirmPassword" class="form-control" ng-model="vm.confirmPassword" required password-input="password">
+            <input type="password" name="confirmPassword" id="confirmPassword" class="form-control"
+                   ng-model="vm.confirmPassword" required password-input="password">
             <span class="form-control-feedback" ng-show='form.confirmPassword.$valid'>
                 <i class="fa fa-check"></i>
             </span>
@@ -31,7 +32,9 @@
         </div>
     </div>
     <div class="modal-footer">
-        <i ng-if="dataLoading"class="fa fa-spinner fa-spin fa-2x text-primary"></i>
+        <span ng-show="dataLoading">
+            <i class="fa fa-spinner fa-spin fa-2x text-primary"></i>
+        </span>
         <button type="submit" ng-disabled="form.$invalid || vm.dataLoading" class="btn btn-primary">Register</button>
         <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
     </div>
