@@ -9,8 +9,6 @@
     background: #fff;
 }
 
-
-
 .vertical-center {
     min-height: 100%;  /* Fallback for vh unit */
     min-height: 100vh; /* You might also want to use

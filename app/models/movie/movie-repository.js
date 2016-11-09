@@ -3,50 +3,61 @@
 var app = angular.module('myApp.model');
 
 app.factory('MovieRepository', ['ErrorHandler', 'Movie', 'ApiManagerUtil', function (ErrorHandler, Movie, ApiManagerUtil) {
+
+    function createFromResponse(data) {
+        var id = data._id || data.id;
+        return new Movie(
+            id,
+            data.title,
+            data.year,
+            data.runtime,
+            data.genres,
+            data.directors,
+            data.writers,
+            data.actors,
+            data.plot,
+            data.languages,
+            data.country,
+            data.poster,
+            data.userCreatedId
+        );
+    }
+
     return {
-        createFromResponse: function (data) {
-            var id = data._id || data.id;
-            return new Movie(
-                id,
-                data.title,
-                data.year,
-                data.runtime,
-                data.genres,
-                data.directors,
-                data.writers,
-                data.actors,
-                data.plot,
-                data.languages,
-                data.country,
-                data.poster,
-                data.userCreatedId
-            );
-        },
         getAll: function () {
             var options = {
-                responseBodyKey: 'movies',
-                responseSuccessSingleInterceptor: this.createFromResponse
+                responseSuccessInterceptor: function (data) {
+                    var movies = [];
+                    _.forEach(data.movies, function (movie) {
+                        movies.push(createFromResponse(movie));
+                    });
+                    var result = {
+                        movies: movies,
+                        pagination: data.pagination
+                    };
+                    return result;
+                }
             };
-            return ApiManagerUtil.getCollection('movies', {}, options);
+            return ApiManagerUtil.getSingle('movies', options);
         },
         getById: function (id) {
             var options = {
                 responseBodyKey: 'movie',
-                responseSuccessInterceptor: this.createFromResponse
+                responseSuccessInterceptor: createFromResponse
             };
             return ApiManagerUtil.getSingleById('movies', id, options);
         },
         create: function (movie) {
             var options = {
                 responseBodyKey: 'movie',
-                responseSuccessInterceptor: this.createFromResponse
+                responseSuccessInterceptor: createFromResponse
             };
             return ApiManagerUtil.create('movies', movie, options);
         },
         update: function (movie) {
             var options = {
                 responseBodyKey: 'movie',
-                responseSuccessInterceptor: this.createFromResponse
+                responseSuccessInterceptor: createFromResponse
             };
             return ApiManagerUtil.update('movies/' + movie.id, movie, options);
         },

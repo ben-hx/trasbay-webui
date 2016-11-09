@@ -17,10 +17,12 @@ app.config(['$stateProvider', function ($stateProvider) {
 app.controller('MovieCtrl', ['$scope', '$state', 'MovieRepository', function ($scope, $state, MovieRepository) {
 
     $scope.reload = function () {
-        MovieRepository.getAll().then(function (movies) {
-            $scope.movies = movies;
-            $scope.extendMoviesWithRating(movies);
-            $scope.extendMoviesWithWatched(movies);
+        MovieRepository.getAll().then(function (data) {
+            $scope.movies = data.movies;
+            $scope.totalItems = data.pagination.totalCount;
+            $scope.currentPage = data.page;
+            $scope.extendMoviesWithRating(data.movies);
+            $scope.extendMoviesWithWatched(data.movies);
         });
     };
     $scope.reload();
@@ -70,5 +72,18 @@ app.controller('MovieCtrl', ['$scope', '$state', 'MovieRepository', function ($s
     $scope.isMovieRateable = function (movie) {
         return movie.hasWatched == true;
     };
+
+
+    $scope.setPage = function (pageNo) {
+        $scope.currentPage = pageNo;
+    };
+
+    $scope.pageChanged = function () {
+        $log.log('Page changed to: ' + $scope.currentPage);
+    };
+
+    $scope.maxSize = 5;
+    $scope.bigTotalItems = 175;
+    $scope.bigCurrentPage = 1;
 
 }]);

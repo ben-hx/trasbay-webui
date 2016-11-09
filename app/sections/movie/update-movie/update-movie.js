@@ -101,6 +101,14 @@ app.controller('UpdateMovieCtrl', ['$scope', '$timeout', '$state', 'MovieReposit
         }
     };
 
+    $scope.delete = function (movie) {
+        if (movie) {
+            MovieRepository.delete(movie).then(function () {
+                $state.go($state.params.destinationState.name, {}, {reload: true});
+            });
+        }
+    };
+
     $scope.dateOptions = {
         startingDay: 1,
         showWeeks: false,
