@@ -4,14 +4,10 @@
 
         <!-- Project Four -->
         <form class="row form-horizontal" ng-submit="save(movie)">
-
             <div class="col-md-3">
-
                 <a href="" class="img-wrapper" ng-click="update(movie)">
-
-
                     <img ng-show="movie === undefined" class="img-movie-gallery" check-image
-                         ng-src="{{movie}}"
+                         ng-src="{{undefined}}"
                          alt="Image for new Movie">
                     <img ng-show="movie != undefined" class="img-movie-gallery" check-image
                          ng-src="{{movie.poster}}"
@@ -27,9 +23,8 @@
                                id="title"
                                placeholder="add title"
                                ng-model="movie.title"
-                               uib-typeahead="state as state.title for state in getTitles($viewValue) | limitTo:10"
-                               typeahead-on-select="titleOnSelect($item)"
-                        >
+                               uib-typeahead="movieFromMovieDatabase as movieFromMovieDatabase.title for movieFromMovieDatabase in getTitles($viewValue) | limitTo:10"
+                               typeahead-on-select="titleOnSelect($item, $model, $label, $event)">
                     </div>
                 </div>
 

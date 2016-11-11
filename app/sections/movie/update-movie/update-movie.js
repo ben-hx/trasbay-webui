@@ -30,10 +30,12 @@ app.controller('UpdateMovieCtrl', ['$scope', '$timeout', '$state', 'MovieReposit
     $scope.reload();
 
     $scope.extendMovieWithRating = function (movie) {
+
         MovieRepository.getRating(movie).then(function (data) {
             movie = angular.extend(movie, data);
             movie.oldAverageRating = data.averageRating;
         });
+
     };
 
     $scope.extendMovieWithWatched = function (movie) {

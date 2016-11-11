@@ -25,7 +25,8 @@ app.controller('AddMovieCtrl', ['$scope', '$state', 'MovieDatabaseRepository', '
         });
     };
 
-    $scope.titleOnSelect = function (shortMovie) {
+    $scope.titleOnSelect = function (shortMovie, movieFromMovieDatabase) {
+        $scope.movie = movieFromMovieDatabase;
         return MovieDatabaseRepository.getByImdbId(shortMovie.imdbId).then(function (movie) {
             $scope.fillModelFromMovieDatabase(movie);
         });

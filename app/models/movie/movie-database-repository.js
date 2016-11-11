@@ -2,6 +2,18 @@
 
 var app = angular.module('myApp.model');
 
+app.factory('MovieShort', function () {
+
+    function MovieShort(title, year, poster, imdbId) {
+        this.title = title;
+        this.year = year;
+        this.poster = poster;
+        this.imdbId = imdbId;
+    }
+
+    return MovieShort;
+});
+
 app.factory('MovieDatabaseRepository', ['$q', '$http', 'ErrorHandler', 'Movie', 'MovieShort', function ($q, $http, ErrorHandler, Movie, MovieShort) {
 
     var splitCommaSeperatedStringToArray = function (str) {
@@ -18,21 +30,22 @@ app.factory('MovieDatabaseRepository', ['$q', '$http', 'ErrorHandler', 'Movie', 
             );
         },
         createFromResponse: function (data) {
-            return new Movie(
-                undefined,
-                data.Title,
-                data.Year,
-                data.Runtime,
-                splitCommaSeperatedStringToArray(data.Genre),
-                splitCommaSeperatedStringToArray(data.Director),
-                splitCommaSeperatedStringToArray(data.Writer),
-                splitCommaSeperatedStringToArray(data.Actors),
-                data.Plot,
-                splitCommaSeperatedStringToArray(data.Language),
-                data.Country,
-                data.Poster,
-                undefined
-            );
+            var movieData = {
+                _id: undefined,
+                title: data.Title,
+                year: data.Year,
+                runtime: data.Runtime,
+                genres: splitCommaSeperatedStringToArray(data.Genre),
+                directors: splitCommaSeperatedStringToArray(data.Director),
+                writers: splitCommaSeperatedStringToArray(data.Writer),
+                actors: splitCommaSeperatedStringToArray(data.Actors),
+                plot: data.Plot,
+                languages: splitCommaSeperatedStringToArray(data.Language),
+                country: data.Country,
+                poster: data.Poster,
+                userCreatedId: undefined
+            };
+            return new Movie(movieData);
         },
         getByImdbId: function (imdbId) {
             var deferred = $q.defer();
@@ -74,10 +87,11 @@ app.factory('MovieDatabaseRepository', ['$q', '$http', 'ErrorHandler', 'Movie', 
                         });
                     }
                 }, function (error) {
+                    deferred.resolve([]);
                     deferred.reject(ErrorHandler.getErrorFromResponse(error));
                 });
             }
             return deferred.promise;
         }
     };
-}])
+}]);

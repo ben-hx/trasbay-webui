@@ -1,1 +1,1 @@
-var app = angular.module('myApp.model', ['restangular', 'myApp.error']);
+var app = angular.module('myApp.model', ['myApp.error']);

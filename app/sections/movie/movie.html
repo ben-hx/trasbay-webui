@@ -25,7 +25,7 @@
                                 ng-model="movie.averageRating"
                                 ng-click="setRating(movie, movie.averageRating)"
                                 read-only="!isMovieRateable(movie)"
-                                on-leave="ratingOnLeave(movie)">
+                                on-leave="ratingLeaved(movie)">
                         </ranking-stars>
                         <div>
                             <button class="btn btn-default btn-lg btn-watched" ng-click="setWatched(movie)"
@@ -41,7 +41,7 @@
         <div class="row">
             <div class="col-lg-12 text-center">
 
-                <ul uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()"></ul>
+                <ul uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged(currentPage)"></ul>
                 <!--
                 <ul uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()"></ul>
                 <ul uib-pagination boundary-links="true" total-items="totalItems" ng-model="currentPage"

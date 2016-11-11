@@ -10,17 +10,37 @@ app.config(['$stateProvider', function ($stateProvider) {
                 templateUrl: 'sections/movie/movie.html',
                 controller: 'MovieCtrl'
             }
+        },
+        params: {
+            page: {
+                value: '0',
+                squash: true
+            },
+            sort: {
+                value: 'title',
+                squash: true
+            },
+            limit: {
+                value: '10',
+                squash: true
+            }
         }
     });
 }]);
 
 app.controller('MovieCtrl', ['$scope', '$state', 'MovieRepository', function ($scope, $state, MovieRepository) {
-
     $scope.reload = function () {
-        MovieRepository.getAll().then(function (data) {
+
+        var queryParams = {
+            limit: $state.params.limit,
+            page: $state.params.page,
+            sort: $state.params.sort
+        };
+
+        MovieRepository.getAll(queryParams).then(function (data) {
             $scope.movies = data.movies;
             $scope.totalItems = data.pagination.totalCount;
-            $scope.currentPage = data.page;
+            $scope.currentPage = data.pagination.page + 1;
             $scope.extendMoviesWithRating(data.movies);
             $scope.extendMoviesWithWatched(data.movies);
         });
@@ -65,7 +85,7 @@ app.controller('MovieCtrl', ['$scope', '$state', 'MovieRepository', function ($s
         }
     };
 
-    $scope.ratingOnLeave = function (movie) {
+    $scope.ratingLeaved = function (movie) {
         movie.averageRating = movie.oldAverageRating;
     };
 
@@ -78,12 +98,8 @@ app.controller('MovieCtrl', ['$scope', '$state', 'MovieRepository', function ($s
         $scope.currentPage = pageNo;
     };
 
-    $scope.pageChanged = function () {
-        $log.log('Page changed to: ' + $scope.currentPage);
+    $scope.pageChanged = function (nextPage) {
+        $state.go('.', {page: nextPage - 1});
     };
-
-    $scope.maxSize = 5;
-    $scope.bigTotalItems = 175;
-    $scope.bigCurrentPage = 1;
 
 }]);

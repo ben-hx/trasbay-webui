@@ -11,10 +11,7 @@ app.run(['$rootScope', '$state', 'AuthenticationService', 'LoginViewManager', fu
 
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
         var landingPageStateName = 'landingpage';
-        var stopEventPropagation = (fromState == toState);
-        if (fromState == toState) {
-            event.preventDefault();
-        }
+        var stopEventPropagation = false;//(fromState == toState);
         if (!AuthenticationService.isLoggedIn() && !toState.name == landingPageStateName) {
             stopEventPropagation = true;
             LoginViewManager.login().then(function () {
