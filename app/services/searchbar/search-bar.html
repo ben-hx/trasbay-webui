@@ -1,16 +1,17 @@
-<form ng-controller="SearchbarCtrl"
+<form name="searchForm"
+      ng-controller="SearchbarCtrl"
       ng-show="SearchbarService.showSearchbar"
       ng-submit="searchOnSubmit()"
       ng-keyup="searchOnChange()">
     <div class="form-group" style="display:inline;">
         <div class="input-group" style="display:table;">
             <input type="text" class="form-control input-searchbar" placeholder="Search..."
-                   focus="true"
+                   focus-on-set-visible="true"
                    ng-model="SearchbarService.searchData.searchText"
                    ng-style="{'visibility': SearchbarService.searchbarIsOpened?'visible':'hidden'}">
             <span class="input-group-btn" style="width:1%;">
                 <a class="btn btn-searchbar" type="button"
-                   ng-click="SearchbarService.searchbarIsOpened = true; searchInputFocus = true"
+                   ng-click="SearchbarService.searchbarIsOpened = true;"
                    ng-show="!SearchbarService.searchbarIsOpened">
                     <span class="glyphicon glyphicon-search">
                         <span class="sr-only">Search</span>
@@ -23,9 +24,9 @@
                         <span class="sr-only">Search</span>
                     </span>
                 </a>
-                
+
                 <a class="btn btn-searchbar" type="button"
-                   ng-click="SearchbarService.clearSearch(); searchOnSubmit(); SearchbarService.searchbarIsOpened = false;"
+                   ng-click="searchOnCleaned(); SearchbarService.searchbarIsOpened = false;"
                    ng-show="SearchbarService.searchbarIsOpened">
                     <span class="glyphicon glyphicon-remove">
                         <span class="sr-only">Cancel Search</span>

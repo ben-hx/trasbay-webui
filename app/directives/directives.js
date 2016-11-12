@@ -145,6 +145,7 @@ app.directive('focusOnShow', function ($timeout) {
     return {
         restrict: 'A',
         link: function ($scope, $element, $attr) {
+            debugger;
             if ($attr.ngShow) {
                 $scope.$watch($attr.ngShow, function (newValue) {
                     if (newValue) {
@@ -167,6 +168,23 @@ app.directive('focusOnShow', function ($timeout) {
         }
     };
 })
+
+app.directive('focusOnSetVisible', function ($timeout) {
+    return {
+        restrict: 'A',
+        link: function ($scope, $element, $attr) {
+            if ($attr.ngStyle) {
+                $scope.$watch($attr.ngStyle, function (newValue) {
+                    if (newValue.visibility && newValue.visibility == 'visible') {
+                        $timeout(function () {
+                            $element[0].focus();
+                        }, 0);
+                    }
+                })
+            }
+        }
+    };
+});
 
 app.directive('contenteditable', function () {
     return {

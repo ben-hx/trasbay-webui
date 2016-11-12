@@ -24,4 +24,13 @@ app.controller('SearchbarCtrl', ['$scope', '$rootScope', '$state', 'SearchbarSer
         $rootScope.$broadcast('searchbarSubmitted', SearchbarService.searchData);
     };
 
+    $scope.searchOnCleaned = function () {
+        if (SearchbarService.searchData.searchText != '') {
+            $scope.searchOnChange();
+        }
+        SearchbarService.searchData.searchText = "";
+        $rootScope.$broadcast('searchbarCleared', SearchbarService.searchData);
+    };
+
+
 }]);

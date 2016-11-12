@@ -39,12 +39,20 @@ app.controller('MovieCtrl', ['$scope', '$state', '$window', 'MovieRepository', '
 
     SearchbarService.showSearchbar = true;
 
-    $scope.$on('searchbarSubmitted', function (events, args) {
-        $scope.reloadWithParams({
-            title: args.searchText,
-            sort: ''
-        });
+    $scope.updateFromSearchEvents = function (events, args) {
+        if ($scope.searchHasChanged) {
+            $scope.reloadWithParams({
+                title: args.searchText,
+                sort: ''
+            });
+            $scope.searchHasChanged = false;
+        }
+    };
+    $scope.$on('searchbarChanged', function (events, args) {
+        $scope.searchHasChanged = true;
     });
+    $scope.$on('searchbarSubmitted', $scope.updateFromSearchEvents);
+    $scope.$on('searchbarCleared', $scope.updateFromSearchEvents);
 
     $scope.rearrangeMovieToPartInfo = function ($index) {
         if ($scope.movies[$index].showFullInfo) {
