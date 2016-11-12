@@ -2,24 +2,27 @@
 
 var app = angular.module('myApp.model');
 
+app.factory('User', function () {
+
+    function User(data) {
+        for (var attr in data) {
+            if (data.hasOwnProperty(attr))
+                this[attr] = data[attr];
+        }
+    }
+
+    return User;
+});
+
 app.factory('UserRepository', ['User', 'ApiManagerUtil', function (User, ApiManagerUtil) {
+
     function createFromResponse(data) {
-        var id = data._id || data.id;
-        return new User(
-            id,
-            data.username,
-            data.email
-        );
-    };
+        data.id = data._id || undefined;
+        return new User(data);
+    }
+
     return {
         register: function (email, password) {
-            /*
-            var options = {
-                responseBodyKey: 'user',
-                responseSuccessInterceptor: createFromResponse
-            };
-            return ApiManagerUtil.create('register', {email: email, password: password}, options);
-            */
             var options = {
                 elementTransformers: [
                     {
@@ -42,13 +45,6 @@ app.factory('UserRepository', ['User', 'ApiManagerUtil', function (User, ApiMana
                 ]
             };
             return ApiManagerUtil.get('me', {}, options);
-            /*
-            var options = {
-                responseBodyKey: 'user',
-                responseSuccessInterceptor: createFromResponse
-            };
-            return ApiManagerUtil.getSingle('me', options);
-            */
         }
     };
 }]);

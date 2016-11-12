@@ -4,7 +4,7 @@ var app = angular.module('myApp.movie', ['myApp.model']);
 
 app.config(['$stateProvider', function ($stateProvider) {
     $stateProvider.state('movies', {
-        url: '/movies',
+        url: '/movies?page&limit&sort',
         views: {
             "main": {
                 templateUrl: 'sections/movie/movie.html',
@@ -16,19 +16,25 @@ app.config(['$stateProvider', function ($stateProvider) {
                 value: '0',
                 squash: true
             },
-            sort: {
-                value: 'title',
-                squash: true
-            },
             limit: {
                 value: '10',
                 squash: true
+            },
+            sort: {
+                value: 'title',
+                squash: true
             }
+        },
+        data: {
+            showSearchbar: true
         }
     });
 }]);
 
 app.controller('MovieCtrl', ['$scope', '$state', 'MovieRepository', function ($scope, $state, MovieRepository) {
+
+   // console.log($state);
+
     $scope.reload = function () {
 
         var queryParams = {

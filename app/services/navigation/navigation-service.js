@@ -2,16 +2,25 @@
 
 var app = angular.module('myApp.navigation');
 
-app.config(['$urlRouterProvider', '$locationProvider', function ($urlRouterProvider, $locationProvider) {
+app.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider, $stateProvider) {
     $urlRouterProvider.otherwise("landingpage");
     //$locationProvider.html5Mode(true);
+
 }]);
 
-app.run(['$rootScope', '$state', 'AuthenticationService', 'LoginViewManager', function ($rootScope, $state, AuthenticationService, LoginViewManager) {
+app.run(['$rootScope', '$state', 'AuthenticationService', 'LoginViewManager', 'SearchbarService', function ($rootScope, $state, AuthenticationService, LoginViewManager, SearchbarService) {
+
+    function prepareSearchBar(state) {
+        var show = false;
+        if (state.data) {
+            show = state.data.showSearchbar;
+        }
+        SearchbarService.showSearchbar = show;
+    }
 
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
         var landingPageStateName = 'landingpage';
-        var stopEventPropagation = false;//(fromState == toState);
+        var stopEventPropagation = angular.equals(fromState, toState) && angular.equals(fromParams, toParams);
         if (!AuthenticationService.isLoggedIn() && !toState.name == landingPageStateName) {
             stopEventPropagation = true;
             LoginViewManager.login().then(function () {
@@ -20,6 +29,8 @@ app.run(['$rootScope', '$state', 'AuthenticationService', 'LoginViewManager', fu
                 $state.transitionTo(landingPageStateName, toParams, {reload: true});
             });
         }
+        prepareSearchBar(toState);
+
         if (stopEventPropagation) {
             event.preventDefault();
         }
@@ -100,8 +111,17 @@ app.factory('NavigationService', ['$state', 'NavigationElement', 'Authentication
 
 }]);
 
-app.controller('NavigationCtrl', ['$scope', 'NavigationService', function ($scope, NavigationService) {
+
+app.controller('NavigationCtrl', ['$scope', '$state', 'NavigationService', 'SearchbarService', function ($scope, $state, NavigationService, SearchbarService) {
 
     $scope.navigationElements = NavigationService.navigationElements;
+    $scope.SearchbarService = SearchbarService;
+
+    $scope.dynamicPopover = {
+        content: 'Hello, World!',
+        templateUrl: 'services/navigation/search-bar.html',
+        title: 'Title'
+    };
+
 
 }]);

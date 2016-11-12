@@ -52,113 +52,59 @@
 -->
 <!-- Navigation -->
 <nav class="navbar navbar-default navbar-fixed-top" ng-controller="NavigationCtrl">
+
+    <!-- display when logged in -->
     <div class="container">
-
-        <div class="navbar-header">
-
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
             <a type="button" class="navbar-toggle" data-toggle="collapse"
-               data-target=".navbar-collapse">
+               data-target="#bs-example-navbar-collapse-1">
                 <span class="glyphicon glyphicon-menu-hamburger">
                     <span class="sr-only">Toggle Navigation</span>
                 </span>
             </a>
 
-            <!--
-                        <a class="navbar-form navbar-search-mobile" href="" ng-click="showSearchbar()">
-                            <input type="text" class="form-control" placeholder="Search...">
-                            <span class="glyphicon glyphicon-search">
-                                <span class="sr-only">Search</span>
-                            </span>
-                        </a>
-            -->
+            <a class="navbar-search-mobile" href="" ng-click="showSearchbar()">
+                <span class="glyphicon glyphicon-search">
+                    <span class="sr-only">Search</span>
+                </span>
+            </a>
 
-            <a class="navbar-brand page-scroll" href="#page-top"
-               du-smooth-scroll>Trashbay!</a>
 
-            <form class="navbar-search-mobile" ng-show="SearchbarService.showSearchbar"
-                  ng-submit="SearchbarService.searchOnChange(true)">
-                <div class="form-group" style="display:inline;">
-                    <div class="input-group" style="display:table;">
-                        <input type="text" class="form-control input-searchbar" placeholder="Search..."
-                               ng-model="SearchbarService.searchData.searchText"
-                               ng-change="SearchbarService.searchOnChange(false)"
-                               ng-style="{'visibility': searchInputIsVisible?'visible':'hidden'}">
-                        <span class="input-group-btn" style="width:1%;">
-                            <a class="btn btn-searchbar" type="button"
-                               ng-click="searchInputIsVisible = true"
-                               ng-show="!searchInputIsVisible">
-                                <span class="glyphicon glyphicon-search">
-                                    <span class="sr-only">Search</span>
-                                </span>
-                            </a>
-                            <a class="btn btn-searchbar" type="button"
-                               ng-click="SearchbarService.searchOnChange(true)"
-                               ng-show="searchInputIsVisible">
-                                <span class="glyphicon glyphicon-search">
-                                    <span class="sr-only">Search</span>
-                                </span>
-                            </a>
-                            <a class="btn btn-searchbar" type="button"
-                               ng-click="searchInputIsVisible = false;"
-                               ng-show="searchInputIsVisible">
-                                <span class="glyphicon glyphicon-remove">
-                                    <span class="sr-only">Cancel Search</span>
-                                </span>
-                            </a>
-                        </span>
-                    </div>
-                </div>
-            </form>
-
+            <a class="navbar-brand page-scroll" href="#page-top" du-smooth-scroll>Trashbay!</a>
         </div>
 
-        <div class="navbar-collapse collapse">
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
             <ul class="nav navbar-nav navbar-right">
+
+
+                <li class="navbar-search-desktop">
+
+                    <input type="text" placeholder="Search">
+
+                    <a href="" class="page-scroll navbar-search-button" ng-click="showSearchbar()">
+                                    <span class="glyphicon glyphicon-search">
+                                        <span class="sr-only">Search</span>
+                                    </span>
+                    </a>
+
+                </li>
+
                 <li class="page-scroll" ng-repeat="element in navigationElements()">
                     <a href="" ng-click="element.clickHandler()">
                         {{element.caption}}
                     </a>
                 </li>
+
+
             </ul>
-
-            <form class="navbar-form navbar-search-desktop" ng-show="SearchbarService.showSearchbar"
-                  ng-submit="SearchbarService.searchOnChange(true)">
-                <div class="form-group" style="display:inline;">
-                    <div class="input-group" style="display:table;">
-                        <input type="text" class="form-control input-searchbar" placeholder="Search..."
-                               ng-model="SearchbarService.searchData.searchText"
-                               ng-change="SearchbarService.searchOnChange(false)"
-                               ng-style="{'visibility': searchInputIsVisible?'visible':'hidden'}">
-                        <span class="input-group-btn" style="width:1%;">
-                            <a class="btn btn-searchbar" type="button"
-                               ng-click="searchInputIsVisible = true"
-                               ng-show="!searchInputIsVisible">
-                                <span class="glyphicon glyphicon-search">
-                                    <span class="sr-only">Search</span>
-                                </span>
-                            </a>
-                            <a class="btn btn-searchbar" type="button"
-                               ng-click="SearchbarService.searchOnChange(true)"
-                               ng-show="searchInputIsVisible">
-                                <span class="glyphicon glyphicon-search">
-                                    <span class="sr-only">Search</span>
-                                </span>
-                            </a>
-                            <a class="btn btn-searchbar" type="button"
-                               ng-click="searchInputIsVisible = false;"
-                               ng-show="searchInputIsVisible">
-                                <span class="glyphicon glyphicon-remove">
-                                    <span class="sr-only">Cancel Search</span>
-                                </span>
-                            </a>
-                        </span>
-                    </div>
-                </div>
-            </form>
-
-        </div><!--/.nav-collapse -->
+        </div>
+        <!-- /.navbar-collapse -->
     </div>
+    <!-- /.container-fluid -->
 </nav>
 
 <!--[if lt IE 7]>
@@ -205,7 +151,6 @@
 <script src="services/navigation/navigation.js"></script>
 <script src="services/navigation/navigation-service.js"></script>
 <script src="services/navigation/navigation-history.js"></script>
-<script src="services/navigation/searchbar-service.js"></script>
 <script src="services/splashscreen/splash-screen.js"></script>
 <script src="services/login/login.js"></script>
 

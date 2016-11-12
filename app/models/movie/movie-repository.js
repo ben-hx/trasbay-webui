@@ -25,7 +25,7 @@ app.factory('Movie', function () {
 app.factory('MovieRepository', ['ErrorHandler', 'Movie', 'ApiManagerUtil', function (ErrorHandler, Movie, ApiManagerUtil) {
 
     function transformMovieResponse(data) {
-        data.id = data._id;
+        data.id = data._id || undefined;
         return new Movie(data);
     }
 
