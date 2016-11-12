@@ -10,12 +10,8 @@ app.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider
 
 app.run(['$rootScope', '$state', 'AuthenticationService', 'LoginViewManager', 'SearchbarService', function ($rootScope, $state, AuthenticationService, LoginViewManager, SearchbarService) {
 
-    function prepareSearchBar(state) {
-        var show = false;
-        if (state.data) {
-            show = state.data.showSearchbar;
-        }
-        SearchbarService.showSearchbar = show;
+    function prepareSearchBar() {
+        SearchbarService.showSearchbar = false;
     }
 
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -29,10 +25,11 @@ app.run(['$rootScope', '$state', 'AuthenticationService', 'LoginViewManager', 'S
                 $state.transitionTo(landingPageStateName, toParams, {reload: true});
             });
         }
-        prepareSearchBar(toState);
 
         if (stopEventPropagation) {
             event.preventDefault();
+        } else {
+            prepareSearchBar();
         }
     });
 }]);
@@ -112,16 +109,8 @@ app.factory('NavigationService', ['$state', 'NavigationElement', 'Authentication
 }]);
 
 
-app.controller('NavigationCtrl', ['$scope', '$state', 'NavigationService', 'SearchbarService', function ($scope, $state, NavigationService, SearchbarService) {
+app.controller('NavigationCtrl', ['$scope', '$state', 'NavigationService', function ($scope, $state, NavigationService) {
 
     $scope.navigationElements = NavigationService.navigationElements;
-    $scope.SearchbarService = SearchbarService;
-
-    $scope.dynamicPopover = {
-        content: 'Hello, World!',
-        templateUrl: 'services/navigation/search-bar.html',
-        title: 'Title'
-    };
-
 
 }]);

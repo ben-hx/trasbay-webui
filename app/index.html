@@ -63,52 +63,10 @@
                 </span>
             </a>
 
-            <!--
-                        <a class="navbar-form navbar-search-mobile" href="" ng-click="showSearchbar()">
-                            <input type="text" class="form-control" placeholder="Search...">
-                            <span class="glyphicon glyphicon-search">
-                                <span class="sr-only">Search</span>
-                            </span>
-                        </a>
-            -->
-
             <a class="navbar-brand page-scroll" href="#page-top"
                du-smooth-scroll>Trashbay!</a>
 
-            <form class="navbar-search-mobile" ng-show="SearchbarService.showSearchbar"
-                  ng-submit="SearchbarService.searchOnChange(true)">
-                <div class="form-group" style="display:inline;">
-                    <div class="input-group" style="display:table;">
-                        <input type="text" class="form-control input-searchbar" placeholder="Search..."
-                               ng-model="SearchbarService.searchData.searchText"
-                               ng-change="SearchbarService.searchOnChange(false)"
-                               ng-style="{'visibility': searchInputIsVisible?'visible':'hidden'}">
-                        <span class="input-group-btn" style="width:1%;">
-                            <a class="btn btn-searchbar" type="button"
-                               ng-click="searchInputIsVisible = true"
-                               ng-show="!searchInputIsVisible">
-                                <span class="glyphicon glyphicon-search">
-                                    <span class="sr-only">Search</span>
-                                </span>
-                            </a>
-                            <a class="btn btn-searchbar" type="button"
-                               ng-click="SearchbarService.searchOnChange(true)"
-                               ng-show="searchInputIsVisible">
-                                <span class="glyphicon glyphicon-search">
-                                    <span class="sr-only">Search</span>
-                                </span>
-                            </a>
-                            <a class="btn btn-searchbar" type="button"
-                               ng-click="searchInputIsVisible = false;"
-                               ng-show="searchInputIsVisible">
-                                <span class="glyphicon glyphicon-remove">
-                                    <span class="sr-only">Cancel Search</span>
-                                </span>
-                            </a>
-                        </span>
-                    </div>
-                </div>
-            </form>
+            <div class="navbar-search-mobile" ng-include src="'services/searchbar/search-bar.html'"></div>
 
         </div>
 
@@ -122,40 +80,7 @@
                 </li>
             </ul>
 
-            <form class="navbar-form navbar-search-desktop" ng-show="SearchbarService.showSearchbar"
-                  ng-submit="SearchbarService.searchOnChange(true)">
-                <div class="form-group" style="display:inline;">
-                    <div class="input-group" style="display:table;">
-                        <input type="text" class="form-control input-searchbar" placeholder="Search..."
-                               ng-model="SearchbarService.searchData.searchText"
-                               ng-change="SearchbarService.searchOnChange(false)"
-                               ng-style="{'visibility': searchInputIsVisible?'visible':'hidden'}">
-                        <span class="input-group-btn" style="width:1%;">
-                            <a class="btn btn-searchbar" type="button"
-                               ng-click="searchInputIsVisible = true"
-                               ng-show="!searchInputIsVisible">
-                                <span class="glyphicon glyphicon-search">
-                                    <span class="sr-only">Search</span>
-                                </span>
-                            </a>
-                            <a class="btn btn-searchbar" type="button"
-                               ng-click="SearchbarService.searchOnChange(true)"
-                               ng-show="searchInputIsVisible">
-                                <span class="glyphicon glyphicon-search">
-                                    <span class="sr-only">Search</span>
-                                </span>
-                            </a>
-                            <a class="btn btn-searchbar" type="button"
-                               ng-click="searchInputIsVisible = false;"
-                               ng-show="searchInputIsVisible">
-                                <span class="glyphicon glyphicon-remove">
-                                    <span class="sr-only">Cancel Search</span>
-                                </span>
-                            </a>
-                        </span>
-                    </div>
-                </div>
-            </form>
+            <div class="navbar-form navbar-search-desktop" ng-include src="'services/searchbar/search-bar.html'"></div>
 
         </div><!--/.nav-collapse -->
     </div>
@@ -205,7 +130,7 @@
 <script src="services/navigation/navigation.js"></script>
 <script src="services/navigation/navigation-service.js"></script>
 <script src="services/navigation/navigation-history.js"></script>
-<script src="services/navigation/searchbar-service.js"></script>
+<script src="services/searchbar/searchbar-service.js"></script>
 <script src="services/splashscreen/splash-screen.js"></script>
 <script src="services/login/login.js"></script>
 

@@ -4,7 +4,7 @@ var app = angular.module('myApp.movie', ['myApp.model']);
 
 app.config(['$stateProvider', function ($stateProvider) {
     $stateProvider.state('movies', {
-        url: '/movies?page&limit&sort',
+        url: '/movies?page&limit&sort&title',
         views: {
             "main": {
                 templateUrl: 'sections/movie/movie.html',
@@ -23,25 +23,81 @@ app.config(['$stateProvider', function ($stateProvider) {
             sort: {
                 value: 'title',
                 squash: true
+
+            },
+
+            title: {
+                value: '',
+                squash: true
             }
         },
-        data: {
-            showSearchbar: true
-        }
+        reloadOnSearch: false,
     });
 }]);
 
-app.controller('MovieCtrl', ['$scope', '$state', 'MovieRepository', function ($scope, $state, MovieRepository) {
+app.controller('MovieCtrl', ['$scope', '$state', '$window', 'MovieRepository', 'SearchbarService', function ($scope, $state, $window, MovieRepository, SearchbarService) {
 
-   // console.log($state);
+    SearchbarService.showSearchbar = true;
+
+    $scope.$on('searchbarSubmitted', function (events, args) {
+        $scope.reloadWithParams({
+            title: args.searchText,
+            sort: ''
+        });
+    });
+
+    $scope.rearrangeMovieToPartInfo = function ($index) {
+        if ($scope.movies[$index].showFullInfo) {
+            $scope.movies[$index].showFullInfo = false;
+            var elementA = $scope.movies[$index];
+            var elementB = $scope.movies[elementA.originalIndex];
+            $scope.movies[$index] = elementB;
+            $scope.movies[elementA.originalIndex] = elementA;
+            $scope.showMovieFullInfo = false;
+        }
+    };
+
+    $scope.rearrangeMovieToFullInfo = function ($index) {
+        if (!$scope.showMovieFullInfo) {
+            $scope.movies[$index].showFullInfo = true;
+            $scope.movies[$index].originalIndex = $index;
+            var stripNumber = ($index % $scope.findColNumberPerRow());
+            if (stripNumber > 0) {
+                var elementA = $scope.movies[$index];
+                var elementB = $scope.movies[$index - stripNumber];
+                $scope.movies[$index] = elementB;
+                $scope.movies[$index - stripNumber] = elementA;
+            }
+            $scope.showMovieFullInfo = true;
+        }
+    };
+
+    $scope.findColNumberPerRow = function () {
+        if ($window.matchMedia("(min-width:992px)").matches) {
+            return 4;
+        }
+        return 1;
+    };
+
+    $scope.reloadWithParams = function (params) {
+        $state.params = params;
+        $scope.reload();
+        $state.go('.', params);
+    };
 
     $scope.reload = function () {
 
         var queryParams = {
             limit: $state.params.limit,
             page: $state.params.page,
-            sort: $state.params.sort
+            sort: $state.params.sort,
+            title: $state.params.title
         };
+
+        if (queryParams.title != '') {
+            SearchbarService.searchbarIsOpened = true;
+            SearchbarService.searchData.searchText = queryParams.title;
+        }
 
         MovieRepository.getAll(queryParams).then(function (data) {
             $scope.movies = data.movies;
@@ -50,6 +106,8 @@ app.controller('MovieCtrl', ['$scope', '$state', 'MovieRepository', function ($s
             $scope.extendMoviesWithRating(data.movies);
             $scope.extendMoviesWithWatched(data.movies);
         });
+
+        $scope.showMovieFullInfo = false;
     };
     $scope.reload();
 
@@ -99,13 +157,11 @@ app.controller('MovieCtrl', ['$scope', '$state', 'MovieRepository', function ($s
         return movie.hasWatched == true;
     };
 
-
-    $scope.setPage = function (pageNo) {
-        $scope.currentPage = pageNo;
-    };
-
     $scope.pageChanged = function (nextPage) {
-        $state.go('.', {page: nextPage - 1});
+        $scope.reloadWithParams({
+            page: nextPage - 1,
+            sort: ''
+        });
     };
 
 }]);

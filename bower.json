@@ -23,6 +23,7 @@
     "angular-animate": "^1.5.7",
     "angular-cookies": "^1.5.7",
     "angular-sanitize": "^1.5.7",
-    "angular-ui-router": "^0.3.1"
+    "angular-ui-router": "^0.3.1",
+    "ng-tags-input": "^3.1.1"
   }
 }
