@@ -9,13 +9,28 @@
 }
 
 .caption-outer {
-    height: 64px;
-    overflow: hidden;
+    height: 20px;
+    text-overflow: ellipsis;
 }
 
 .caption-innner {
+    text-overflow: ellipsis;
+}
+
+.movie-caption {
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.movie-caption-full {
+    text-align: center;
     overflow-wrap: break-word;
-    vertical-align: middle;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .img-wrapper {
@@ -92,4 +107,16 @@ fieldset[disabled] .btn-watched:focus {
     outline-color: transparent;
     outline-style: none;
     outline-width: 0px;;
+}
+
+.pull-absolute-right {
+    position: absolute;
+    right: 0px;
+    cursor: pointer;
+}
+
+.movie-row {
+    padding-bottom: 40px;
+    padding-left: 0px;
+    padding-right: 0px;
 }

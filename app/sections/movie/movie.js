@@ -17,7 +17,7 @@ app.config(['$stateProvider', function ($stateProvider) {
                 squash: true
             },
             limit: {
-                value: '10',
+                value: '12',
                 squash: true
             },
             sort: {
@@ -54,6 +54,7 @@ app.controller('MovieCtrl', ['$scope', '$state', '$window', 'MovieRepository', '
     $scope.$on('searchbarSubmitted', $scope.updateFromSearchEvents);
     $scope.$on('searchbarCleared', $scope.updateFromSearchEvents);
 
+
     $scope.rearrangeMovieToPartInfo = function ($index) {
         if ($scope.movies[$index].showFullInfo) {
             $scope.movies[$index].showFullInfo = false;
@@ -62,6 +63,7 @@ app.controller('MovieCtrl', ['$scope', '$state', '$window', 'MovieRepository', '
             $scope.movies[$index] = elementB;
             $scope.movies[elementA.originalIndex] = elementA;
             $scope.showMovieFullInfo = false;
+            $scope.showMovieFullInfoIndex = -1;
         }
     };
 
@@ -77,8 +79,10 @@ app.controller('MovieCtrl', ['$scope', '$state', '$window', 'MovieRepository', '
                 $scope.movies[$index - stripNumber] = elementA;
             }
             $scope.showMovieFullInfo = true;
+            $scope.showMovieFullInfoIndex = $index - stripNumber;
         }
     };
+
 
     $scope.findColNumberPerRow = function () {
         if ($window.matchMedia("(min-width:992px)").matches) {
@@ -102,7 +106,7 @@ app.controller('MovieCtrl', ['$scope', '$state', '$window', 'MovieRepository', '
             title: $state.params.title
         };
 
-        if (queryParams.title != '') {
+        if (queryParams.title) {
             SearchbarService.searchbarIsOpened = true;
             SearchbarService.searchData.searchText = queryParams.title;
         }

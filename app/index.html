@@ -31,6 +31,7 @@
     <!-- Custom CSS -->
     <link href="css/app.css" rel="stylesheet">
     <link href="css/navbar.css" rel="stylesheet">
+    <link href="css/loading-bar.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/movie.css" rel="stylesheet">
     <link href="css/taginput.css" rel="stylesheet">
@@ -41,9 +42,9 @@
 <!-- Has to be included first, to hide the rest of the screen-->
 <div ng-controller="SplashScreenCtrl" ng-hide="hideScreen" class="loading vertical-center fade-in-out"
      ng-init="onInit()">
-    <div class="text-center ">
-        <img class="img-responsive" src="img/logo/LogoFont.png">
-        <i class="fa fa-spinner fa-spin fa-5x img-responsive text-primary"></i>
+    <div class="text-center">
+        <img src="img/logo/logo.svg">
+        <img class="man-spinner" src="img/loading-spinners/man.gif">
     </div>
 </div>
 
@@ -62,12 +63,9 @@
                     <span class="sr-only">Toggle Navigation</span>
                 </span>
             </a>
-
             <a class="navbar-brand page-scroll" href="#page-top"
-               du-smooth-scroll>Trashbay!</a>
-
+               du-smooth-scroll><img class="nav-bar-logo" alt="logo" src="img/logo/logo.svg"></a>
             <div class="navbar-search-mobile" ng-include src="'services/searchbar/search-bar.html'"></div>
-
         </div>
 
         <div class="navbar-collapse collapse">

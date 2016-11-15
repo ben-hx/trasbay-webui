@@ -4,14 +4,14 @@
         <div class="row">
             <div class="col-lg-12 text-center">
                 <h2 class="section-heading">
-                    Movies {{findColNumberPerRow()}}
+                    Movies
                 </h2>
             </div>
         </div>
-        <div class="row movie-row">
+        <div class="row">
             <div ng-repeat="movie in movies">
 
-                <div class="col-md-12" ng-show="movie.showFullInfo">
+                <div class="col-md-12 movie-row" ng-show="movie.showFullInfo">
 
                     <div class="col-md-3">
                         <div class="content-wrapper">
@@ -20,9 +20,7 @@
                                      alt="Image for {{movie.title}}">
                             </a>
 
-                            <div class="caption-outer">
-                                <h4 class="caption-innner">{{movie.title}}</h4>
-                            </div>
+                            <h4 class="movie-caption-full">{{movie.title}}</h4>
 
                             <div class="ratings">
                                 <ranking-stars
@@ -43,18 +41,40 @@
                     </div>
 
                     <div class="col-md-9">
-                        <div>{{movie.plot}}</div>
-                        <div>{{movie.year}}</div>
-                        <div>{{movie.runtime}}</div>
-                        <div>{{movie.country}}</div>
-                        <div>{{movie.genres}}</div>
-                        <div>{{movie.directors}}</div>
-                        <div>{{movie.writers}}</div>
-                        <div>{{movie.actors}}</div>
+                        <div>
+                            <a class="pull-absolute-right" title="Close">
+                                <i ng-click="rearrangeMovieToPartInfo($index)"
+                                   class="glyphicon glyphicon-remove"></i>
+                            </a>
+                            <div class="">Plot</div>
+                            <p class="text-justify">{{movie.plot}}</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-1">Year</div>
+                            <p class="col-sm-2">{{movie.year}}</p>
+                            <div class="col-sm-1">Runtime</div>
+                            <p class="col-sm-2">{{movie.runtime}}</p>
+                            <div class="col-sm-1">Country</div>
+                            <p class="col-sm-2">{{movie.country.join(', ')}}</p>
+                            <div class="col-sm-1">Genres</div>
+                            <p class="col-sm-2">{{movie.genres.join(', ')}}</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-1">Directors</div>
+                            <p class="col-sm-3">{{movie.directors.join(', ')}}</p>
+                            <div class="col-sm-1">Writers</div>
+                            <p class="col-sm-3">{{movie.writers.join(', ')}}</p>
+                            <div class="col-sm-1">Actors</div>
+                            <p class="col-sm-3">{{movie.actors.join(', ')}}</p>
+                        </div>
+                        <div class="row">
+                            <a href="" class="pull-right" title="Edit">
+                                <i ng-click="update(movie)"
+                                   class="glyphicon glyphicon-edit"></i>
+                            </a>
+                        </div>
                     </div>
-
                 </div>
-
 
                 <div class="col-md-3" ng-show="!movie.showFullInfo">
                     <div class="content-wrapper">
@@ -64,9 +84,7 @@
                                  alt="Image for {{movie.title}}">
                         </a>
 
-                        <div class="caption-outer">
-                            <h4 class="caption-innner">{{movie.title}}</h4>
-                        </div>
+                        <h4 class="movie-caption">{{movie.title}}</h4>
 
                         <div class="ratings">
                             <ranking-stars
@@ -89,7 +107,11 @@
         </div>
         <div class="row">
             <div class="col-lg-12 text-center">
-                <ul uib-pagination total-items="totalItems" ng-model="currentPage"
+                <ul class="pager" uib-pagination
+                    boundary-link-numbers="true"
+                    max-size="5"
+                    total-items="totalItems"
+                    ng-model="currentPage"
                     ng-change="pageChanged(currentPage)"></ul>
             </div>
         </div>

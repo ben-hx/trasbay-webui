@@ -1,9 +1,21 @@
+@font-face {
+    font-family: "TOXIA";
+    src: url("../fonts/TOXIA.ttf");
+}
+
+@font-face {
+    font-family: "Distortion";
+    src: url("../fonts/Distortion.ttf");
+}
+
 html,
 body {
     padding: 0;
     margin: 0;
     height: 100%;
-    background-color: darkgrey;
+    background-color: black;
+    color: white;
+    font-family: "TOXIA", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .view-main {
@@ -15,7 +27,7 @@ body {
 }
 
 .text-primary {
-    color: #fed136;
+    color: #E2001A;
 }
 
 p {
@@ -36,25 +48,24 @@ a.active {
 }
 
 a {
-    color: #fed136;
+    color: #E2001A;
 }
 
 a:hover,
 a:focus,
 a:active,
 a.active {
-    color: #fec503;
+    color: #E2001A;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    text-transform: uppercase;
-    font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 700;
+.form-control:focus {
+    border-color: #E2001A;
+    border-top-color: rgb(226, 0, 26);
+    border-right-color: rgb(226, 0, 26);
+    border-bottom-color: rgb(226, 0, 26);
+    border-left-color: rgb(226, 0, 26);
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(245, 46, 69, .6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(245, 46, 69, .6);
 }
 
 .img-centered {
@@ -70,12 +81,11 @@ h6 {
 }
 
 .btn-primary {
-    border-color: #fed136;
+    border-color: #E2001A;
     text-transform: uppercase;
-    font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 700;
     color: #fff;
-    background-color: #fed136;
+    background-color: #E2001A;
 }
 
 .btn-primary:hover,
@@ -83,9 +93,9 @@ h6 {
 .btn-primary:active,
 .btn-primary.active,
 .open .dropdown-toggle.btn-primary {
-    border-color: #f6bf01;
+    border-color: #E2001A;
     color: #fff;
-    background-color: #fec503;
+    background-color: #E2001A;
 }
 
 .btn-primary:active,
@@ -109,25 +119,24 @@ fieldset[disabled] .btn-primary:active,
 .btn-primary.disabled.active,
 .btn-primary[disabled].active,
 fieldset[disabled] .btn-primary.active {
-    border-color: #fed136;
-    background-color: #fed136;
+    border-color: #E2001A;
+    background-color: #E2001A;
 }
 
 .btn-primary .badge {
-    color: #fed136;
+    color: #E2001A;
     background-color: #fff;
 }
 
 .btn-xl {
     padding: 20px 40px;
-    border-color: #fed136;
+    border-color: #E2001A;
     border-radius: 3px;
     text-transform: uppercase;
-    font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 18px;
     font-weight: 700;
     color: #fff;
-    background-color: #fed136;
+    background-color: #E2001A;
 }
 
 .btn-xl:hover,
@@ -135,9 +144,9 @@ fieldset[disabled] .btn-primary.active {
 .btn-xl:active,
 .btn-xl.active,
 .open .dropdown-toggle.btn-xl {
-    border-color: #f6bf01;
+    border-color: #E2001A;
     color: #fff;
-    background-color: #fec503;
+    background-color: #E2001A;
 }
 
 .btn-xl:active,
@@ -161,12 +170,12 @@ fieldset[disabled] .btn-xl:active,
 .btn-xl.disabled.active,
 .btn-xl[disabled].active,
 fieldset[disabled] .btn-xl.active {
-    border-color: #fed136;
-    background-color: #fed136;
+    border-color: #E2001A;
+    background-color: #E2001A;
 }
 
 .btn-xl .badge {
-    color: #fed136;
+    color: #E2001A;
     background-color: #fff;
 }
 
@@ -175,16 +184,23 @@ fieldset[disabled] .btn-xl.active {
     background-color: #222;
 }
 
+.nav-bar-logo {
+    height: 100%;
+}
+
 .navbar-default .navbar-brand {
-    font-family: "Kaushan Script", "Helvetica Neue", Helvetica, Arial, cursive;
-    color: #fed136;
+    color: #E2001A;
+    float: left;
+    height: 50px;
+    padding: 3px 3px;
+    margin: 3px 3px;
 }
 
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus,
 .navbar-default .navbar-brand:active,
 .navbar-default .navbar-brand.active {
-    color: #fec503;
+    color: #E2001A;
 }
 
 .navbar-default .navbar-collapse {
@@ -207,7 +223,6 @@ fieldset[disabled] .btn-xl.active {
 
 .navbar-default .nav li a {
     text-transform: uppercase;
-    font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 400;
     letter-spacing: 1px;
     color: #fff;
@@ -216,19 +231,19 @@ fieldset[disabled] .btn-xl.active {
 .navbar-default .nav li a:hover,
 .navbar-default .nav li a:focus {
     outline: 0;
-    color: #fed136;
+    color: #E2001A;
 }
 
 .navbar-default .navbar-nav > .active > a {
     border-radius: 0;
     color: #fff;
-    background-color: #fed136;
+    background-color: #E2001A;
 }
 
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
     color: #fff;
-    background-color: #fec503;
+    background-color: #E2001A;
 }
 
 @media (min-width: 768px) {
@@ -242,7 +257,7 @@ fieldset[disabled] .btn-xl.active {
     }
 
     .navbar-default .navbar-brand {
-        font-size: 2em;
+        height: 80px;
         -webkit-transition: all .3s;
         -moz-transition: all .3s;
         transition: all .3s;
@@ -255,10 +270,11 @@ fieldset[disabled] .btn-xl.active {
     .navbar-default.navbar-shrink {
         padding: 10px 0;
         background-color: #222;
+
     }
 
     .navbar-default.navbar-shrink .navbar-brand {
-        font-size: 1.5em;
+        height: 50px;
     }
 }
 
@@ -282,7 +298,6 @@ header .intro-text {
 
 header .intro-text .intro-lead-in {
     margin-bottom: 25px;
-    font-family: "Droid Serif", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 22px;
     font-style: italic;
     line-height: 22px;
@@ -291,7 +306,6 @@ header .intro-text .intro-lead-in {
 header .intro-text .intro-heading {
     margin-bottom: 25px;
     text-transform: uppercase;
-    font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 50px;
     font-weight: 700;
     line-height: 50px;
@@ -310,7 +324,6 @@ header .intro-text .intro-heading {
 
     header .intro-text .intro-lead-in {
         margin-bottom: 25px;
-        font-family: "Droid Serif", "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-size: 40px;
         font-style: italic;
         line-height: 40px;
@@ -319,7 +332,6 @@ header .intro-text .intro-heading {
     header .intro-text .intro-heading {
         margin-bottom: 50px;
         text-transform: uppercase;
-        font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-size: 75px;
         font-weight: 700;
         line-height: 75px;
@@ -349,4 +361,76 @@ section h3.section-subheading {
     section {
         padding: 150px 0;
     }
+}
+
+.pagination > li:first-child > a, .pagination > li:first-child > span {
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.pagination > li:last-child > a, .pagination > li:last-child > span {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.pager li > a,
+.pager li > span {
+    display: inline-block;
+    padding: 5px 14px;
+    background-color: #FFFFFF;
+    border: 1px solid #FFFFFF;
+    border-radius: 15px;
+}
+
+.pager li > a:hover,
+.pager li > a:focus {
+    text-decoration: none;
+    background-color: #FFFFFF;
+}
+
+.pager .next > a,
+.pager .next > span {
+    float: right;
+}
+
+.pager .previous > a,
+.pager .previous > span {
+    float: left;
+}
+
+.pager .disabled > a,
+.pager .disabled > a:hover,
+.pager .disabled > a:focus,
+.pager .disabled > span {
+    color: #777;
+    cursor: not-allowed;
+    background-color: #fff;
+}
+
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+    z-index: 3;
+    color: #fff;
+    cursor: default;
+    background-color: #E2001A;
+    border-color: #E2001A;
+}
+
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+    z-index: 2;
+    color: #E2001A;
+    background-color: #eee;
+    border-color: #ddd;
+}
+
+.pagination > li > a,
+.pagination > li > span {
+    color: black;
 }
