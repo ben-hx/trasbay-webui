@@ -3,6 +3,7 @@
 var app = angular.module('myApp.landingpage', ['ui.bootstrap']);
 
 app.config(['$stateProvider', function ($stateProvider) {
+    console.log('landingpage');
     $stateProvider.state('landingpage', {
         url: '/landingpage',
         views: {
@@ -10,7 +11,7 @@ app.config(['$stateProvider', function ($stateProvider) {
                 templateUrl: 'sections/landingpage/landingpage.html',
                 controller: 'LandingPageCtrl'
             }
-        }
+        },
     });
 }]);
 

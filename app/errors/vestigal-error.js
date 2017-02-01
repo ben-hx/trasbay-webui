@@ -8,9 +8,9 @@ app.factory('VestigalError', function () {
 
     VestigalError.build = function () {
         return new VestigalError(
-            "Error!"
+            "Unexpected Error!"
         );
     };
 
     return VestigalError;
-})
+});

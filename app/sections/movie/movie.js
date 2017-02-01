@@ -3,6 +3,7 @@
 var app = angular.module('myApp.movie', ['myApp.model']);
 
 app.config(['$stateProvider', function ($stateProvider) {
+    console.log('movie');
     $stateProvider.state('movies', {
         url: '/movies?page&limit&sort&title',
         views: {

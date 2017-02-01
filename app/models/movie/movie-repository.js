@@ -97,16 +97,21 @@ app.factory('MovieRepository', ['ErrorHandler', 'Movie', 'ApiManagerUtil', funct
                         directWithoutKeyName: true,
                         isCollection: false,
                         transformerFunction: function (model) {
-                            var usersWatched = model.users.length;
-                            if (model.watched) {
-                                usersWatched++;
-                            }
                             return {
-                                hasWatched: model.watched,
-                                users: model.users,
-                                usersWatched: usersWatched
+                                hasWatched: model.watched.value,
+                            };
+                            /*
+                             var usersWatched = model.users.length;
+                             if (model.watched) {
+                             usersWatched++;
+                             }
+                             return {
+                             hasWatched: model.watched,
+                             users: model.users,
+                             usersWatched: usersWatched
 
-                            }
+                             }
+                             */
                         }
                     }
                 ]
@@ -122,7 +127,7 @@ app.factory('MovieRepository', ['ErrorHandler', 'Movie', 'ApiManagerUtil', funct
                         isCollection: false,
                         transformerFunction: function (model) {
                             return {
-                                hasWatched: model.watched
+                                hasWatched: model.watched.value
                             }
                         }
                     }
@@ -138,9 +143,8 @@ app.factory('MovieRepository', ['ErrorHandler', 'Movie', 'ApiManagerUtil', funct
                         isCollection: false,
                         transformerFunction: function (model) {
                             return {
-                                ownRating: model.ownRating,
-                                averageRating: model.averageRating,
-                                usersRating: model.usersRating
+                                ownRating: model.rating.value,
+                                averageRating: model.averageRating
                             };
                         }
                     }

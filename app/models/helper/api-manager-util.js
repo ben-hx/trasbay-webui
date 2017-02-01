@@ -3,7 +3,7 @@
 var app = angular.module('myApp.model');
 
 
-app.factory('ApiManagerUtil', ['$q', '$http', 'ErrorHandler', function ($q, $http, ErrorHandler) {
+app.factory('ApiManagerUtil', ['$q', '$http', 'ErrorHandler', 'ApiIsOfflineError', function ($q, $http, ErrorHandler, ApiIsOfflineError) {
 
     var baseUrl = 'http://localhost:8080/v1';
     var authenticationHeader;
@@ -29,41 +29,40 @@ app.factory('ApiManagerUtil', ['$q', '$http', 'ErrorHandler', function ($q, $htt
         return result;
     };
 
-    var request = function (data) {
-        var deferred = $q.defer();
-        $http({
-            method: data.method,
-            headers: authenticationHeader,
-            data: data.data,
-            params: data.params,
-            url: baseUrl + '/' + data.resourceURI
-        }).then(function (response) {
-            var result = transformResponseBody(response.data.data, data.options);
-            deferred.resolve(result);
-        }, function (error) {
-            deferred.reject(ErrorHandler.getErrorFromResponse(error));
-        });
-        return deferred.promise;
-    };
-
     return {
+        request: function (data) {
+            var deferred = $q.defer();
+            $http({
+                method: data.method,
+                headers: authenticationHeader,
+                data: data.data,
+                params: data.params,
+                url: baseUrl + '/' + data.resourceURI
+            }).then(function (response) {
+                var result = transformResponseBody(response.data.data, data.options);
+                deferred.resolve(result);
+            }, function (error) {
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
         setDefaultHeaders: function (header) {
             authenticationHeader = header;
         },
         get: function (resourceURI, params, options) {
-            return request({method: 'GET', resourceURI: resourceURI, params: params, data: {}, options: options});
+            return this.request({method: 'GET', resourceURI: resourceURI, params: params, data: {}, options: options});
         },
         create: function (resourceURI, data, options) {
-            return request({method: 'POST', resourceURI: resourceURI, params: {}, data: data, options: options});
+            return this.request({method: 'POST', resourceURI: resourceURI, params: {}, data: data, options: options});
         },
         set: function (resourceURI, options) {
-            return request({method: 'PUT', resourceURI: resourceURI, params: {}, data: {}, options: options});
+            return this.request({method: 'PUT', resourceURI: resourceURI, params: {}, data: {}, options: options});
         },
         update: function (resourceURI, data, options) {
-            return request({method: 'PUT', resourceURI: resourceURI, params: {}, data: data, options: options});
+            return this.request({method: 'PUT', resourceURI: resourceURI, params: {}, data: data, options: options});
         },
         delete: function (resourceURI, data, options) {
-            return request({method: 'DELETE', resourceURI: resourceURI, params: {}, data: {}, options: options});
+            return this.request({method: 'DELETE', resourceURI: resourceURI, params: {}, data: {}, options: options});
         }
     };
 }]);
