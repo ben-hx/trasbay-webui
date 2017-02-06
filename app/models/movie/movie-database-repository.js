@@ -20,6 +20,8 @@ app.factory('MovieDatabaseRepository', ['$q', '$http', 'ErrorHandler', 'Movie', 
         return str.split(",");
     };
 
+    var omdbBase = 'https://www.omdbapi.com/';
+
     return {
         createFromShortMovieResponse: function (data) {
             return new MovieShort(
@@ -50,7 +52,7 @@ app.factory('MovieDatabaseRepository', ['$q', '$http', 'ErrorHandler', 'Movie', 
         getByImdbId: function (imdbId) {
             var deferred = $q.defer();
             var self = this;
-            $http.get('http://www.omdbapi.com/', {
+            $http.get(omdbBase, {
                 params: {
                     i: imdbId,
                     r: 'json',
@@ -70,7 +72,7 @@ app.factory('MovieDatabaseRepository', ['$q', '$http', 'ErrorHandler', 'Movie', 
             if (searchText.length < 2) {
                 deferred.resolve([]);
             } else {
-                $http.get('http://www.omdbapi.com/', {
+                $http.get(omdbBase, {
                     params: {
                         s: searchText,
                         r: 'json',

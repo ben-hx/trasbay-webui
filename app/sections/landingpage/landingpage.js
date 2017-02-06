@@ -1,11 +1,10 @@
 'use strict';
 
-var app = angular.module('myApp.landingpage', ['ui.bootstrap']);
+var app = angular.module('myApp.landingpage', ['ui.bootstrap', 'myApp.login']);
 
 app.config(['$stateProvider', function ($stateProvider) {
-    console.log('landingpage');
-    $stateProvider.state('landingpage', {
-        url: '/landingpage',
+    $stateProvider.state('landing', {
+        url: '/landing',
         views: {
             "main": {
                 templateUrl: 'sections/landingpage/landingpage.html',
@@ -15,13 +14,10 @@ app.config(['$stateProvider', function ($stateProvider) {
     });
 }]);
 
-app.controller('LandingPageCtrl', ['$scope', '$location', 'LoginViewManager', function ($scope, $location, LoginViewManager) {
-
+app.controller('LandingPageCtrl', ['$scope', '$state', 'LoginViewManager', function ($scope, $state, LoginViewManager) {
     $scope.login = function () {
         LoginViewManager.login().then(function () {
-            $location.path('movies');
-        }, function () {
-            $location.path('landingpage');
+            $state.go('home');
         });
     };
 

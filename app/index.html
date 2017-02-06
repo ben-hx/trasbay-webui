@@ -7,11 +7,11 @@
     <title>Trashbay.org</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <base href="/">
 
     <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
     <link href="bower_components/angular-loading-bar/build/loading-bar.css" rel="stylesheet">
     <link href="bower_components/ng-tags-input/ng-tags-input.css" rel="stylesheet">
+    <link href="bower_components/ng-table-bundle/ng-table.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -48,89 +48,46 @@
     </div>
 </div>
 
-<!--
-<ng-include src="'./navigation/navigation.html'" autoscroll="true"></ng-include>
--->
-<!-- Navigation -->
-<nav class="navbar navbar-default navbar-fixed-top" ng-controller="NavigationCtrl">
-    <div class="container">
-
-        <div class="navbar-header">
-
-            <a type="button" class="navbar-toggle" data-toggle="collapse"
-               data-target=".navbar-collapse">
-                <span class="glyphicon glyphicon-menu-hamburger">
-                    <span class="sr-only">Toggle Navigation</span>
-                </span>
-            </a>
-            <a class="navbar-brand page-scroll" href="#page-top"
-               du-smooth-scroll><img class="nav-bar-logo" alt="logo" src="img/logo/logo.svg"></a>
-            <div class="navbar-search-mobile" ng-include src="'services/searchbar/search-bar.html'"></div>
-        </div>
-
-        <div class="navbar-collapse collapse">
-
-            <ul class="nav navbar-nav navbar-right">
-                <li class="page-scroll" ng-repeat="element in navigationElements()">
-                    <a href="" ng-click="element.clickHandler()">
-                        {{element.caption}}
-                    </a>
-                </li>
-            </ul>
-
-            <div class="navbar-form navbar-search-desktop" ng-include src="'services/searchbar/search-bar.html'"></div>
-
-        </div><!--/.nav-collapse -->
-    </div>
-</nav>
+<ng-include src="'services/navigation/navigation.html'" autoscroll="true"></ng-include>
 
 <!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
     your browser</a> to improve your experience.</p>
 <![endif]-->
 
-
 <div ui-view="main" class="view-animate view-main" autoscroll></div>
-
-
-<!--
-<ng-include src="'./sections/footer/footer.html'"></ng-include>
--->
-
 
 <!-- External Dependencies JavaScript -->
 <script src="bower_components/jquery/dist/jquery.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <script src="bower_components/jquery.easing/js/jquery.easing.js"></script>
 <script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 <script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-scroll/angular-scroll.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
 <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/ng-tags-input/ng-tags-input.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-<script src="bower_components/ng-tags-input/ng-tags-input.js"></script>
-<script src="bower_components/angular-scroll/angular-scroll.js"></script>
-<script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
-
-<!-- Custom Extensions JavaScript -->
-<script src="sections/header/cbpAnimatedHeader.js"></script>
+<script src="bower_components/ng-table-bundle/ng-table.js"></script>
 
 <!-- Custom Angular-Extensions JavaScript -->
 <script src="app.js"></script>
 <script src="config.js"></script>
 <script src="directives/directives.js"></script>
 
-<script src="services/services.js"></script>
-<script src="services/authentication/basic-authentication-service.js"></script>
-<script src="services/authentication/authentication-service.js"></script>
-<script src="services/favicon/favicon-service.js"></script>
-<script src="services/navigation/navigation.js"></script>
-<script src="services/navigation/navigation-service.js"></script>
-<script src="services/navigation/navigation-history.js"></script>
-<script src="services/searchbar/searchbar-service.js"></script>
-<script src="services/splashscreen/splash-screen.js"></script>
-<script src="services/login/login.js"></script>
+<script src="models/models.js"></script>
+<script src="models/helper/api-manager-util.js"></script>
+<script src="models/helper/api-manager-util-decorator.js"></script>
+<script src="models/user/user-repository.js"></script>
+<script src="models/user/admin-repository.js"></script>
+<script src="models/note/note.js"></script>
+<script src="models/note/note-repository.js"></script>
+<script src="models/category/category-repository.js"></script>
+<script src="models/movie/movie-repository.js"></script>
+<script src="models/movie/movie-database-repository.js"></script>
 
 <script src="errors/error.js"></script>
 <script src="errors/error-handler.js"></script>
@@ -139,21 +96,19 @@
 <script src="errors/validation-error.js"></script>
 <script src="errors/not-authorized-error.js"></script>
 
-<script src="models/models.js"></script>
-<script src="models/helper/api-manager-util.js"></script>
-<script src="models/helper/api-manager-util-decorator.js"></script>
-<script src="models/user/user-repository.js"></script>
-<script src="models/note/note.js"></script>
-<script src="models/note/note-repository.js"></script>
-<script src="models/category/category-repository.js"></script>
-<script src="models/movie/movie-repository.js"></script>
-<script src="models/movie/movie-database-repository.js"></script>
+<script src="services/authentication/basic-authentication-service.js"></script>
+<script src="services/authentication/authentication-service.js"></script>
+<script src="services/splashscreen/splash-screen.js"></script>
+<script src="services/navigation/navigation.js"></script>
+<script src="services/searchbar/searchbar-service.js"></script>
+<script src="services/login/login.js"></script>
 
-<script src="sections/home/home.js"></script>
+<script src="sections/temp/temp.js"></script>
 <script src="sections/landingpage/landingpage.js"></script>
-<script src="sections/error/error.js"></script>
-<script src="sections/note/note.js"></script>
+<script src="sections/admin/admin.js"></script>
 <script src="sections/movie/movie.js"></script>
-<script src="sections/movie/add-movie/add-movie.js"></script>
-<script src="sections/movie/update-movie/update-movie.js"></script>
+<script src="sections/movie/list/list-movie.js"></script>
+<script src="sections/movie/add/add-movie.js"></script>
+<script src="sections/movie/update/update-movie.js"></script>
+
 </body>

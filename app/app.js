@@ -3,22 +3,23 @@
 angular.module('myApp', [
     'ngAnimate',
     'duScroll',
-    'ui.router',
     'angular-loading-bar',
+    'ui.router',
+    'myApp.config',
     'myApp.directives',
-    'myApp.authentication',
-    'myApp.navigation',
     'myApp.splashscreen',
-    'myApp.login',
-    'myApp.services',
-    'myApp.movie',
-    'myApp.add-movie',
-    'myApp.update-movie',
+    'myApp.navigation',
+    'myApp.searchbar',
+    'myApp.temp',
+    'myApp.error',
+    'myApp.model',
+    'myApp.authentication',
     'myApp.landingpage',
-    'myApp.config'
+    'myApp.movie',
+    'myApp.admin',
 ]).config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
     cfpLoadingBarProvider.includeSpinner = false;
 }]).run(['$rootScope', 'cfpLoadingBar', 'AuthenticationService', function ($rootScope, cfpLoadingBar, AuthenticationService) {
-    cfpLoadingBar.start();
     AuthenticationService.initialize();
+    cfpLoadingBar.start();
 }]);

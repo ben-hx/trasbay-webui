@@ -2,7 +2,7 @@
 
 var app = angular.module('myApp.login', ['myApp.authentication']);
 
-app.factory('LoginViewManager', ['$q', '$location', '$uibModal', function ($q, $location, $uibModal) {
+app.factory('LoginViewManager', ['$q', '$uibModal', function ($q, $uibModal) {
     var deferredResult = null;
 
     var handleSuccessfulLogin = function () {
@@ -16,6 +16,7 @@ app.factory('LoginViewManager', ['$q', '$location', '$uibModal', function ($q, $
     var handleRegister = function () {
         var modalInstance = $uibModal.open({
             animation: true,
+            backdrop: 'static',
             templateUrl: 'services/login/register.html',
             controller: 'RegisterCtrl',
             keyboard: false
@@ -30,6 +31,7 @@ app.factory('LoginViewManager', ['$q', '$location', '$uibModal', function ($q, $
     var handleLogin = function () {
         var modalInstance = $uibModal.open({
             animation: true,
+            backdrop: 'static',
             templateUrl: 'services/login/login.html',
             controller: 'LoginCtrl',
             keyboard: false

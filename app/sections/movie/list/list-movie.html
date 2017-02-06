@@ -90,12 +90,11 @@
                             <ranking-stars
                                     ng-model="movie.averageRating"
                                     ng-click="setRating(movie, movie.averageRating)"
-                                    read-only="!isMovieRateable(movie)"
-                                    on-leave="ratingLeaved(movie)">
+                                    read-only="!isMovieRateable(movie)">
                             </ranking-stars>
                             <div>
                                 <button class="btn btn-default btn-lg btn-watched" ng-click="setWatched(movie)"
-                                        ng-model="movie.hasWatched" uib-btn-checkbox>
+                                        ng-model="movie.ownWatched.value" uib-btn-checkbox>
                                     <span class="glyphicon glyphicon-camera"></span>
                                 </button>
                                 <span class="badge badge-notify">{{movie.usersWatched}}</span>

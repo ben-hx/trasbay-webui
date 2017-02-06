@@ -90,80 +90,26 @@ app.factory('MovieRepository', ['ErrorHandler', 'Movie', 'ApiManagerUtil', funct
             };
             return ApiManagerUtil.delete('movies/' + movie.id, movie, options);
         },
-        getWatched: function (movie) {
-            var options = {
-                elementTransformers: [
-                    {
-                        directWithoutKeyName: true,
-                        isCollection: false,
-                        transformerFunction: function (model) {
-                            return {
-                                hasWatched: model.watched.value,
-                            };
-                            /*
-                             var usersWatched = model.users.length;
-                             if (model.watched) {
-                             usersWatched++;
-                             }
-                             return {
-                             hasWatched: model.watched,
-                             users: model.users,
-                             usersWatched: usersWatched
-
-                             }
-                             */
-                        }
-                    }
-                ]
-            };
-            return ApiManagerUtil.get('movies/' + movie.id + '/watched', {}, options);
-        },
         setWatched: function (movie, hasWatched) {
             var url = (hasWatched ? 'watched' : 'unwatched');
             var options = {
                 elementTransformers: [
                     {
-                        directWithoutKeyName: true,
+                        keyName: 'movie',
                         isCollection: false,
-                        transformerFunction: function (model) {
-                            return {
-                                hasWatched: model.watched.value
-                            }
-                        }
+                        transformerFunction: transformMovieResponse
                     }
                 ]
             };
             return ApiManagerUtil.set('movies/' + movie.id + '/' + url, options);
         },
-        getRating: function (movie) {
-            var options = {
-                elementTransformers: [
-                    {
-                        directWithoutKeyName: true,
-                        isCollection: false,
-                        transformerFunction: function (model) {
-                            return {
-                                ownRating: model.rating.value,
-                                averageRating: model.averageRating
-                            };
-                        }
-                    }
-                ]
-            };
-            return ApiManagerUtil.get('movies/' + movie.id + '/rating', {}, options);
-        },
         setRating: function (movie, rating) {
             var options = {
                 elementTransformers: [
                     {
-                        directWithoutKeyName: true,
+                        keyName: 'movie',
                         isCollection: false,
-                        transformerFunction: function (model) {
-                            return {
-                                ownRating: model.ownRating,
-                                averageRating: model.averageRating
-                            }
-                        }
+                        transformerFunction: transformMovieResponse
                     }
                 ]
             };

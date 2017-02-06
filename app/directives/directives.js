@@ -4,7 +4,6 @@
 
 var app = angular.module('myApp.directives', []);
 
-
 app.directive('checkImage', function ($http) {
 
     function setDefaultImageForElement(element) {
@@ -15,15 +14,21 @@ app.directive('checkImage', function ($http) {
         restrict: 'A',
         link: function (scope, element, attrs) {
             attrs.$observe('ngSrc', function (ngSrc) {
+                element.hide();
+                var spinner = element.parent().append("<img id='spinner' class='" + element.attr('class') + " fa-spin' src='../img/movie/movie-default-thumbnail.png'>");
+                var ngSrc = ngSrc;
                 if (!ngSrc) {
                     setDefaultImageForElement(element);
+                    element.parent().find('#spinner').remove();
                     return;
                 }
-                $http.get(ngSrc).success(function () {
-                }).error(function () {
+                $http.get(ngSrc).then(function (result) {
+                }).catch(function () {
                     setDefaultImageForElement(element);
+                }).finally(function () {
+                    element.parent().find('#spinner').remove();
+                    element.show();
                 });
-
             });
         }
     };

@@ -18,6 +18,10 @@ body {
     font-family: "TOXIA", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.modal {
+    color: #777;
+}
+
 .view-main {
     height: 100%;
 }
@@ -344,7 +348,7 @@ section {
 
 section h2.section-heading {
     margin-top: 0;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     font-size: 40px;
 }
 
@@ -434,3 +438,71 @@ section h3.section-subheading {
 .pagination > li > span {
     color: black;
 }
+
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: scale(1) rotate(0deg);
+    }
+    to {
+        transform: scale(1) rotate(360deg);
+    }
+}
+
+.tooltip-error .tooltip-inner {
+    background-color: #E2001A;
+    color: #fff;
+}
+
+.tooltip-error .tooltip.top .tooltip-arrow {
+    border-top-color: #E2001A;
+}
+
+.tooltip-error .tooltip.right .tooltip-arrow {
+    border-right-color: #E2001A;
+}
+
+.tooltip-error .tooltip.bottom .tooltip-arrow {
+    border-bottom-color: #E2001A;
+}
+
+.tooltip-error .tooltip.left .tooltip-arrow {
+    border-left-color: #E2001A;
+}
+
+.ng-table th {
+    text-align: left;
+}
+
+.ng-table th.sortable.sort-desc, .ng-table th.sortable.sort-asc {
+    background-color: transparent;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+}
+
+.table > thead > tr > td.active, .table > tbody > tr > td.active, .table > tfoot > tr > td.active, .table > thead > tr > th.active, .table > tbody > tr > th.active, .table > tfoot > tr > th.active, .table > thead > tr.active > td, .table > tbody > tr.active > td, .table > tfoot > tr.active > td, .table > thead > tr.active > th, .table > tbody > tr.active > th, .table > tfoot > tr.active > th {
+    background-color: #777;
+}
+
+.table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    border: none;
+    vertical-align: middle;
+}
+
+.icon-links {
+    word-spacing: 15px;
+}
+
+

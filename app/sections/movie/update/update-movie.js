@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('myApp.update-movie', ['myApp.model', 'ui.bootstrap', 'ngTagsInput']);
+var app = angular.module('myApp.movie');
 
 app.config(['$stateProvider', function ($stateProvider) {
     $stateProvider.state('updatemovie', {
@@ -11,7 +11,7 @@ app.config(['$stateProvider', function ($stateProvider) {
         },
         views: {
             "main": {
-                templateUrl: 'sections/movie/update-movie/update-movie.html',
+                templateUrl: 'sections/movie/update/update-movie.html',
                 controller: 'UpdateMovieCtrl'
             }
         }
@@ -23,49 +23,30 @@ app.controller('UpdateMovieCtrl', ['$scope', '$timeout', '$state', 'MovieReposit
     $scope.reload = function () {
         MovieRepository.getById($state.params.movieId).then(function (movie) {
             $scope.movie = $scope.modelToViewData(movie);
-            $scope.extendMovieWithRating(movie);
-            $scope.extendMovieWithWatched(movie);
         });
     };
     $scope.reload();
 
-    $scope.extendMovieWithRating = function (movie) {
-
-        MovieRepository.getRating(movie).then(function (data) {
-            movie = angular.extend(movie, data);
-            movie.oldAverageRating = data.averageRating;
-        });
-
-    };
-
-    $scope.extendMovieWithWatched = function (movie) {
-        MovieRepository.getWatched(movie).then(function (data) {
-            movie = angular.extend(movie, data);
-        });
-    };
-
     $scope.setWatched = function (movie) {
-        MovieRepository.setWatched(movie, movie.hasWatched).then(function (data) {
-            movie.hasWatched = data.hasWatched;
-            movie.hasWatched ? movie.usersWatched++ : movie.usersWatched--;
+        MovieRepository.setWatched(movie, movie.ownWatched.value).then(function (updatedMovie) {
+            movie = updatedMovie;
         });
     };
 
     $scope.setRating = function (movie, value) {
         if ($scope.isMovieRateable(movie)) {
-            MovieRepository.setRating(movie, value).then(function (data) {
-                movie.ownRating = data.ownRating;
-                movie.oldAverageRating = data.averageRating;
+            MovieRepository.setRating(movie, value).then(function (updatedMovie) {
+                movie = updatedMovie;
+                movie.oldAverageRating = updatedMovie.averageRating;
             });
         }
     };
 
-    $scope.ratingOnLeave = function (movie) {
-        movie.averageRating = movie.oldAverageRating;
-    };
-
     $scope.isMovieRateable = function (movie) {
-        return movie.hasWatched == true;
+        if (!movie) {
+            return false;
+        }
+        return movie.ownWatched.value == true;
     };
 
     $scope.modelToViewData = function (movie) {

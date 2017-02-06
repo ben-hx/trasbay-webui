@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('myApp.add-movie', ['myApp.model', 'ui.bootstrap', 'ngTagsInput']);
+var app = angular.module('myApp.movie');
 
 app.config(['$stateProvider', function ($stateProvider) {
     $stateProvider.state('addmovie', {
@@ -10,7 +10,7 @@ app.config(['$stateProvider', function ($stateProvider) {
         },
         views: {
             "main": {
-                templateUrl: 'sections/movie/add-movie/add-movie.html',
+                templateUrl: 'sections/movie/add/add-movie.html',
                 controller: 'AddMovieCtrl'
             }
         }

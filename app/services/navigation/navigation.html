@@ -1,0 +1,34 @@
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-fixed-top"
+     ng-class="{'navbar-shrink': showShrink}"
+     ng-controller="NavigationCtrl">
+    <div class="container">
+
+        <div class="navbar-header">
+
+            <a type="button" class="navbar-toggle" data-toggle="collapse"
+               data-target=".navbar-collapse">
+                <span class="glyphicon glyphicon-menu-hamburger">
+                    <span class="sr-only">Toggle Navigation</span>
+                </span>
+            </a>
+            <a class="navbar-brand page-scroll" href="#page-top"
+               du-smooth-scroll><img class="nav-bar-logo" alt="logo" src="img/logo/logo.svg"></a>
+            <div class="navbar-search-mobile" ng-include src="'services/searchbar/search-bar.html'"></div>
+        </div>
+
+        <div class="navbar-collapse collapse">
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="page-scroll" ng-repeat="element in NavigationService.navigationElements">
+                    <a href="" ng-click="element.clickHandler()">
+                        {{element.caption}}
+                    </a>
+                </li>
+            </ul>
+
+            <div class="navbar-form navbar-search-desktop" ng-include src="'services/searchbar/search-bar.html'"></div>
+
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>

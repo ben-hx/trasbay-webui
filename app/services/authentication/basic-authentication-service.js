@@ -55,7 +55,7 @@ app.service('BasicAuthenticationService', ['$cookieStore', '$q', 'UserRepository
         logout: clearLoggedInUser,
         initialize: function () {
             var storageObject = $cookieStore.get(currentUserCookieKey);
-            if (storageObject) {
+            if (storageObject && storageObject.user) {
                 changeLoggedInUser(storageObject.user, storageObject.password);
             }
         }
