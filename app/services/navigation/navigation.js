@@ -144,7 +144,7 @@ app.factory('NavigationService', ['NavigationElements', 'AuthenticationService',
             case 'admin':
                 return getAdminElements();
             case 'moderator':
-                return getAdminElements();
+                return getModeratorElements();
             default:
                 return getLooserElements();
         }

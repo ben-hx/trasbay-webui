@@ -99,7 +99,7 @@ app.controller('InaktiveUsersCtrl', ['$scope', '$rootScope', '$state', 'NgTableP
         }).finally(function () {
             form.whileLoading = false;
         });
-    }
+    };
 
     $scope.deleteUser = function (user, users, index, form) {
         form.hasError = false;
