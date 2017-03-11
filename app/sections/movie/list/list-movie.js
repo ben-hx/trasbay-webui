@@ -4,20 +4,35 @@ var app = angular.module('myApp.movie');
 
 app.config(['$stateProvider', function ($stateProvider) {
     $stateProvider.state('movies', {
-        url: '/movies?page&limit&sort&title',
+        url: '/movies?' +
+        '{page:int}&' +
+        '{limit:int}&' +
+        '{sort:string}&' +
+        '{title:string}&' +
+        '{createdFrom:date}&{createdTo:date}&' +
+        '{lastModifiedFrom:date}&{lastModifiedTo:date}&' +
+        '{yearFrom:int}&{yearTo:int}&' +
+        '{averageRatingFrom:int}&{averageRatingTo:int}&' +
+        '{genres:array}&' +
+        '{actors:array}&' +
+        '{tags:array}&',
         views: {
             "main": {
                 templateUrl: 'sections/movie/list/list-movie.html',
-                controller: 'MovieCtrl'
-            }
+                controller: 'MovieListCtrl'
+            },
+            "filter@movies": {
+                templateUrl: 'sections/movie/filter/filter-movie.html',
+                controller: 'MovieFilterCtrl'
+            },
         },
         params: {
             page: {
-                value: '0',
+                value: 0,
                 squash: true
             },
             limit: {
-                value: '12',
+                value: 12,
                 squash: true
             },
             sort: {
@@ -28,89 +43,107 @@ app.config(['$stateProvider', function ($stateProvider) {
             title: {
                 value: '',
                 squash: true
+            },
+            createdFrom: {
+                value: null,
+                squash: true
+            },
+            createdTo: {
+                value: null,
+                squash: true
+            },
+            lastModifiedFrom: {
+                value: null,
+                squash: true
+            },
+            lastModifiedTo: {
+                value: null,
+                squash: true
+            },
+            yearFrom: {
+                value: null,
+                squash: true
+            },
+            yearTo: {
+                value: null,
+                squash: true
+            },
+            averageRatingFrom: {
+                value: null,
+                squash: true
+            },
+            averageRatingTo: {
+                value: null,
+                squash: true
+            },
+            genres: {
+                array: true,
+                value: [],
+                squash: true
+            },
+            actors: {
+                array: true,
+                value: [],
+                squash: true
+            },
+            tags: {
+                array: true,
+                value: [],
+                squash: true
             }
         },
         reloadOnSearch: false,
     });
 }]);
 
-app.controller('MovieCtrl', ['$scope', '$state', '$window', 'MovieRepository', 'SearchbarService', function ($scope, $state, $window, MovieRepository, SearchbarService) {
+app.controller('MovieListCtrl', ['$scope', '$state', '$stateParams', '$window', '$timeout', '$document', 'UiUtil', 'MovieRepository', 'MovieFilterService', 'SearchbarService', function ($scope, $state, $stateParams, $window, $timeout, $document, UiUtil, MovieRepository, MovieFilterService, SearchbarService) {
 
-    SearchbarService.showSearchbar = true;
-
-    $scope.updateFromSearchEvents = function (events, args) {
-        if ($scope.searchHasChanged) {
-            $scope.reloadWithParams({
-                title: args.searchText,
-                sort: ''
-            });
-            $scope.searchHasChanged = false;
-        }
+    $scope.init = function () {
+        $scope.reload();
+        $scope.UiUtil = UiUtil;
+        SearchbarService.show = true;
     };
-    $scope.$on('searchbarChanged', function (events, args) {
-        $scope.searchHasChanged = true;
-    });
+
+    $scope.updateFromSearchEvents = function () {
+        $scope.reloadWithParams(MovieFilterService.data);
+    };
+
     $scope.$on('searchbarSubmitted', $scope.updateFromSearchEvents);
-    $scope.$on('searchbarCleared', $scope.updateFromSearchEvents);
+    $scope.$on('movieFilterSubmitted', $scope.updateFromSearchEvents);
 
+    $scope.$on('searchbarChanged', function (events, args) {
+        MovieFilterService.data.title = SearchbarService.data.searchText;
+    });
 
-    $scope.rearrangeMovieToPartInfo = function ($index) {
-        if ($scope.movies[$index].showFullInfo) {
-            $scope.movies[$index].showFullInfo = false;
-            var elementA = $scope.movies[$index];
-            var elementB = $scope.movies[elementA.originalIndex];
-            $scope.movies[$index] = elementB;
-            $scope.movies[elementA.originalIndex] = elementA;
-            $scope.showMovieFullInfo = false;
-            $scope.showMovieFullInfoIndex = -1;
-        }
-    };
+    $scope.$on('movieFilterChanged', function (events, args) {
+        SearchbarService.data.searchText = MovieFilterService.data.title;
+    });
 
-    $scope.rearrangeMovieToFullInfo = function ($index) {
-        if (!$scope.showMovieFullInfo) {
-            $scope.movies[$index].showFullInfo = true;
-            $scope.movies[$index].originalIndex = $index;
-            var stripNumber = ($index % $scope.findColNumberPerRow());
-            if (stripNumber > 0) {
-                var elementA = $scope.movies[$index];
-                var elementB = $scope.movies[$index - stripNumber];
-                $scope.movies[$index] = elementB;
-                $scope.movies[$index - stripNumber] = elementA;
-            }
-            $scope.showMovieFullInfo = true;
-            $scope.showMovieFullInfoIndex = $index - stripNumber;
-        }
-    };
+    $scope.$on('movieFilterCleared', function (events, args) {
+        SearchbarService.data.searchText = '';
+        $scope.updateFromSearchEvents();
+    });
 
+    $scope.$on('movieFilterClosed', function (events, args) {
+        SearchbarService.settings.isOpen = false;
+    });
 
-    $scope.findColNumberPerRow = function () {
-        if ($window.matchMedia("(min-width:992px)").matches) {
-            return 4;
-        }
-        return 1;
-    };
+    $scope.$on('searchbarOpened', function (events, args) {
+        MovieFilterService.settings.isOpen = true;
+    });
+
+    $scope.$on('searchbarClosed', function (events, args) {
+        MovieFilterService.settings.isOpen = false;
+    });
 
     $scope.reloadWithParams = function (params) {
-        $state.params = params;
         $scope.reload();
-        $state.go('.', params);
+        $state.transitionTo($state.current.name, params);
     };
 
     $scope.reload = function () {
-
-        var queryParams = {
-            limit: $state.params.limit,
-            page: $state.params.page,
-            sort: $state.params.sort,
-            title: $state.params.title
-        };
-
-        if (queryParams.title) {
-            SearchbarService.searchbarIsOpened = true;
-            SearchbarService.searchData.searchText = queryParams.title;
-        }
-
-        MovieRepository.getAll(queryParams).then(function (data) {
+        MovieFilterService.data = $stateParams;
+        MovieRepository.getAll($stateParams).then(function (data) {
             $scope.movies = data.movies;
             $scope.totalItems = data.pagination.totalCount;
             $scope.currentPage = data.pagination.page + 1;
@@ -118,25 +151,51 @@ app.controller('MovieCtrl', ['$scope', '$state', '$window', 'MovieRepository', '
 
         $scope.showMovieFullInfo = false;
     };
-    $scope.reload();
 
-    $scope.update = function (movie) {
+    $scope.update = function (index) {
+        var movie = $scope.movies[index];
         var destinationState = {name: 'movies'};
         $state.go('updatemovie', {movieId: movie.id, destinationState: destinationState}, {reload: true});
     };
 
-    $scope.setWatched = function (movie) {
+    $scope.setWatched = function (index) {
+        var movie = $scope.movies[index];
+        console.log(movie.ownWatched.value);
         MovieRepository.setWatched(movie, movie.ownWatched.value).then(function (updatedMovie) {
-            movie = updatedMovie;
+            angular.extend($scope.movies[index], updatedMovie);
+        }).catch(function () {
+            movie.ownWatched.value = !movie.ownWatched.value;
         });
     };
 
-    $scope.setRating = function (movie, value) {
+    $scope.setRating = function (index, value) {
+        var movie = $scope.movies[index];
         if ($scope.isMovieRateable(movie)) {
             MovieRepository.setRating(movie, value).then(function (updatedMovie) {
-                movie = updatedMovie;
-                movie.oldAverageRating = updatedMovie.averageRating;
+                angular.extend($scope.movies[index], updatedMovie);
+                $scope.movies[index].oldAverageRating = updatedMovie.averageRating;
             });
+        }
+    };
+
+    $scope.postComment = function (index, comment) {
+        var movie = $scope.movies[index];
+        MovieRepository.postComment(movie, comment).then(function (updatedMovie) {
+            angular.extend($scope.movies[index], updatedMovie);
+            $scope.movies[index].currentComment = '';
+        });
+    };
+
+    $scope.deleteComment = function (index, comment) {
+        var movie = $scope.movies[index];
+        MovieRepository.deleteComment(movie, comment).then(function (updatedMovie) {
+            angular.extend($scope.movies[index], updatedMovie);
+        });
+    };
+
+    $scope.ratingHover = function (movie, value) {
+        if ($scope.isMovieRateable(movie)) {
+            movie.showRatingToolTip = true;
         }
     };
 
@@ -145,10 +204,27 @@ app.controller('MovieCtrl', ['$scope', '$state', '$window', 'MovieRepository', '
     };
 
     $scope.pageChanged = function (nextPage) {
-        $scope.reloadWithParams({
-            page: nextPage - 1,
-            sort: ''
-        });
+        MovieFilterService.data.page = nextPage - 1;
+        $scope.reloadWithParams(MovieFilterService.data);
     };
+
+    $scope.scrollTo = function (id, top) {
+        $timeout(function () {
+            var element = angular.element(document.getElementById(id));
+            $document.scrollToElementAnimated(element, top);
+        }, 1);
+    };
+
+    $scope.showFullInfo = function ($event, movie, id) {
+        movie.showFullInfo = true;
+        var top = $event.target.getBoundingClientRect().top;
+        $scope.scrollTo(id, top);
+    };
+
+    $scope.showPartInfo = function ($event, movie, id) {
+        movie.showFullInfo = false;
+        var top = $event.target.getBoundingClientRect().top;
+        $scope.scrollTo(id, top);
+    }
 
 }]);

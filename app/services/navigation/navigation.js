@@ -19,7 +19,7 @@ app.run(['$rootScope', '$state', 'AuthenticationService', 'LoginViewManager', 'S
     });
 
     function prepareSearchBar() {
-        SearchbarService.showSearchbar = false;
+        SearchbarService.show = false;
     }
 
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -76,6 +76,12 @@ app.factory('NavigationElement', function () {
 app.factory('NavigationElements', ['$state', 'NavigationElement', 'AuthenticationService', 'LoginViewManager', function ($state, NavigationElement, AuthenticationService, LoginViewManager) {
 
     return {
+        userElement: NavigationElement.build({
+            name: 'user', caption: 'User', goToState: 'user', clickHandler: function () {
+                $state.go('user');
+            }
+        }),
+
         adminElement: NavigationElement.build({
             name: 'admin', caption: 'Admin', goToState: 'admin', clickHandler: function () {
                 $state.go('admin');
@@ -97,9 +103,7 @@ app.factory('NavigationElements', ['$state', 'NavigationElement', 'Authenticatio
 
         loginElement: NavigationElement.build({
             name: 'login', caption: 'Login', anchor: 'page-top', clickHandler: function () {
-                LoginViewManager.login().then(function () {
-                    $state.go('home');
-                });
+                LoginViewManager.login();
             }
         }),
 
@@ -128,6 +132,7 @@ app.factory('NavigationService', ['NavigationElements', 'AuthenticationService',
         return [
             NavigationElements.moviesElement,
             NavigationElements.addMovieElement,
+            NavigationElements.userElement,
             NavigationElements.logoutElement
         ];
     }
@@ -135,6 +140,7 @@ app.factory('NavigationService', ['NavigationElements', 'AuthenticationService',
     function getLooserElements() {
         return [
             NavigationElements.moviesElement,
+            NavigationElements.userElement,
             NavigationElements.logoutElement
         ];
     }

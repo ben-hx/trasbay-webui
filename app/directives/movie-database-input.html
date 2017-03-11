@@ -1,0 +1,19 @@
+<span>
+    <input class="form-control"
+           type="text"
+           placeholder="{{placeholder}}"
+           ng-model="data.title"
+           uib-typeahead="movie as movie for movie in getTitles($viewValue) | limitTo:10"
+           typeahead-on-select="titleOnSelect($item, $model, $label, $event)"
+           typeahead-is-open="typeaheadIsOpen"
+           typeahead-template-url="customTemplate.html"
+           typeahead-loading="isLoading">
+
+    <script type="text/ng-template" id="customTemplate.html">
+        <a class="movie-search">
+            <img class="img-movie-search" check-image
+                 ng-src="{{match.model.poster}}">
+            <span class="text-movie-search" ng-bind-html="match.model.title | uibTypeaheadHighlight:query"></span>
+        </a>
+    </script>
+</span>

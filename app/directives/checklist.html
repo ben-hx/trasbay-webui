@@ -1,0 +1,12 @@
+<div class="list-group category" ng-init="searchText = ''">
+    <div class="list-group-item">
+        <input type="text" placeholder="Search..." ng-model="searchText">
+    </div>
+    <div class="list-group-item category"
+         ng-show="searchText == '' || searchText != '' && checkboxName.toLowerCase().includes(searchText)"
+         ng-repeat="(checkboxName, checkboxValue) in ngModel">
+        <input type="checkbox" ng-model="ngModel[checkboxName]"
+               ng-change="onChange({name:checkboxName, value:checkboxValue})"/>
+        {{ checkboxName }}
+    </div>
+</div>

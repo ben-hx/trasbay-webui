@@ -10,7 +10,9 @@
 
     <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
     <link href="bower_components/angular-loading-bar/build/loading-bar.css" rel="stylesheet">
-    <link href="bower_components/ng-tags-input/ng-tags-input.css" rel="stylesheet">
+    <link href="bower_components/angular-ui-notification/dist/angular-ui-notification.css" rel="stylesheet">
+    <link href="bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css" rel="stylesheet"/>
+    <link href="bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet"/>
     <link href="bower_components/ng-table-bundle/ng-table.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
@@ -38,7 +40,8 @@
 
     <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
 </head>
-<body id="page-top" class="index">
+<body id="page-top" class="ng-cloak index">
+
 <!-- Has to be included first, to hide the rest of the screen-->
 <div ng-controller="SplashScreenCtrl" ng-hide="hideScreen" class="loading vertical-center fade-in-out"
      ng-init="onInit()">
@@ -55,7 +58,8 @@
     your browser</a> to improve your experience.</p>
 <![endif]-->
 
-<div ui-view="main" class="view-animate view-main" autoscroll></div>
+<div id="main-content" ui-view="main" class="view-animate view-main" autoscroll>
+</div>
 
 <!-- External Dependencies JavaScript -->
 <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -66,14 +70,18 @@
 <script src="bower_components/angular-scroll/angular-scroll.js"></script>
 <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
 <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-<script src="bower_components/ng-tags-input/ng-tags-input.js"></script>
+<script src="bower_components/angular-timeago/dist/angular-timeago-core.min.js"></script>
+<script src="bower_components/angular-timeago/src/languages/time-ago-language-en_US.js"></script>
+
 <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+<script src="bower_components/angular-ui-notification/dist/angular-ui-notification.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <script src="bower_components/ng-table-bundle/ng-table.js"></script>
+<script src="bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"></script>
+<script src="bower_components/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
 
-<!-- Custom Angular-Extensions JavaScript -->
 <script src="app.js"></script>
 <script src="config.js"></script>
 <script src="directives/directives.js"></script>
@@ -82,7 +90,6 @@
 <script src="models/helper/api-manager-util.js"></script>
 <script src="models/helper/api-manager-util-decorator.js"></script>
 <script src="models/user/user-repository.js"></script>
-<script src="models/user/admin-repository.js"></script>
 <script src="models/note/note.js"></script>
 <script src="models/note/note-repository.js"></script>
 <script src="models/category/category-repository.js"></script>
@@ -101,14 +108,31 @@
 <script src="services/splashscreen/splash-screen.js"></script>
 <script src="services/navigation/navigation.js"></script>
 <script src="services/searchbar/searchbar-service.js"></script>
+<script src="services/searchbar/searchbar-text/searchbar-text.js"></script>
+<script src="services/searchbar/searchbar-movie/searchbar-movie.js"></script>
+
 <script src="services/login/login.js"></script>
+<script src="services/login/login-navigation-decorator.js"></script>
+<script src="services/confirmation/confirmation.js"></script>
+<script src="services/notification/notification.js"></script>
+<script src="services/error-handler/error-handler.js"></script>
+<script src="services/event-handler/event-handler.js"></script>
+<script src="services/ui-util/ui-util.js"></script>
 
 <script src="sections/temp/temp.js"></script>
 <script src="sections/landingpage/landingpage.js"></script>
-<script src="sections/admin/admin.js"></script>
+
+<script src="sections/user/user.js"></script>
+<script src="sections/user/manage-users/manage-users.js"></script>
+<script src="sections/user/manage-inaktive-users/manage-inaktive-users.js"></script>
+<script src="sections/user/manage-user-info/manage-user-info.js"></script>
+<script src="sections/user/decorator/user-repository-decorator.js"></script>
+
 <script src="sections/movie/movie.js"></script>
 <script src="sections/movie/list/list-movie.js"></script>
+<script src="sections/movie/filter/filter-movie.js"></script>
 <script src="sections/movie/add/add-movie.js"></script>
 <script src="sections/movie/update/update-movie.js"></script>
+<script src="sections/movie/decorator/movie-repository-decorator.js"></script>
 
 </body>

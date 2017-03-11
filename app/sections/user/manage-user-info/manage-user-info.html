@@ -1,0 +1,169 @@
+<div class="container" ng-init="init()">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h2 class="section-heading">
+                User Info
+            </h2>
+        </div>
+    </div>
+
+    <form name="userInfoForm" class="row form-horizontal" ng-submit="save(user)">
+        <div class="col-md-4 col-md-offset-4">
+
+            <div class="form-group">
+                <div class="col-sm-1 pull-right">
+                    <btn class="btn btn-link" ng-show="!whileEditing" title="edit">
+                        <i ng-click="whileEditing = true" class="glyphicon glyphicon-edit"></i>
+                    </btn>
+                    <btn class="btn btn-link" ng-show="whileEditing" title="cancel">
+                        <i ng-click="whileEditing = false" class="glyphicon glyphicon-remove"></i>
+                    </btn>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="username">username</label>
+                <span class="col-sm-10 input-label" ng-show="!whileEditing">{{user.username}}</span>
+                <div class="col-sm-10">
+                    <input class="form-control" id="username" ng-show="whileEditing" placeholder="ashySlashy"
+                           type="text"
+                           ng-model="user.username"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="email">email</label>
+                <span class="col-sm-10 input-label" ng-show="!whileEditing">{{user.email}}</span>
+                <div class="col-sm-10">
+                    <input class="form-control" id="email" ng-show="whileEditing"
+                           placeholder="ashySlashy@trashy.org" type="email"
+                           ng-model="user.email" required/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="firstname">firstname</label>
+                <span class="col-sm-10 input-label" ng-show="!whileEditing">{{user.firstname}}</span>
+                <div class="col-sm-10">
+                    <input class="form-control" id="firstname" ng-show="whileEditing" placeholder="ashy" type="text"
+                           ng-model="user.firstname"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="lastname">lastname</label>
+                <span class="col-sm-10 input-label" ng-show="!whileEditing">{{user.lastname}}</span>
+                <div class="col-sm-10">
+                    <input class="form-control" id="lastname" ng-show="whileEditing" placeholder="slashy"
+                           type="text"
+                           ng-model="user.lastname"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">role</label>
+                <span class="col-sm-10 input-label">{{user.role}}</span>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-1 pull-right">
+                    <button type="submit" class="btn btn-link" ng-show="whileEditing" title="save"
+                            ng-disabled="userInfoForm.$invalid || !userInfoForm.$dirty">
+                        <span>save </span>
+                        <i class="glyphicon glyphicon-ok"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <form name="changePasswordForm" class="row form-horizontal"
+          ng-submit="changePassword(password.oldPassword, password.newPassword)">
+        <div class="col-md-4 col-md-offset-4">
+
+            <div ng-show="!passwordWhileEditing">
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="username">password</label>
+                    <div class="col-sm-10">
+                        <button class="btn btn-link" ng-click="passwordWhileEditing = true" style="padding-left: 0px;">
+                            change!
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="passwordWhileEditing">
+
+                <div class="form-group">
+                    <div class="col-sm-1 pull-right">
+                        <btn class="btn btn-link" title="cancel">
+                            <i ng-click="passwordWhileEditing = false" class="glyphicon glyphicon-remove"></i>
+                        </btn>
+                    </div>
+                </div>
+
+                <div class="form-group has-feedback" ng-class="{
+                'has-error': !password.oldPasswordIsMatch,
+                'has-success': password.oldPasswordIsMatch }">
+                    <label class="col-sm-2 control-label" for="oldPassword">old password</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="oldPassword" type="password" ng-model="password.oldPassword"
+                               ng-change="oldPasswordOnChange(password.oldPassword)"
+                               required/>
+                        <span ng-show="!password.oldPasswordIsMatch"
+                              class="help-block">Old Password is required</span>
+                        <span class="form-control-feedback"
+                              ng-show='password.oldPasswordIsMatch'>
+                            <i class="fa fa-check"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group has-feedback" ng-class="{
+                'has-error': changePasswordForm.password.$dirty && !changePasswordForm.confirmPassword.$valid,
+                'has-success': changePasswordForm.password.$valid && changePasswordForm.confirmPassword.$valid }">
+                    <label class="col-sm-2 control-label" for="password">new password</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" type="password" name="password" id="password" class="form-control"
+                               ng-model="password.newPassword"
+                               required/>
+                        <span ng-show="changePasswordForm.password.$dirty && changePasswordForm.password.$error.required"
+                              class="help-block">New Password is required</span>
+                        <span class="form-control-feedback"
+                              ng-show='changePasswordForm.password.$valid && changePasswordForm.confirmPassword.$valid'>
+                            <i class="fa fa-check"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group has-feedback" ng-class="{
+                    'has-error': changePasswordForm.password.$dirty && !changePasswordForm.confirmPassword.$valid,
+                    'has-success': changePasswordForm.password.$valid && changePasswordForm.confirmPassword.$valid }">
+                    <label class="col-sm-2 control-label" for="confirmPassword">confirm new password</label>
+                    <div class="col-sm-10">
+                        <input type="password" name="confirmPassword" id="confirmPassword" class="form-control"
+                               ng-model="password.confirmNewPassword" required password-input="password">
+                        <span class="form-control-feedback" ng-show='changePasswordForm.confirmPassword.$valid'>
+                            <i class="fa fa-check"></i>
+                        </span>
+                        <span ng-show="changePasswordForm.confirmPassword.$dirty && !changePasswordForm.confirmPassword.$valid"
+                              class="help-block">Please confirm the new password</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-1 pull-right">
+                        <button type="submit" class="btn btn-link" title="save"
+                                ng-disabled="changePasswordForm.$invalid || !changePasswordForm.$dirty">
+                            <span>save </span>
+                            <i class="glyphicon glyphicon-ok"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+</div>

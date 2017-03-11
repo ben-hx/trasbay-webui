@@ -16,9 +16,6 @@ app.config(['$stateProvider', function ($stateProvider) {
 
 app.controller('LandingPageCtrl', ['$scope', '$state', 'LoginViewManager', function ($scope, $state, LoginViewManager) {
     $scope.login = function () {
-        LoginViewManager.login().then(function () {
-            $state.go('home');
-        });
+        LoginViewManager.login();
     };
-
 }]);

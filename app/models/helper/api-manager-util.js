@@ -5,7 +5,7 @@ var app = angular.module('myApp.model');
 
 app.factory('ApiManagerUtil', ['$q', '$http', 'ErrorHandler', 'ApiIsOfflineError', function ($q, $http, ErrorHandler, ApiIsOfflineError) {
 
-    var baseUrl = 'http://localhost:8080/v1';
+    var baseUrl = 'https://benhx.kaus.uberspace.de/api/v1';
     var authenticationHeader;
 
     var transformResponseBody = function (responseBody, options) {
@@ -14,10 +14,11 @@ app.factory('ApiManagerUtil', ['$q', '$http', 'ErrorHandler', 'ApiIsOfflineError
             angular.forEach(options.elementTransformers, function (transformer) {
                 var element = (transformer.directWithoutKeyName ? responseBody : responseBody[transformer.keyName]);
                 if (transformer.isCollection) {
-                    result[transformer.keyName] = angular.forEach(element, function (item) {
+                    result[transformer.keyName] = element.map(function (item) {
                         if (transformer.transformerFunction) {
                             item = transformer.transformerFunction(item);
                         }
+                        return item;
                     });
                 } else {
                     if (transformer.transformerFunction) {
@@ -49,8 +50,14 @@ app.factory('ApiManagerUtil', ['$q', '$http', 'ErrorHandler', 'ApiIsOfflineError
         setDefaultHeaders: function (header) {
             authenticationHeader = header;
         },
-        get: function (resourceURI, params, options) {
-            return this.request({method: 'GET', resourceURI: resourceURI, params: params, data: {}, options: options});
+        get: function (resourceURI, params, data, options) {
+            return this.request({
+                method: 'GET',
+                resourceURI: resourceURI,
+                params: params,
+                data: data,
+                options: options
+            });
         },
         create: function (resourceURI, data, options) {
             return this.request({method: 'POST', resourceURI: resourceURI, params: {}, data: data, options: options});
@@ -61,7 +68,7 @@ app.factory('ApiManagerUtil', ['$q', '$http', 'ErrorHandler', 'ApiIsOfflineError
         update: function (resourceURI, data, options) {
             return this.request({method: 'PUT', resourceURI: resourceURI, params: {}, data: data, options: options});
         },
-        delete: function (resourceURI, data, options) {
+        delete: function (resourceURI, options) {
             return this.request({method: 'DELETE', resourceURI: resourceURI, params: {}, data: {}, options: options});
         }
     };

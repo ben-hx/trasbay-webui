@@ -1,0 +1,12 @@
+<div class="list-group category" ng-init="searchText = ''">
+    <div class="list-group-item">
+        <input type="text" placeholder="Search..." ng-model="searchText">
+    </div>
+    <div class="list-group-item category"
+         ng-show="searchText == '' || searchText != '' && checkboxName.toLowerCase().includes(searchText)"
+         ng-repeat="value in values" ng-init="isChecked = (data.indexOf(value) > -1)">
+        <input type="checkbox" ng-model="isChecked"
+               ng-change="onChange(value, isChecked)"/>
+        {{ value }}
+    </div>
+</div>

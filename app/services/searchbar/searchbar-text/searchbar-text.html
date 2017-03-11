@@ -1,38 +1,41 @@
 <form name="searchForm"
-      ng-controller="SearchbarCtrl"
-      ng-show="SearchbarService.showSearchbar"
+      class="searchbar"
+      ng-controller="SearchbarTextCtrl"
+      ng-show="SearchbarService.show"
+      ng-init="init()"
       ng-submit="searchOnSubmit()"
       ng-keyup="searchOnChange()">
     <div class="form-group" style="display:inline;">
         <div class="input-group" style="display:table;">
-            <input type="text" class="form-control input-searchbar" placeholder="Search..."
+            <input type="text" class="form-control" placeholder="Search..."
                    focus-on-set-visible="true"
-                   ng-model="SearchbarService.searchData.searchText"
-                   ng-style="{'visibility': SearchbarService.searchbarIsOpened?'visible':'hidden'}">
+                   ng-model="SearchbarService.data.searchText"
+                   ng-style="{'visibility': SearchbarService.settings.isOpen?'visible':'hidden'}">
             <span class="input-group-btn" style="width:1%;">
                 <a class="btn btn-searchbar" type="button"
-                   ng-click="SearchbarService.searchbarIsOpened = true;"
-                   ng-show="!SearchbarService.searchbarIsOpened">
+                   ng-click="searchOnOpen()"
+                   ng-show="!SearchbarService.settings.isOpen">
                     <span class="glyphicon glyphicon-search">
-                        <span class="sr-only">Search</span>
+                    <span class="sr-only">Search</span>
                     </span>
                 </a>
                 <a class="btn btn-searchbar" type="submit"
                    ng-click="searchOnSubmit()"
-                   ng-show="SearchbarService.searchbarIsOpened">
+                   ng-show="SearchbarService.settings.isOpen">
                     <span class="glyphicon glyphicon-search">
-                        <span class="sr-only">Search</span>
+                    <span class="sr-only">Search</span>
                     </span>
                 </a>
 
                 <a class="btn btn-searchbar" type="button"
-                   ng-click="searchOnCleaned(); SearchbarService.searchbarIsOpened = false;"
-                   ng-show="SearchbarService.searchbarIsOpened">
+                   ng-click="searchOnClosed()"
+                   ng-show="SearchbarService.settings.isOpen">
                     <span class="glyphicon glyphicon-remove">
-                        <span class="sr-only">Cancel Search</span>
+                        <span class="sr-only">Close Search</span>
                     </span>
                 </a>
             </span>
+
         </div>
     </div>
 </form>

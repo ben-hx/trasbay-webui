@@ -1,0 +1,14 @@
+<div class="input-group">
+    <input type="text"
+           class="{{inputClass}}"
+           uib-datepicker-popup="dd.MM.yyyy"
+           is-open="dateIsOpen"
+           popup-placement="{{popupPlacement}}"
+           ng-model="ngModel"
+           placeholder="{{placeholder}}"/>
+    <span class="input-group-btn">
+        <button type="button" class="{{btnClass}}" ng-click="dateIsOpen = true">
+            <i class="glyphicon glyphicon-calendar"></i>
+        </button>
+    </span>
+</div>

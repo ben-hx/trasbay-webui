@@ -1,7 +1,30 @@
 .img-movie-gallery {
     display: inline-block;
     text-align: center;
-    max-height: 300px;
+    height: 300px;
+    width: auto;
+    min-width: 200px;
+}
+
+.movie-search {
+    cursor: pointer;
+}
+
+.img-movie-search {
+    display: inline-block;
+    text-align: center;
+    height: 100px;
+    width: auto;
+    min-width: 40px;
+}
+
+.text-movie-search {
+    font-size: 30px;
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.1;
+    color: inherit;
+    padding-left: 15px;
 }
 
 .content-wrapper {

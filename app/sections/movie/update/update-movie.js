@@ -18,14 +18,18 @@ app.config(['$stateProvider', function ($stateProvider) {
     });
 }]);
 
-app.controller('UpdateMovieCtrl', ['$scope', '$timeout', '$state', 'MovieRepository', function ($scope, $timeout, $state, MovieRepository) {
+app.controller('UpdateMovieCtrl', ['$scope', '$state', 'MovieRepository', 'NotificationService', 'ConfirmationViewManager', function ($scope, $state, MovieRepository, NotificationService, ConfirmationViewManager) {
 
-    $scope.reload = function () {
+    $scope.init = function () {
+        $scope.refresh();
+        $scope.whileEditing = true;
+    };
+
+    $scope.refresh = function () {
         MovieRepository.getById($state.params.movieId).then(function (movie) {
-            $scope.movie = $scope.modelToViewData(movie);
+            $scope.movie = movie;
         });
     };
-    $scope.reload();
 
     $scope.setWatched = function (movie) {
         MovieRepository.setWatched(movie, movie.ownWatched.value).then(function (updatedMovie) {
@@ -49,67 +53,23 @@ app.controller('UpdateMovieCtrl', ['$scope', '$timeout', '$state', 'MovieReposit
         return movie.ownWatched.value == true;
     };
 
-    $scope.modelToViewData = function (movie) {
-        var result = movie;
-        result.year = new Date(movie.year);
-        return result;
-    };
-
-    $scope.viewDataToModel = function (viewData) {
-        var result = viewData;
-        result.genres = result.genres.map(function (data) {
-            return data.text;
-        });
-        result.directors = result.directors.map(function (data) {
-            return data.text;
-        });
-        result.writers = result.writers.map(function (data) {
-            return data.text;
-        });
-        result.actors = result.actors.map(function (data) {
-            return data.text;
-        });
-        result.languages = result.languages.map(function (data) {
-            return data.text;
-        });
-        result.year = result.year.getYear();
-        return result;
-    };
-
     $scope.save = function (movie) {
-        if (movie) {
-            MovieRepository.update($scope.viewDataToModel(movie)).then(function () {
-                $state.go($state.params.destinationState.name, {}, {reload: true});
-            });
-        }
+        MovieRepository.update(movie).then(function (updatedMovie) {
+            movie = updatedMovie;
+            $scope.goBack();
+        });
     };
 
     $scope.delete = function (movie) {
-        if (movie) {
-            MovieRepository.delete(movie).then(function () {
-                $state.go($state.params.destinationState.name, {}, {reload: true});
-            });
+        MovieRepository.delete(movie).then(function (deletedMovie) {
+            $scope.goBack();
+        });
+    };
+
+    $scope.goBack = function () {
+        if ($state.params.destinationState) {
+            $state.go($state.params.destinationState.name, {}, {reload: true});
         }
-    };
-
-    $scope.dateOptions = {
-        startingDay: 1,
-        showWeeks: false,
-        minMode: 'year',
-        datepickerMode: 'year',
-        currentText: 'This Year'
-    };
-
-    $scope.open = function () {
-        $scope.popup.opened = true;
-    };
-
-    $scope.formats = ['yyyy'];
-    $scope.format = $scope.formats[0];
-    $scope.altInputFormats = 'yyyy';
-
-    $scope.popup = {
-        opened: false
-    };
+    }
 
 }]);

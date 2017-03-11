@@ -2,8 +2,13 @@
 
 var app = angular.module('myApp.model');
 
+app.factory('Movie', ['EventHandler', function (EventHandler) {
 
-app.factory('Movie', function () {
+    var currentUser = null;
+
+    EventHandler.subscribe('currentUserChanged', function (event, user) {
+        currentUser = user;
+    });
 
     function Movie(data) {
         for (var attr in data) {
@@ -19,14 +24,26 @@ app.factory('Movie', function () {
         return './app/img/movie/movie-default-thumbnail.png';
     };
 
+    Movie.prototype.isCommentDeletable = function (comment) {
+        if (currentUser == null) {
+            return false;
+        }
+        return currentUser.equals(comment.user) || currentUser.isAdmin();
+    };
+
+    Movie.prototype.isRateable = function () {
+        return this.ownWatched.value == true;
+    };
+
     return Movie;
-});
+}]);
 
 app.factory('MovieRepository', ['ErrorHandler', 'Movie', 'ApiManagerUtil', function (ErrorHandler, Movie, ApiManagerUtil) {
 
     function transformMovieResponse(data) {
         data.id = data._id || undefined;
-        return new Movie(data);
+        var result = new Movie(data);
+        return result;
     }
 
     return {
@@ -40,7 +57,7 @@ app.factory('MovieRepository', ['ErrorHandler', 'Movie', 'ApiManagerUtil', funct
                     }
                 ]
             };
-            return ApiManagerUtil.get('movies', params, options);
+            return ApiManagerUtil.get('movies', params, {}, options);
         },
         getById: function (id) {
             var options = {
@@ -52,7 +69,7 @@ app.factory('MovieRepository', ['ErrorHandler', 'Movie', 'ApiManagerUtil', funct
                     }
                 ]
             };
-            return ApiManagerUtil.get('movies/' + id, {}, options);
+            return ApiManagerUtil.get('movies/' + id, {}, {}, options);
         },
         create: function (movie) {
             var options = {
@@ -88,7 +105,7 @@ app.factory('MovieRepository', ['ErrorHandler', 'Movie', 'ApiManagerUtil', funct
                     }
                 ]
             };
-            return ApiManagerUtil.delete('movies/' + movie.id, movie, options);
+            return ApiManagerUtil.delete('movies/' + movie.id, options);
         },
         setWatched: function (movie, hasWatched) {
             var url = (hasWatched ? 'watched' : 'unwatched');
@@ -115,5 +132,62 @@ app.factory('MovieRepository', ['ErrorHandler', 'Movie', 'ApiManagerUtil', funct
             };
             return ApiManagerUtil.update('movies/' + movie.id + '/rating', {value: rating}, options);
         },
+        getGenres: function () {
+            var options = {
+                elementTransformers: [
+                    {
+                        keyName: 'genres',
+                        isCollection: true
+                    }
+                ]
+            };
+            return ApiManagerUtil.get('movies/genres', {}, {}, options);
+        },
+        getActors: function () {
+            var options = {
+                elementTransformers: [
+                    {
+                        keyName: 'actors',
+                        isCollection: true
+                    }
+                ]
+            };
+            return ApiManagerUtil.get('movies/actors', {}, {}, options);
+        },
+        getTags: function () {
+            var options = {
+                elementTransformers: [
+                    {
+                        keyName: 'tags',
+                        isCollection: true
+                    }
+                ]
+            };
+            return ApiManagerUtil.get('movies/tags', {}, {}, options);
+        },
+        postComment: function (movie, comment) {
+            var options = {
+                elementTransformers: [
+                    {
+                        keyName: 'movie',
+                        isCollection: false,
+                        transformerFunction: transformMovieResponse
+                    }
+                ]
+            };
+            return ApiManagerUtil.create('movies/' + movie.id + '/comments', {text: comment}, options);
+        },
+        deleteComment: function (movie, comment) {
+            var options = {
+                elementTransformers: [
+                    {
+                        keyName: 'movie',
+                        isCollection: false,
+                        transformerFunction: transformMovieResponse
+                    }
+                ]
+            };
+            return ApiManagerUtil.delete('movies/' + movie.id + '/comments/' + comment._id, options);
+        }
     };
 }]);

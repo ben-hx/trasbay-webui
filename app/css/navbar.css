@@ -23,11 +23,12 @@
     border: 1px solid transparent;
     border-radius: 4px;
 }
+
 .btn-searchbar {
     margin-top: 2px;
 }
 
-.input-searchbar {
+.searchbar input {
     background-color: rgba(0, 0, 0, 0);
 
 }

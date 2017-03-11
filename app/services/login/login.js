@@ -5,8 +5,12 @@ var app = angular.module('myApp.login', ['myApp.authentication']);
 app.factory('LoginViewManager', ['$q', '$uibModal', function ($q, $uibModal) {
     var deferredResult = null;
 
-    var handleSuccessfulLogin = function () {
-        deferredResult.resolve();
+    var handleSuccessfulLogin = function (user) {
+        deferredResult.resolve({action: "login", user: user});
+    };
+
+    var handleSuccessfulRegistration = function (user) {
+        deferredResult.resolve({action: "register", user: user});
     };
 
     var handleUnsuccessfulLogin = function () {
@@ -21,8 +25,8 @@ app.factory('LoginViewManager', ['$q', '$uibModal', function ($q, $uibModal) {
             controller: 'RegisterCtrl',
             keyboard: false
         });
-        modalInstance.result.then(function () {
-            handleSuccessfulLogin();
+        modalInstance.result.then(function (result) {
+            handleSuccessfulRegistration(result);
         }, function (response) {
             handleUnsuccessfulLogin();
         });
@@ -36,10 +40,10 @@ app.factory('LoginViewManager', ['$q', '$uibModal', function ($q, $uibModal) {
             controller: 'LoginCtrl',
             keyboard: false
         });
-        modalInstance.result.then(function () {
-            handleSuccessfulLogin();
-        }, function (response) {
-            if (response === 'register') {
+        modalInstance.result.then(function (result) {
+            handleSuccessfulLogin(result);
+        }, function (result) {
+            if (result === 'register') {
                 handleRegister();
             } else {
                 handleUnsuccessfulLogin();
@@ -91,13 +95,16 @@ app.controller('LoginCtrl', ['$scope', '$uibModalInstance', '$uibModal', 'Authen
 
 app.controller('RegisterCtrl', ['$scope', '$uibModalInstance', 'AuthenticationService', function ($scope, $uibModalInstance, AuthenticationService) {
 
+    $scope.whileRegistering = true;
     $scope.dataLoading = false;
     $scope.error = {show: false, message: ""};
+    $scope.user = null;
 
     $scope.login = function (formData) {
         $scope.dataLoading = true;
         AuthenticationService.register(formData.email, formData.password).then(function (user) {
-            $uibModalInstance.close(user);
+            $scope.whileRegistering = false;
+            $scope.user = user;
         }, function (error) {
             $scope.error.show = true;
             $scope.error.message = error.message;
@@ -108,6 +115,10 @@ app.controller('RegisterCtrl', ['$scope', '$uibModalInstance', 'AuthenticationSe
 
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
+    };
+
+    $scope.confirm = function () {
+        $uibModalInstance.close($scope.user);
     };
 
 }]);

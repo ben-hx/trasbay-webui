@@ -1,12 +1,34 @@
-<section id="updatemovie">
+<section id="updatemovie" ng-init="init()">
     <div class="container">
-        <form class="row form-horizontal">
-            <div class="col-md-3 text-center">
-                <a href="" class="img-wrapper" ng-click="update(movie)">
-                    <img class="img-movie-gallery" check-image ng-src="{{movie.poster}}"
-                         alt="Image for {{movie.title}}">
-                </a>
+        <form name="movieForm" class="row form-horizontal" ng-submit="save(movie)">
 
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-link" ng-show="!whileEditing" title="edit">
+                            <i ng-click="whileEditing = true" class="glyphicon glyphicon-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-link" ng-show="whileEditing" title="cancel">
+                            <i ng-click="whileEditing = false" class="glyphicon glyphicon-remove"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 text-center">
+                <div class="img-wrapper">
+                    <img class="img-movie-gallery"
+                         check-image
+                         ng-src="{{movie.poster}}"
+                         alt="Image for {{movie.title}}"
+                         ng-show="!whileEditing">
+                    <editable-image class="img-movie-gallery"
+                                    ng-model="movie.poster"
+                                    alt="Image for {{movie.title}}"
+                                    placeholder="insert the poster-url"
+                                    ng-show="whileEditing">
+                    </editable-image>
+                </div>
                 <div class="ratings">
                     <ranking-stars
                             ng-model="movie.averageRating"
@@ -14,122 +36,149 @@
                             read-only="!isMovieRateable(movie)">
                     </ranking-stars>
                     <div>
-                        <button class="btn btn-default btn-lg btn-watched" ng-click="setWatched(movie)"
+                        <button type="button" class="btn btn-default btn-lg btn-watched" ng-click="setWatched(movie)"
                                 ng-model="movie.ownWatched.value" uib-btn-checkbox>
                             <span class="glyphicon glyphicon-camera"></span>
                         </button>
-                        <span class="badge badge-notify">{{movie.usersWatched}}</span>
+                        <span class="badge badge-notify">{{movie.userWatched.length + movie.ownWatched.value}}</span>
                     </div>
                 </div>
             </div>
             <div class="col-md-9">
 
-                <div class="form-group form-group-lg">
-                    <label class="col-sm-2 control-label" for="title">Title</label>
-                    <div class="col-sm-10">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="title">title</label>
+                    <span class="col-sm-10 input-label" ng-show="!whileEditing">{{movie.title}}</span>
+                    <div class="col-sm-10" ng-show="whileEditing">
                         <p class="input-group">
-                            <input type="text" class="form-control" type="text" id="title" placeholder="add the title"
-                                   ng-model="movie.title"/>
+                            <input class="form-control" id="title" placeholder="add the title"
+                                   type="text" ng-model="movie.title" required/>
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-lg btn-danger" ng-click="delete(movie)"><i
+                                <button type="button" class="btn btn-danger" ng-click="delete(movie)"><i
                                         class="glyphicon glyphicon-trash"></i></button>
                             </span>
                         </p>
                     </div>
                 </div>
 
-                <div class="form-group form-group-lg">
-                    <label class="col-sm-2 control-label" for="plot">Plot</label>
-                    <div class="col-sm-10">
-                    <textarea class="form-control" rows="3" id="plot" placeholder="add some plot"
-                              ng-model="movie.plot"></textarea>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="plot">plot</label>
+                    <span class="col-sm-10 input-label" ng-show="!whileEditing">{{movie.plot}}</span>
+                    <div class="col-sm-10" ng-show="whileEditing">
+                        <textarea class="form-control vresize" rows="3" id="plot" placeholder="add some plot"
+                                  ng-model="movie.plot"></textarea>
                     </div>
                 </div>
 
-                <div class="form-group form-group-lg">
+                <div class="form-group">
 
-                    <label class="col-sm-2 control-label" for="year">Year</label>
-                    <div class="col-sm-3">
-                        <p class="input-group">
-                            <input type="text"
-                                   class="form-control"
-                                   placeholder="add the released year"
-                                   id="year"
-                                   uib-datepicker-popup="{{format}}"
-                                   is-open="popup.opened"
-                                   datepicker-options="dateOptions"
-                                   current-text="This Year"
-                                   ng-required="true"
-                                   close-text="Close"
-                                   alt-input-formats="altInputFormats"
-                                   popup-placement="auto bottom-right"
-                                   ng-model="movie.year"
-                            />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-lg btn-default" ng-click="open()"><i
-                                        class="glyphicon glyphicon-calendar"></i></button>
-                            </span>
-                        </p>
+                    <label class="col-sm-2 control-label" for="year">year</label>
+                    <span class="col-sm-2 input-label" ng-show="!whileEditing">{{movie.year | date:'yyyy'}}</span>
+                    <div class="col-sm-2" ng-show="whileEditing">
+                        <year-input id="year" placeholder="add the year" ng-model="movie.year"></year-input>
                     </div>
 
-                    <label class="col-sm-1 control-label" for="runtime">Runtime</label>
-                    <div class="col-sm-2">
-                        <input class="form-control" type="text" id="runtime" placeholder="add the runtime"
-                               ng-model="movie.runtime">
+                    <label class="col-sm-1 control-label" for="runtime">runtime</label>
+                    <span class="col-sm-3 input-label" ng-show="!whileEditing">{{movie.runtime}} min</span>
+                    <div class="col-sm-3" ng-show="whileEditing">
+                        <number-input id="runtime" ng-model="movie.runtime"
+                                      placeholder="add the runtime"
+                                      min="1" max="1000"
+                                      step="1"></number-input>
                     </div>
 
-                    <label class="col-sm-1 control-label" for="country">Country</label>
-                    <div class="col-sm-3">
+                    <label class="col-sm-1 control-label" for="country">country</label>
+                    <span class="col-sm-3 input-label" ng-show="!whileEditing">{{movie.country}}</span>
+                    <div class="col-sm-3" ng-show="whileEditing">
                         <input class="form-control" type="text" id="country" placeholder="add the country"
                                ng-model="movie.country">
                     </div>
                 </div>
 
-                <div class="form-group form-group-lg">
-                    <label class="col-sm-2 control-label" for="languages">Languages</label>
-                    <div class="col-sm-10">
-                        <tag-input class="form-control" id="languages" ng-model="movie.languages"
-                                   placeholder="add the different languages"></tag-input>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="languages">languages</label>
+                    <div class="col-sm-10 tag-wrapper" ng-show="!whileEditing">
+                        <span class="tag label label-default"
+                              ng-repeat="language in movie.languages">{{language}}</span>
+                    </div>
+                    <div class="col-sm-10" ng-show="whileEditing">
+                        <tag-input id="languages" placeholder="add the different languages"
+                                   ng-model="movie.languages"></tag-input>
                     </div>
                 </div>
 
-                <div class="form-group form-group-lg">
-                    <label class="col-sm-2 control-label" for="genres">Genres</label>
-                    <div class="col-sm-10">
-                        <tag-input class="form-control" id="genres" ng-model="movie.genres"
-                                   placeholder="add the different genres"></tag-input>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="genres">genres</label>
+                    <div class="col-sm-10 tag-wrapper" ng-show="!whileEditing">
+                        <span class="tag label label-default"
+                              ng-repeat="genre in movie.genres">{{genre}}</span>
+                    </div>
+                    <div class="col-sm-10" ng-show="whileEditing">
+                        <tag-input id="genres" placeholder="add the different genres"
+                                   ng-model="movie.genres"></tag-input>
                     </div>
                 </div>
 
-                <div class="form-group form-group-lg">
-                    <label class="col-sm-2 control-label" for="directors">Directors</label>
-                    <div class="col-sm-10">
-                        <tag-input class="form-control" id="directors" ng-model="movie.directors"
-                                   placeholder="add the different directors"></tag-input>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="genres">directors</label>
+                    <div class="col-sm-10 tag-wrapper" ng-show="!whileEditing">
+                        <span class="tag label label-default"
+                              ng-repeat="director in movie.directors">{{director}}</span>
+                    </div>
+                    <div class="col-sm-10" ng-show="whileEditing">
+                        <tag-input id="directors" placeholder="add the different directors"
+                                   ng-model="movie.directors"></tag-input>
                     </div>
                 </div>
 
-                <div class="form-group form-group-lg">
-                    <label class="col-sm-2 control-label" for="writers">Writers</label>
-                    <div class="col-sm-10">
-                        <tag-input class="form-control" id="writers" ng-model="movie.writers"
-                                   placeholder="add the different writers"></tag-input>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="genres">writers</label>
+                    <div class="col-sm-10 tag-wrapper" ng-show="!whileEditing">
+                        <span class="tag label label-default"
+                              ng-repeat="writer in movie.writers">{{writer}}</span>
+                    </div>
+                    <div class="col-sm-10" ng-show="whileEditing">
+                        <tag-input id="writers" placeholder="add the different writers"
+                                   ng-model="movie.writers"></tag-input>
                     </div>
                 </div>
 
-                <div class="form-group form-group-lg">
-                    <label class="col-sm-2 control-label" for="actors">Actors</label>
-                    <div class="col-sm-10">
-                        <tag-input class="form-control" id="actors" ng-model="movie.actors"
-                                   placeholder="add the different actors"></tag-input>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="actors">actors</label>
+                    <div class="col-sm-10 tag-wrapper" ng-show="!whileEditing">
+                        <span class="tag label label-default"
+                              ng-repeat="actor in movie.actors">{{actor}}</span>
+                    </div>
+                    <div class="col-sm-10" ng-show="whileEditing">
+                        <tag-input id="actors" placeholder="add the different actors"
+                                   ng-model="movie.actors"></tag-input>
                     </div>
                 </div>
 
-                <button type="" class="btn btn-primary btn-lg btn-block" ng-click="save(movie)">Save</button>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="tags">tags</label>
+                    <div class="col-sm-10 tag-wrapper" ng-show="!whileEditing">
+                        <span class="tag label label-default"
+                              ng-repeat="tag in movie.tags">{{tag}}</span>
+                    </div>
+                    <div class="col-sm-10" ng-show="whileEditing">
+                        <tag-input id="tags" placeholder="add the different tags"
+                                   ng-model="movie.tags"></tag-input>
+                    </div>
+                </div>
+            </div>
 
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="pull-right">
+                        <button type="submit" class="btn btn-link" ng-show="whileEditing" title="save"
+                                ng-disabled="movieForm.$invalid || !movieForm.$dirty">
+                            <span>save </span>
+                            <i class="glyphicon glyphicon-ok"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </form>
-        <!-- /.row -->
-
     </div>
 </section>

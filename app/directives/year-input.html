@@ -1,0 +1,23 @@
+<div class="input-group">
+    <input type="text"
+           class="{{inputClass}}"
+           uib-datepicker-popup="yyyy"
+           alt-input-formats="'M!/d!/yyyy'"
+           datepicker-options="{
+                                        startingDay: 1,
+                                        showWeeks: false,
+                                        minMode: 'year',
+                                        datepickerMode: 'year',
+                                        currentText: 'This Year'
+                                    }"
+           current-text="This Year"
+           is-open="yearIsOpen"
+           popup-placement="{{popupPlacement}}"
+           ng-model="data" ng-change="onInputChange()"
+           placeholder="{{placeholder}}"/>
+    <span class="input-group-btn">
+        <button type="button" class="{{btnClass}}"
+                ng-click="yearIsOpen = true">
+        <i class="glyphicon glyphicon-calendar"></i></button>
+    </span>
+</div>

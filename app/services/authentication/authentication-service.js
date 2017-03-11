@@ -10,6 +10,7 @@ app.service('AuthenticationService', ['BasicAuthenticationService', function (Ba
         register: currentAuthenticationService.register,
         getLoggedInUser: currentAuthenticationService.getLoggedInUser,
         isLoggedIn: currentAuthenticationService.isLoggedIn,
+        isInAnyRole: currentAuthenticationService.isInAnyRole,
         logout: currentAuthenticationService.logout,
         initialize: currentAuthenticationService.initialize
     };

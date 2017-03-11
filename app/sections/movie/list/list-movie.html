@@ -1,5 +1,7 @@
-<!-- Notes Section -->
-<section id="movies">
+<section id="movies" ng-init="init()">
+
+    <div ui-view="filter"></div>
+
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
@@ -9,99 +11,178 @@
             </div>
         </div>
         <div class="row">
-            <div ng-repeat="movie in movies">
+            <div ng-repeat="movie in movies track by $index">
 
-                <div class="col-md-12 movie-row" ng-show="movie.showFullInfo">
-
+                <div id="{{movie.title}}_full" class="col-md-12 movie-row" ng-show="movie.showFullInfo">
+                    <span class="close-wrapper">
+                        <button type="button" class="btn btn-link"
+                                ng-click="movie.showFullInfo = false"
+                                title="close">
+                            <i class="glyphicon glyphicon-remove"></i>
+                        </button>
+                    </span>
                     <div class="col-md-3">
                         <div class="content-wrapper">
-                            <a href="" class="img-wrapper" ng-click="rearrangeMovieToPartInfo($index)">
+                            <a href="" class="img-wrapper" ng-click="showPartInfo($event, movie, movie.title+'_part')">
                                 <img class="img-movie-gallery" check-image ng-src="{{movie.poster}}"
                                      alt="Image for {{movie.title}}">
                             </a>
-
                             <h4 class="movie-caption-full">{{movie.title}}</h4>
 
                             <div class="ratings">
                                 <ranking-stars
                                         ng-model="movie.averageRating"
                                         ng-click="setRating(movie, movie.averageRating)"
-                                        read-only="!isMovieRateable(movie)"
+                                        read-only="!movie.isRateable()"
                                         on-leave="ratingLeaved(movie)">
                                 </ranking-stars>
                                 <div>
                                     <button class="btn btn-default btn-lg btn-watched" ng-click="setWatched(movie)"
-                                            ng-model="movie.hasWatched" uib-btn-checkbox>
+                                            ng-model="movie.ownWatched.value" uib-btn-checkbox>
                                         <span class="glyphicon glyphicon-camera"></span>
                                     </button>
-                                    <span class="badge badge-notify">{{movie.usersWatched}}</span>
+                                    <span class="badge badge-notify">{{movie.userWatched.length + movie.ownWatched.value}}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-9">
-                        <div>
-                            <a class="pull-absolute-right" title="Close">
-                                <i ng-click="rearrangeMovieToPartInfo($index)"
-                                   class="glyphicon glyphicon-remove"></i>
-                            </a>
-                            <div class="">Plot</div>
-                            <p class="text-justify">{{movie.plot}}</p>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h4 class="control-label">plot</h4>
+                            </div>
+                            <p class="col-sm-12 text-justify">{{movie.plot}}</p>
                         </div>
                         <div class="row">
-                            <div class="col-sm-1">Year</div>
+                            <h4 class="col-sm-1 control-label">year</h4>
                             <p class="col-sm-2">{{movie.year}}</p>
-                            <div class="col-sm-1">Runtime</div>
-                            <p class="col-sm-2">{{movie.runtime}}</p>
-                            <div class="col-sm-1">Country</div>
-                            <p class="col-sm-2">{{movie.country.join(', ')}}</p>
-                            <div class="col-sm-1">Genres</div>
-                            <p class="col-sm-2">{{movie.genres.join(', ')}}</p>
+                            <h4 class="col-sm-1 control-label">runtime</h4>
+                            <p class="col-sm-2">{{movie.runtime}} min</p>
+                            <h4 class="col-sm-1 control-label">country</h4>
+                            <p class="col-sm-2">{{movie.country}}</p>
+                            <h4 class="col-sm-1 control-label">languages</h4>
+                            <div class="col-sm-2 tag-wrapper">
+                                <span ng-repeat="language in movie.languages">
+                                    <span class="tag label label-default">{{language}}</span>
+                                </span>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-1">Directors</div>
-                            <p class="col-sm-3">{{movie.directors.join(', ')}}</p>
-                            <div class="col-sm-1">Writers</div>
-                            <p class="col-sm-3">{{movie.writers.join(', ')}}</p>
-                            <div class="col-sm-1">Actors</div>
-                            <p class="col-sm-3">{{movie.actors.join(', ')}}</p>
+                            <h4 class="col-sm-1 control-label">genres</h4>
+                            <div class="col-sm-2 tag-wrapper">
+                                <span ng-repeat="genre in movie.genres">
+                                    <span class="tag label label-default">{{genre}}</span>
+                                </span>
+                            </div>
+                            <h4 class="col-sm-1 control-label">directors</h4>
+                            <div class="col-sm-2 tag-wrapper">
+                                <span ng-repeat="director in movie.directors">
+                                    <span class="tag label label-default">{{director}}</span>
+                                </span>
+                            </div>
+                            <h4 class="col-sm-1 control-label">writers</h4>
+                            <div class="col-sm-2 tag-wrapper">
+                                <span class="tag label label-default"
+                                      ng-repeat="writer in movie.writers">{{writer}}</span>
+                            </div>
+                            <h4 class="col-sm-1 control-label">actors</h4>
+                            <div class="col-sm-2 tag-wrapper">
+                                <span ng-repeat="actor in movie.actors">
+                                    <span class="tag label label-default">{{actor}}</span>
+                                </span>
+                            </div>
                         </div>
                         <div class="row">
-                            <a href="" class="pull-right" title="Edit">
-                                <i ng-click="update(movie)"
-                                   class="glyphicon glyphicon-edit"></i>
-                            </a>
+                            <h4 class="col-sm-1 control-label">tags</h4>
+                            <div class="col-sm-5 tag-wrapper">
+                                <span ng-repeat="tag in movie.tags">
+                                    <span class="tag label label-default">{{tag}}</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-link" ng-click="update($index)"
+                                            title="close">
+                                        <span>edit </span>
+                                        <i class="glyphicon glyphicon-edit"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row comments">
+                            <div class="col-sm-6">
+                                <h4>
+                                    Comments
+                                    <small class="pull-right">{{movie.userComments.length}} comments</small>
+                                </h4>
+                                <div class="comment" ng-repeat="comment in movie.userComments">
+                                    <div class="comment-heading">
+                                        <h4 class="col-sm-4">{{UiUtil.userToString(comment.user)}}</h4>
+                                        <div class="col-sm-8">
+                                            <div class="pull-right" ng-show="movie.isCommentDeletable(comment)">
+                                                <small>{{comment.date | timeAgo}}</small>
+                                                <button type="submit" class="btn btn-link"
+                                                        ng-click="deleteComment($parent.$index, comment)"
+                                                        title="delete-comment">
+                                                    <i class="glyphicon glyphicon-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="comment-text">
+                                        <p class="col-sm-12">{{comment.text}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="media">
+                                    <form ng-submit="postComment($index, movie.currentComment)" class="media-body">
+                                        <textarea class="form-control vresize" rows="3"
+                                                  placeholder="leave a comment"
+                                                  ng-model="movie.currentComment"></textarea>
+                                        <div class="pull-right">
+                                            <button type="submit" class="btn btn-link btn-comment"
+                                                    ng-disabled="!movie.currentComment"
+                                                    title="save">
+                                                <span>post </span>
+                                                <i class="glyphicon glyphicon-ok"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-3" ng-show="!movie.showFullInfo">
+                <div id="{{movie.title}}_part" class="col-md-3" ng-show="!movie.showFullInfo">
                     <div class="content-wrapper">
-                        <!--<a href="" class="img-wrapper" ng-click="update(movie)">-->
-                        <a href="" class="img-wrapper" ng-click="rearrangeMovieToFullInfo($index)">
+                        <a href="" class="img-wrapper" ng-click="showFullInfo($event, movie, movie.title+'_full')">
                             <img class="img-movie-gallery" check-image ng-src="{{movie.poster}}"
                                  alt="Image for {{movie.title}}">
                         </a>
 
                         <h4 class="movie-caption">{{movie.title}}</h4>
-
                         <div class="ratings">
                             <ranking-stars
                                     ng-model="movie.averageRating"
-                                    ng-click="setRating(movie, movie.averageRating)"
-                                    read-only="!isMovieRateable(movie)">
+                                    ng-click="setRating($index, movie.averageRating)"
+                                    read-only="!movie.isRateable()">
                             </ranking-stars>
                             <div>
-                                <button class="btn btn-default btn-lg btn-watched" ng-click="setWatched(movie)"
+                                <button class="btn btn-default btn-lg btn-watched" ng-click="setWatched($index)"
                                         ng-model="movie.ownWatched.value" uib-btn-checkbox>
                                     <span class="glyphicon glyphicon-camera"></span>
                                 </button>
-                                <span class="badge badge-notify">{{movie.usersWatched}}</span>
+                                <span class="badge badge-notify">{{movie.userWatched.length + movie.ownWatched.value}}</span>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
         <div class="row">
@@ -110,6 +191,7 @@
                     boundary-link-numbers="true"
                     max-size="5"
                     total-items="totalItems"
+                    ng-show="movies.length != totalItems"
                     ng-model="currentPage"
                     ng-change="pageChanged(currentPage)"></ul>
             </div>

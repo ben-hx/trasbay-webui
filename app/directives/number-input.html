@@ -1,0 +1,21 @@
+<div class="input-group" ng-init="init()">
+    <span class="input-group-btn">
+        <button type="button" class="btn btn-default btn-number"
+                ng-disabled="subDisabled"
+                ng-click="sub()">
+            <span class="glyphicon glyphicon-minus"></span>
+        </button>
+    </span>
+    <input type="text" class="form-control input-number" min="{{min}}"
+           max="{{max}}"
+           ng-model="data"
+           placeholder="{{placeholder}}">
+    <i class="glyphicon glyphicon-user form-control-feedback"></i>
+    <span class="input-group-btn">
+        <button type="button" class="btn btn-default btn-number"
+                ng-disabled="addDisabled"
+                ng-click="add()">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
+    </span>
+</div>
