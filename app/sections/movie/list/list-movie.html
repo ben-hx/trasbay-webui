@@ -3,11 +3,48 @@
     <div ui-view="filter"></div>
 
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h2 class="section-heading">
+        <div class="row section-heading">
+            <div class="col-xs-4 col-xs-offset-4">
+                <h2>
                     Movies
                 </h2>
+            </div>
+            <div class="col-xs-4">
+                <span class="section-page-settings text-right">
+                    <div class="col-md-6">
+                        <div uib-dropdown>
+                            <button class="btn btn-link" uib-dropdown-toggle>
+                                <span>{{limit.field.caption}} </span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu
+                                aria-labelledby="simple-dropdown">
+                                <li ng-repeat="item in limit.items">
+                                    <a href ng-click="limitBy(item)">{{item.caption}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <span uib-dropdown>
+                            <button class="btn btn-link" uib-dropdown-toggle>
+                                <span>sorty by: {{sort.field.caption}} </span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu
+                                aria-labelledby="simple-dropdown">
+                                <li ng-repeat="item in sort.items">
+                                    <a href ng-click="sortBy(item)">{{item.caption}}</a>
+                                </li>
+                            </ul>
+                        </span>
+                        <button type="button" class="btn btn-link"
+                                ng-click="sortBy(sort.field)">
+                            <i ng-if="sort.order != '-'"
+                               class="glyphicon glyphicon glyphicon-triangle-bottom"></i>
+                            <i ng-if="sort.order == '-'"
+                               class="glyphicon glyphicon glyphicon-triangle-top"></i>
+                        </button>
+                    </div>
+                </span>
             </div>
         </div>
         <div class="row">
@@ -16,7 +53,7 @@
                 <div id="{{movie.title}}_full" class="col-md-12 movie-row" ng-show="movie.showFullInfo">
                     <span class="close-wrapper">
                         <button type="button" class="btn btn-link"
-                                ng-click="movie.showFullInfo = false"
+                                ng-click="showPartInfo($event, movie, movie.title+'_part')"
                                 title="close">
                             <i class="glyphicon glyphicon-remove"></i>
                         </button>
@@ -32,12 +69,12 @@
                             <div class="ratings">
                                 <ranking-stars
                                         ng-model="movie.averageRating"
-                                        ng-click="setRating(movie, movie.averageRating)"
+                                        ng-click="setRating($index, movie.averageRating)"
                                         read-only="!movie.isRateable()"
                                         on-leave="ratingLeaved(movie)">
                                 </ranking-stars>
                                 <div>
-                                    <button class="btn btn-default btn-lg btn-watched" ng-click="setWatched(movie)"
+                                    <button class="btn btn-default btn-lg btn-watched" ng-click="setWatched($index)"
                                             ng-model="movie.ownWatched.value" uib-btn-checkbox>
                                         <span class="glyphicon glyphicon-camera"></span>
                                     </button>
@@ -56,11 +93,11 @@
                         </div>
                         <div class="row">
                             <h4 class="col-sm-1 control-label">year</h4>
-                            <p class="col-sm-2">{{movie.year}}</p>
+                            <span class="col-sm-2 input-label">{{movie.year}}</span>
                             <h4 class="col-sm-1 control-label">runtime</h4>
-                            <p class="col-sm-2">{{movie.runtime}} min</p>
+                            <span class="col-sm-2 input-label">{{movie.runtime}} min</span>
                             <h4 class="col-sm-1 control-label">country</h4>
-                            <p class="col-sm-2">{{movie.country}}</p>
+                            <span class="col-sm-2 input-label">{{movie.country}}</span>
                             <h4 class="col-sm-1 control-label">languages</h4>
                             <div class="col-sm-2 tag-wrapper">
                                 <span ng-repeat="language in movie.languages">
@@ -95,9 +132,23 @@
                         </div>
                         <div class="row">
                             <h4 class="col-sm-1 control-label">tags</h4>
-                            <div class="col-sm-5 tag-wrapper">
-                                <span ng-repeat="tag in movie.tags">
-                                    <span class="tag label label-default">{{tag}}</span>
+                            <div class="col-sm-11 tag-wrapper" ng-show="!tagsWhileEditing">
+                                <span class="tag label label-default"
+                                      ng-repeat="tag in movie.tags">{{tag}}</span>
+                                <button type="button" class="btn btn-link" title="edit" ng-show="false"
+                                        ng-click="tagsWhileEditing = true">
+                                    add more
+                                </button>
+                            </div>
+                            <div class="col-sm-10 input-group" ng-show="tagsWhileEditing">
+                                <tag-input id="tags" placeholder="add the different tags"
+                                           ng-model="movie.tags"></tag-input>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-link" title="cancel"
+                                            ng-click="tagsWhileEditing = false">
+                                        <span> </span>
+                                        <i class="glyphicon glyphicon-remove"></i>
+                                    </button>
                                 </span>
                             </div>
                         </div>
@@ -142,6 +193,7 @@
                                     <form ng-submit="postComment($index, movie.currentComment)" class="media-body">
                                         <textarea class="form-control vresize" rows="3"
                                                   placeholder="leave a comment"
+                                                  ng-enter="postComment($index, movie.currentComment)"
                                                   ng-model="movie.currentComment"></textarea>
                                         <div class="pull-right">
                                             <button type="submit" class="btn btn-link btn-comment"
@@ -191,6 +243,7 @@
                     boundary-link-numbers="true"
                     max-size="5"
                     total-items="totalItems"
+                    items-per-page="limit.field.value"
                     ng-show="movies.length != totalItems"
                     ng-model="currentPage"
                     ng-change="pageChanged(currentPage)"></ul>

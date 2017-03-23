@@ -100,9 +100,9 @@ app.controller('RegisterCtrl', ['$scope', '$uibModalInstance', 'AuthenticationSe
     $scope.error = {show: false, message: ""};
     $scope.user = null;
 
-    $scope.login = function (formData) {
+    $scope.register = function (formData) {
         $scope.dataLoading = true;
-        AuthenticationService.register(formData.email, formData.password).then(function (user) {
+        AuthenticationService.register(formData).then(function (user) {
             $scope.whileRegistering = false;
             $scope.user = user;
         }, function (error) {

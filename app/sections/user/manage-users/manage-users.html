@@ -13,24 +13,25 @@
                     ng-show="user._id != currentUserId"
                     ng-init="userForm[$index].whileEditing = false"
                     ng-class="{'active': userForm[$index].whileEditing}">
-                    <!-- Loading -->
-                    <td class="col-md-5" ng-if="userForm[$index].whileLoading">
-                    </td>
-                    <td class="col-md-3" ng-if="userForm[$index].whileLoading">
-                        <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
-                    </td>
-                    <!-- End Loading -->
                     <!-- Data -->
-                    <td class="col-md-5" ng-if="!userForm[$index].whileLoading" title="'mail'" sortable="'email'">
-                        <span>{{user.email}}</span>
+                    <td class="col-md-4" title="'mail'" sortable="'email'">
+                        <span ng-if="!userForm[$index].whileLoading">{{user.email}}</span>
                     </td>
-                    <td class="col-md-3" ng-if="!userForm[$index].whileLoading" title="'role'" sortable="'role'">
-                        <input ng-show="userForm[$index].whileEditing" type="text" ng-model="user.role"
-                               class="form-control input-sm" required/>
-                        <span ng-show="!userForm[$index].whileEditing">{{user.role}}</span>
+                    <td class="col-md-3" title="'username'"
+                        sortable="'username'">
+                        <span ng-if="!userForm[$index].whileLoading">{{user.username}}</span>
+                        <span ng-if="userForm[$index].whileLoading"
+                              class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+                    </td>
+                    <td class="col-md-2" title="'role'" sortable="'role'">
+                        <span ng-if="!userForm[$index].whileLoading">
+                            <input ng-show="userForm[$index].whileEditing" type="text" ng-model="user.role"
+                                   class="form-control input-sm" required/>
+                            <span ng-show="!userForm[$index].whileEditing">{{user.role}}</span>
+                        </span>
                     </td>
                     <!-- End Data -->
-                    <td class="col-md-4">
+                    <td class="col-md-3">
                     <span class="pull-right">
                         <a class="icon-links" ng-show="userForm[$index].whileEditing" href="" title="delete"
                            ng-click="deleteUser(user, $data, $index, userForm[$index])">

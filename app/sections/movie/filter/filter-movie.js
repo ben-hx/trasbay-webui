@@ -15,7 +15,7 @@ app.service('MovieFilterService', function () {
 
 
 app.config(['$provide', function ($provide) {
-    $provide.decorator('MovieFilterService', ['$delegate', '$cookieStore', '$rootScope', function ($delegate, $cookieStore, $rootScope) {
+    $provide.decorator('MovieFilterService', ['$delegate', '$cookieStore', 'EventHandler', function ($delegate, $cookieStore, EventHandler) {
 
         var dataKey = "MovieFilterData";
         var settingsKey = "MovieFilterSettings";
@@ -30,9 +30,9 @@ app.config(['$provide', function ($provide) {
             $cookieStore.put(settingsKey, $delegate.settings);
         };
 
-        $rootScope.$on('movieFilterSubmitted', save);
-        $rootScope.$on('movieFilterCleared', save);
-        $rootScope.$on('movieFilterClosed', save);
+        EventHandler.subscribe('movieFilterSubmitted', save);
+        EventHandler.subscribe('movieFilterCleared', save);
+        EventHandler.subscribe('movieFilterClosed', save);
 
         var initialize = function () {
             load();
@@ -44,7 +44,7 @@ app.config(['$provide', function ($provide) {
     }]);
 }]);
 
-app.controller('MovieFilterCtrl', ['$scope', '$rootScope', 'MovieRepository', 'MovieFilterService', function ($scope, $rootScope, MovieRepository, MovieFilterService) {
+app.controller('MovieFilterCtrl', ['$scope', 'EventHandler', 'MovieRepository', 'MovieFilterService', function ($scope, EventHandler, MovieRepository, MovieFilterService) {
 
     $scope.init = function () {
         $scope.MovieFilterService = MovieFilterService;
@@ -60,21 +60,21 @@ app.controller('MovieFilterCtrl', ['$scope', '$rootScope', 'MovieRepository', 'M
     };
 
     $scope.filterOnChange = function () {
-        $rootScope.$broadcast('movieFilterChanged', MovieFilterService.data);
+        EventHandler.emit('movieFilterChanged', MovieFilterService.data);
     };
 
     $scope.filterOnSubmit = function () {
-        $rootScope.$broadcast('movieFilterSubmitted', MovieFilterService.data);
+        EventHandler.emit('movieFilterSubmitted', MovieFilterService.data);
     };
 
     $scope.filterOnClear = function () {
         MovieFilterService.clear();
-        $rootScope.$broadcast('movieFilterCleared', MovieFilterService.data);
+        EventHandler.emit('movieFilterCleared', MovieFilterService.data);
     };
 
     $scope.filterOnClose = function () {
         MovieFilterService.settings.isOpen = false;
-        $rootScope.$broadcast('movieFilterClosed', MovieFilterService.data);
+        EventHandler.emit('movieFilterClosed', MovieFilterService.data);
     };
 
 }]);

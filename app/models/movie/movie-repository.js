@@ -2,9 +2,9 @@
 
 var app = angular.module('myApp.model');
 
-app.factory('Movie', ['EventHandler', function (EventHandler) {
+app.factory('Movie', ['EventHandler', 'AuthenticationService', function (EventHandler, AuthenticationService) {
 
-    var currentUser = null;
+    var currentUser = AuthenticationService.getLoggedInUser();
 
     EventHandler.subscribe('currentUserChanged', function (event, user) {
         currentUser = user;

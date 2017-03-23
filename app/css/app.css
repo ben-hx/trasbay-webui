@@ -549,6 +549,10 @@ header .intro-text .intro-heading {
     width: 100%;
 }
 
+.dropdown-menu {
+    min-width: inherit;
+}
+
 .editable-image {
     width: 100%;
     height: 100%;
@@ -627,10 +631,20 @@ section {
     transition: all 0.5s ease;
 }
 
-section h2.section-heading {
-    margin-top: 0;
+section .section-heading {
     margin-bottom: 20px;
+}
+
+section .section-heading h2 {
+    margin-top: 0;
+    text-align: center;
     font-size: 40px;
+}
+
+section .section-page-settings button {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
 }
 
 section h3.section-subheading {

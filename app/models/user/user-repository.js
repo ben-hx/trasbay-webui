@@ -39,7 +39,7 @@ app.factory('User', ['EventHandler', function (EventHandler) {
 }]);
 
 app.factory('UserRepository', ['User', 'EventHandler', 'ApiManagerUtil', function (User, EventHandler, ApiManagerUtil) {
-    
+
     function createFromResponse(data) {
         data.id = data._id || undefined;
         return new User(data);
@@ -49,7 +49,7 @@ app.factory('UserRepository', ['User', 'EventHandler', 'ApiManagerUtil', functio
         createFromData: function (data) {
             return createFromResponse(data);
         },
-        register: function (email, password) {
+        register: function (data) {
             var options = {
                 elementTransformers: [
                     {
@@ -59,7 +59,7 @@ app.factory('UserRepository', ['User', 'EventHandler', 'ApiManagerUtil', functio
                     }
                 ]
             };
-            return ApiManagerUtil.create('register', {email: email, password: password}, options);
+            return ApiManagerUtil.create('register', data, options);
         },
         update: function (user) {
             var options = {

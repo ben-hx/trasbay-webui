@@ -96,71 +96,145 @@ app.config(['$stateProvider', function ($stateProvider) {
     });
 }]);
 
-app.controller('MovieListCtrl', ['$scope', '$state', '$stateParams', '$window', '$timeout', '$document', 'UiUtil', 'MovieRepository', 'MovieFilterService', 'SearchbarService', function ($scope, $state, $stateParams, $window, $timeout, $document, UiUtil, MovieRepository, MovieFilterService, SearchbarService) {
+app.controller('MovieListCtrl', ['$scope', '$state', '$stateParams', '$window', '$timeout', '$document', 'EventHandler', 'UiUtil', 'MovieRepository', 'MovieFilterService', 'SearchbarService', function ($scope, $state, $stateParams, $window, $timeout, $document, EventHandler, UiUtil, MovieRepository, MovieFilterService, SearchbarService) {
 
     $scope.init = function () {
-        $scope.reload();
-        $scope.UiUtil = UiUtil;
         SearchbarService.show = true;
+        MovieFilterService.data = $stateParams;
+        $scope.UiUtil = UiUtil;
+        $scope.MovieFilterService = MovieFilterService;
+        $scope.updateSearchbarFromMovieFilter();
+        $scope.reload($stateParams);
+        $scope.sort = {
+            items: [
+                {name: 'title', caption: 'title'},
+                {name: 'averageRating', caption: 'average rating'},
+                {name: 'year', caption: 'year'},
+                {name: 'created', caption: 'created'}
+            ]
+        };
+        $scope.sort.field = $scope.extractSortFieldFromParams($stateParams);
+        $scope.sort.order = $scope.extractSortOrderFromParams($stateParams);
+        $scope.limit = {
+            items: [
+                {value: 15, caption: '15 per page'},
+                {value: 25, caption: '25 per page'},
+                {value: 50, caption: '50 per page'},
+                {value: 100, caption: '100 per page'},
+            ]
+        };
+        $scope.limit.field = $scope.extractLimitFieldFromParams($stateParams);
     };
+
+    $scope.limitBy = function (item) {
+        if (item.name == $scope.limit.field.value) {
+            return
+        }
+        $scope.limit.field = item;
+        MovieFilterService.data.limit = $scope.limit.field.value;
+        $scope.updateFromSearchEvents();
+    };
+
+    $scope.extractLimitFieldFromParams = function (params) {
+        var fieldValue = params.limit;
+        var result = $scope.limit.items[0];
+        angular.forEach($scope.limit.items, function (item) {
+            if (item.value == fieldValue) {
+                result = item;
+            }
+        });
+        return result;
+    };
+
+    $scope.extractSortFieldFromParams = function (params) {
+        var fieldName = params.sort;
+        if (fieldName.substring(0, 1) == '-') {
+            fieldName.substring(1, fieldName.length)
+        }
+        var result = $scope.sort.items[0];
+        angular.forEach($scope.sort.items, function (value) {
+            if (value == fieldName) {
+                result = value;
+            }
+        });
+        return result;
+    };
+
+    $scope.extractSortOrderFromParams = function (params) {
+        if (params.sort.substring(0, 1) == '-') {
+            return '-'
+        }
+        return '';
+    };
+
 
     $scope.updateFromSearchEvents = function () {
         $scope.reloadWithParams(MovieFilterService.data);
     };
 
-    $scope.$on('searchbarSubmitted', $scope.updateFromSearchEvents);
-    $scope.$on('movieFilterSubmitted', $scope.updateFromSearchEvents);
-
-    $scope.$on('searchbarChanged', function (events, args) {
-        MovieFilterService.data.title = SearchbarService.data.searchText;
-    });
-
-    $scope.$on('movieFilterChanged', function (events, args) {
+    $scope.updateSearchbarFromMovieFilter = function () {
         SearchbarService.data.searchText = MovieFilterService.data.title;
-    });
+    };
 
-    $scope.$on('movieFilterCleared', function (events, args) {
+    $scope.updateMovieFilterFromSearchBar = function () {
+        MovieFilterService.data.title = SearchbarService.data.searchText;
+    };
+
+    EventHandler.subscribe('searchbarSubmitted', $scope.updateFromSearchEvents);
+    EventHandler.subscribe('movieFilterSubmitted', $scope.updateFromSearchEvents);
+    EventHandler.subscribe('searchbarChanged', $scope.updateMovieFilterFromSearchBar);
+    EventHandler.subscribe('movieFilterChanged', $scope.updateSearchbarFromMovieFilter);
+
+    EventHandler.subscribe('movieFilterCleared', function (events, args) {
         SearchbarService.data.searchText = '';
         $scope.updateFromSearchEvents();
     });
 
-    $scope.$on('movieFilterClosed', function (events, args) {
+    EventHandler.subscribe('movieFilterClosed', function (events, args) {
         SearchbarService.settings.isOpen = false;
     });
 
-    $scope.$on('searchbarOpened', function (events, args) {
+    EventHandler.subscribe('searchbarOpened', function (events, args) {
         MovieFilterService.settings.isOpen = true;
     });
 
-    $scope.$on('searchbarClosed', function (events, args) {
+    EventHandler.subscribe('searchbarClosed', function (events, args) {
         MovieFilterService.settings.isOpen = false;
     });
 
     $scope.reloadWithParams = function (params) {
-        $scope.reload();
         $state.transitionTo($state.current.name, params);
+        $scope.reload(params);
     };
 
-    $scope.reload = function () {
-        MovieFilterService.data = $stateParams;
-        MovieRepository.getAll($stateParams).then(function (data) {
+    $scope.reload = function (params) {
+        MovieRepository.getAll(params).then(function (data) {
             $scope.movies = data.movies;
             $scope.totalItems = data.pagination.totalCount;
             $scope.currentPage = data.pagination.page + 1;
         });
-
         $scope.showMovieFullInfo = false;
+    };
+
+    $scope.sortBy = function (item) {
+        if (item.name == $scope.sort.field.name) {
+            $scope.sort.order = $scope.sort.order == '-' ? '' : '-';
+        } else {
+            $scope.sort.order = '';
+        }
+        $scope.sort.field = item;
+        MovieFilterService.data.sort = $scope.sort.order + $scope.sort.field.name;
+        $scope.updateFromSearchEvents();
     };
 
     $scope.update = function (index) {
         var movie = $scope.movies[index];
         var destinationState = {name: 'movies'};
-        $state.go('updatemovie', {movieId: movie.id, destinationState: destinationState}, {reload: true});
+        $state.go('updatemovie', {movieId: movie.id, destinationState: destinationState});
     };
 
     $scope.setWatched = function (index) {
         var movie = $scope.movies[index];
-        console.log(movie.ownWatched.value);
         MovieRepository.setWatched(movie, movie.ownWatched.value).then(function (updatedMovie) {
             angular.extend($scope.movies[index], updatedMovie);
         }).catch(function () {

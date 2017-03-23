@@ -458,6 +458,27 @@ app.directive('passwordInput', [function () {
 }]);
 
 /**
+ * directive to submit on enter-click in textareas
+ *
+ * @directive ngEnter
+ */
+app.directive('ngEnter', function () {
+    return function (scope, element, attrs) {
+        element.bind("keydown", function (e) {
+            if (e.which === 13 && !e.ctrlKey) {
+                scope.$apply(function () {
+                    scope.$eval(attrs.ngEnter, {'e': e});
+                });
+                e.preventDefault();
+            }
+            else if (e.which === 13 && e.ctrlKey) {
+                this.value = this.value + "\n";
+            }
+        });
+    };
+});
+
+/**
  * directive to open the datepicker
  *
  * @directive dateclick

@@ -8,6 +8,7 @@ app.controller('ManageInaktiveUsersCtrl', ['$scope', '$rootScope', '$state', 'Ng
 
     $scope.refresh = function () {
         UserRepository.getInaktviveUsers().then(function (doc) {
+            console.log(doc);
             $scope.tableParams = new NgTableParams({count: 20, sorting: {email: "asc"}}, {
                 counts: [],
                 dataset: doc.users

@@ -12,34 +12,35 @@
                 <tr ng-repeat="user in $data" ng-form="userForm[$index]"
                     ng-init="userForm[$index].whileEditing = false"
                     ng-class="{'active': userForm[$index].whileEditing}">
-                    <!-- Loading -->
-                    <td class="col-md-8" ng-if="userForm[$index].whileLoading">
-                        <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
-                    </td>
-                    <!-- End Loading -->
                     <!-- Data -->
-                    <td class="col-md-8" ng-if="!userForm[$index].whileLoading" title="'mail'" sortable="'email'">
-                        <span>{{user.email}}</span>
+                    <td class="col-md-4" title="'mail'"
+                        sortable="'email'">
+                        <span ng-if="!userForm[$index].whileLoading">{{user.email}}</span>
+                    </td>
+                    <td class="col-md-4" title="'username'" sortable="'username'">
+                        <span ng-if="!userForm[$index].whileLoading">{{user.username}}</span>
+                        <span ng-if="userForm[$index].whileLoading"
+                              class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
                     </td>
                     <!-- End Data -->
                     <td class="col-md-4">
-                    <span class="pull-right">
-                        <a class="icon-links" ng-show="userForm[$index].whileEditing" href="" title="acivate"
-                           ng-click="activate(user, userForm[$index])">
-                        activate
-                        </a>
-                        <a class="icon-links" ng-show="userForm[$index].whileEditing" href="" title="delete"
-                           ng-click="deleteUser(user, $data, $index, userForm[$index])">
-                            <i class="glyphicon glyphicon-trash"></i>
-                        </a>
-                        <a class="icon-links" ng-show="userForm[$index].whileEditing" href="" title="cancel">
-                            <i ng-click="userForm[$index].whileEditing = false"
-                               class="glyphicon glyphicon-remove"></i>
-                        </a>
-                        <a class="icon-links" ng-show="!userForm[$index].whileEditing" href="" title="edit">
-                            <i ng-click="userForm[$index].whileEditing = true" class="glyphicon glyphicon-edit"></i>
-                        </a>
-                    </span>
+                        <span class="pull-right">
+                            <a class="icon-links" ng-if="userForm[$index].whileEditing" href="" title="acivate"
+                               ng-click="activate(user, userForm[$index])">
+                            activate
+                            </a>
+                            <a class="icon-links" ng-if="userForm[$index].whileEditing" href="" title="delete"
+                               ng-click="deleteUser(user, $data, $index, userForm[$index])">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </a>
+                            <a class="icon-links" ng-if="userForm[$index].whileEditing" href="" title="cancel">
+                                <i ng-click="userForm[$index].whileEditing = false"
+                                   class="glyphicon glyphicon-remove"></i>
+                            </a>
+                            <a class="icon-links" ng-if="!userForm[$index].whileEditing" href="" title="edit">
+                                <i ng-click="userForm[$index].whileEditing = true" class="glyphicon glyphicon-edit"></i>
+                            </a>
+                        </span>
                     </td>
                 </tr>
             </table>

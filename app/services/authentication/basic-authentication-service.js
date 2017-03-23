@@ -50,9 +50,9 @@ app.service('BasicAuthenticationService', ['$cookieStore', '$q', 'EventHandler',
             });
             return deferred.promise;
         },
-        register: function (email, password) {
+        register: function (data) {
             var deferred = $q.defer();
-            UserRepository.register(email, password).then(function (user) {
+            UserRepository.register(data).then(function (user) {
                 deferred.resolve(user);
             }, function (error) {
                 clearLoggedInUser();
