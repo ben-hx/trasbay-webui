@@ -26,17 +26,13 @@ app.controller('AddMovieCtrl', ['$scope', '$state', 'MovieRepository', function 
         $scope.tooltips = {title: true};
     };
 
-    $scope.clearMovie = function () {
-        $scope.movie = {};
-    };
-
     $scope.hideTooltips = function () {
         $scope.tooltips = {title: false};
     };
 
     $scope.save = function (movie) {
         MovieRepository.create(movie).then(function () {
-            $scope.clearMovie();
+            $scope.reset();
             if (!$scope.inputCollector) {
                 $scope.goBack();
             }
@@ -48,8 +44,9 @@ app.controller('AddMovieCtrl', ['$scope', '$state', 'MovieRepository', function 
     };
 
     $scope.goBack = function () {
-        if ($state.params.destinationState) {
-            $state.go($state.params.destinationState.name, {}, {reload: true});
+        var destinationState = $state.params.destinationState;
+        if (destinationState) {
+            $state.go(destinationState.name, destinationState.params, {reload: true});
         }
     };
 

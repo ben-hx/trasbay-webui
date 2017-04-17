@@ -1,0 +1,12 @@
+<div class="list-group category" ng-init="init()">
+    <div class="list-group-item">
+        <input type="text" placeholder="Search..." ng-model="searchText">
+    </div>
+    <div class="list-group-item category"
+         ng-show="searchText == '' || searchText != '' && item.user.email.toLowerCase().includes(searchText) || searchText != '' && item.user.username.toLowerCase().includes(searchText)"
+         ng-repeat="item in list.getAll() track by $index">
+        <input type="checkbox" ng-model="item.checked"
+               ng-click="onClick(item)"/>
+        {{ item.user.toString() }}
+    </div>
+</div>

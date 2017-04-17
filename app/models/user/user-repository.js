@@ -32,6 +32,9 @@ app.factory('User', ['EventHandler', function (EventHandler) {
         if (this.equals(currentUser)) {
             return "me";
         }
+        if (this.username) {
+            return this.username;
+        }
         return this.email;
     };
 
@@ -44,6 +47,12 @@ app.factory('UserRepository', ['User', 'EventHandler', 'ApiManagerUtil', functio
         data.id = data._id || undefined;
         return new User(data);
     }
+
+    var currentUser = null;
+
+    EventHandler.subscribe('currentUserChanged', function (event, user) {
+        currentUser = user;
+    });
 
     return {
         createFromData: function (data) {
@@ -121,6 +130,26 @@ app.factory('UserRepository', ['User', 'EventHandler', 'ApiManagerUtil', functio
                 ]
             };
             return ApiManagerUtil.get('users', {}, {}, options);
+        },
+        getOtherUsers: function () {
+            var options = {
+                elementTransformers: [
+                    {
+                        keyName: 'users',
+                        isCollection: true,
+                        transformerFunction: createFromResponse
+                    }
+                ]
+            };
+            return ApiManagerUtil.get('users', {}, {}, options).then(function (result) {
+                for (var index in result.users) {
+                    if (result.users[index].equals(currentUser)) {
+                        result.users.splice(index, 1);
+                        break;
+                    }
+                }
+                return result;
+            });
         },
         setUserRole: function (user, role) {
             var options = {

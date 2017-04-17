@@ -3,7 +3,7 @@
 var app = angular.module('myApp.model');
 
 
-app.factory('ApiManagerUtil', ['$q', '$http', 'ErrorHandler', 'ApiIsOfflineError', function ($q, $http, ErrorHandler, ApiIsOfflineError) {
+app.factory('ApiManagerUtil', ['$q', '$http', 'ErrorHandler', function ($q, $http, ErrorHandler) {
 
     var baseUrl = 'https://benhx.kaus.uberspace.de/api/v1';
     var authenticationHeader;

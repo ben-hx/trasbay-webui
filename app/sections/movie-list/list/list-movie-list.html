@@ -1,0 +1,54 @@
+<section id="movieLists" ng-init="init()">
+
+    <div class="container">
+        <div class="row section-heading">
+            <div class="col-xs-4">
+                <span class="section-page-settings">
+                    <button type="button" class="btn btn-link"
+                            ng-click="add()">
+                    <span>add </span>
+                    <i class="glyphicon glyphicon glyphicon-plus"></i>
+                    </button>
+                </span>
+            </div>
+            <div class="col-xs-4">
+                <h2>
+                    Movie Lists
+                </h2>
+            </div>
+        </div>
+
+        <uib-accordion class="row" close-others="false">
+            <uib-accordion-group is-open="private.open">
+                <uib-accordion-heading>
+                    <h3>private
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': private.open, 'glyphicon-chevron-right': !private.open}"></i>
+                    </h3>
+                </uib-accordion-heading>
+                <div ui-view="private"></div>
+            </uib-accordion-group>
+
+            <uib-accordion-group is-open="group.open">
+                <uib-accordion-heading>
+                    <h3>group
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': group.open, 'glyphicon-chevron-right': !group.open}"></i>
+                    </h3>
+                </uib-accordion-heading>
+                <div ui-view="group"></div>
+            </uib-accordion-group>
+
+            <uib-accordion-group is-open="public.open">
+                <uib-accordion-heading>
+                    <h3>public
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': public.open, 'glyphicon-chevron-right': !public.open}"></i>
+                    </h3>
+                </uib-accordion-heading>
+                <div ui-view="public"></div>
+            </uib-accordion-group>
+
+        </uib-accordion>
+    </div>
+</section>

@@ -1,0 +1,19 @@
+<div ng-init="init()">
+    <div class="col-md-12" ng-show="whileLoading">
+        <div class="text-center">
+            <loading-spinner class="loading-spinner-sm"></loading-spinner>
+        </div>
+    </div>
+    <div class="col-md-12" ng-if="(movies || []).length === 0" ng-show="!whileLoading">
+        nothing populated!
+    </div>
+    <div class="col-xs-6 col-sm-2 col-md-2" ng-repeat="movie in movies track by $index" ng-show="!whileLoading">
+        <div class="content-wrapper">
+            <a href="" class="img-wrapper" ng-click="show($index)">
+                <img class="img-movie-poster-sm" check-image ng-src="{{movie.poster}}"
+                     alt="Image for {{movie.title}}">
+            </a>
+            <div class="movie-caption">{{movie.title}}</div>
+        </div>
+    </div>
+</div>

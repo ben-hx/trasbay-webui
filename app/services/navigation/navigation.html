@@ -6,22 +6,23 @@
 
         <div class="navbar-header">
 
-            <a type="button" class="navbar-toggle" data-toggle="collapse"
-               data-target=".navbar-collapse">
+            <a type="button" class="navbar-toggle" ng-click="isNavCollapsed = !isNavCollapsed">
                 <span class="glyphicon glyphicon-menu-hamburger">
                     <span class="sr-only">Toggle Navigation</span>
                 </span>
             </a>
-            <a class="navbar-brand page-scroll" href="#page-top"
-               du-smooth-scroll><img class="nav-bar-logo" alt="logo" src="img/logo/logo.svg"></a>
+            <a class="navbar-brand page-scroll" href="home"
+               du-smooth-scroll>
+                <img class="nav-bar-logo" alt="logo" src="img/logo/logo.svg">
+            </a>
             <div class="navbar-search-mobile" ng-include src="'services/searchbar/searchbar.html'"></div>
         </div>
 
-        <div class="navbar-collapse collapse">
+        <div class="collapse navbar-collapse" uib-collapse="isNavCollapsed">
 
             <ul class="nav navbar-nav navbar-right">
-                <li class="page-scroll" ng-repeat="element in NavigationService.navigationElements">
-                    <a href="" ng-click="element.clickHandler()">
+                <li ng-repeat="element in NavigationService.navigationElements">
+                    <a href="" class="page-scroll" ng-click="navigationElementClick(element)">
                         {{element.caption}}
                     </a>
                 </li>

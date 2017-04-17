@@ -8,9 +8,7 @@ app.config(['$provide', function ($provide) {
         '$q',
         '$state',
         'ErrorHandler',
-        'ApiIsOfflineError',
-        'VestigalError',
-        function ($delegate, $q, $state, ErrorHandler, ApiIsOfflineError, VestigalError) {
+        function ($delegate, $q, $state, ErrorHandler) {
             var request = $delegate.request;
 
             $delegate.request = function () {
@@ -20,8 +18,8 @@ app.config(['$provide', function ($provide) {
                     deferred.resolve(response);
                 }, function (error) {
                     error = ErrorHandler.getErrorFromResponse(error);
-                    var badError = (error instanceof ApiIsOfflineError) ||
-                        (error instanceof VestigalError);
+                    var badError = (error.name && error.name == 'ApiIsOfflineError') ||
+                        (error.name && error.name == 'VestigalError');
                     if (badError) {
                         $state.go('error', {error: error}, {reload: true});
                     }

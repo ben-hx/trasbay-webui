@@ -1,0 +1,49 @@
+<div ng-init="init()">
+    <div class="col-md-12" ng-show="whileLoading">
+        <div class="text-center">
+            <loading-spinner class="loading-spinner-sm"></loading-spinner>
+        </div>
+    </div>
+    <div class="col-md-12" ng-if="(lists || []).length === 0" ng-show="!whileLoading">
+        no list populated!
+    </div>
+    <div class="movie-list-row" ng-repeat="list in lists track by $index" ng-show="!whileLoading">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="movie-list-title">
+                    <span>{{list.title}} </span>
+                    <span ng-if="list.isEditable()">
+                        <button type="button" class="btn btn-link"
+                                ng-click="update($index)"
+                                title="update">
+                            <i class="glyphicon glyphicon-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-link"
+                                ng-click="remove($index)"
+                                title="close">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-click="show($index)">
+            <div class="col-xs-3 col-sm-2 col-md-1 movie-list-movie"
+                 ng-repeat="movieItem in list.movies | limitTo: 11">
+                <div class="content-wrapper">
+                    <a href="" class="img-wrapper">
+                        <img class="img-movie-poster-xs" check-image ng-src="{{movieItem.movie.poster}}"
+                             alt="Image for {{movieItem.movie.title}}">
+                    </a>
+                    <div class="movie-caption">{{movieItem.movie.title}}</div>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-2 col-md-1 movie-list-movie"
+                 ng-if="list.movies.length > 11">
+                <div class="img-movie-poster-xs">
+                    <h4 style="margin-top: 40%">...</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

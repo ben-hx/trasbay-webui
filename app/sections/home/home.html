@@ -1,0 +1,34 @@
+<section id="movieLists" ng-init="init()">
+
+    <div class="container">
+        <div class="row section-heading">
+            <div class="col-xs-4 col-xs-offset-4">
+                <h2>
+                    Home
+                </h2>
+            </div>
+        </div>
+
+        <uib-accordion class="row" close-others="false">
+            <uib-accordion-group is-open="recentlyCreatedMovies.open">
+                <uib-accordion-heading>
+                    <h3>recently created movies
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': recentlyCreatedMovies.open, 'glyphicon-chevron-right': !recentlyCreatedMovies.open}"></i>
+                    </h3>
+                </uib-accordion-heading>
+                <div ui-view="recentlyCreatedMovies"></div>
+            </uib-accordion-group>
+
+            <uib-accordion-group is-open="mostRatedMovies.open">
+                <uib-accordion-heading>
+                    <h3>most rated movies
+                        <i class="pull-right glyphicon"
+                           ng-class="{'glyphicon-chevron-down': mostRatedMovies.open, 'glyphicon-chevron-right': !mostRatedMovies.open}"></i>
+                    </h3>
+                </uib-accordion-heading>
+                <div ui-view="mostRatedMovies"></div>
+            </uib-accordion-group>
+        </uib-accordion>
+    </div>
+</section>

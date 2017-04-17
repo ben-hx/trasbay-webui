@@ -71,8 +71,10 @@ var app = angular.module('myApp', [
     'myApp.model',
     'myApp.errorHandler',
     'myApp.authentication',
+    'myApp.home',
     'myApp.landingpage',
     'myApp.movie',
+    'myApp.movieList',
     'myApp.user',
     'myApp.uiUtil'
 ]);

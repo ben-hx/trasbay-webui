@@ -5,196 +5,163 @@
          ng-submit="filterOnSubmit()"
          ng-keyup="filterOnChange()">
     <div class="sidebar-wrapper">
+        <uib-accordion class="sidebar-content" close-others="false">
 
-        <div class="sidebar-content container">
-            <div class="row sidebar-row">
-                <div class="col-xs-1 col-filter">
-                    <a class="btn btn-filter" type="button"
-                       ng-click="MovieFilterService.settings.titleIsExpanded = !MovieFilterService.settings.titleIsExpanded">
-                        <i ng-if="MovieFilterService.settings.titleIsExpanded" class="glyphicon glyphicon-minus"></i>
-                        <i ng-if="!MovieFilterService.settings.titleIsExpanded" class="glyphicon glyphicon-plus"></i>
-                    </a>
-                </div>
-                <div class="col-xs-11 col-filter">
-                    <h4>
-                        Title
+            <uib-accordion-group class="row sidebar-row" is-open="MovieFilterService.settings.titleIsExpanded">
+                <uib-accordion-heading>
+                    <h4 class="col-xs-1">
+                        <i class="glyphicon"
+                           ng-class="{'glyphicon glyphicon-minus': MovieFilterService.settings.titleIsExpanded,
+                           'glyphicon glyphicon-plus': !MovieFilterService.settings.titleIsExpanded}"></i>
                     </h4>
-                    <div ng-show="MovieFilterService.settings.titleIsExpanded">
-                        <div class="col-md-12">
-                            <input type="text" class="form-control" ng-model="MovieFilterService.data.title">
+                    <h4 class="col-xs-11">title</h4>
+                </uib-accordion-heading>
+                <div class="col-xs-12 col-xs-offset-1">
+                    <input type="text" class="form-control" ng-model="MovieFilterService.data.title">
+                </div>
+            </uib-accordion-group>
+
+            <uib-accordion-group class="row sidebar-row" is-open="MovieFilterService.settings.createdIsExpanded">
+                <uib-accordion-heading>
+                    <h4 class="col-xs-1">
+                        <i class="glyphicon"
+                           ng-class="{'glyphicon glyphicon-minus': MovieFilterService.settings.createdIsExpanded,
+                           'glyphicon glyphicon-plus': !MovieFilterService.settings.createdIsExpanded}"></i>
+                    </h4>
+                    <h4 class="col-xs-11">created</h4>
+                </uib-accordion-heading>
+                <div class="col-xs-12 col-xs-offset-1">
+                    <div class="col-xs-6">
+                        <label class="control-label">from</label>
+                        <date-input ng-model="MovieFilterService.data.createdFrom"
+                                    popup-placement="bottom-left"></date-input>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="control-label">to</label>
+                        <date-input ng-model="MovieFilterService.data.createdTo"
+                                    popup-placement="bottom-right"></date-input>
+                    </div>
+                </div>
+            </uib-accordion-group>
+
+
+            <uib-accordion-group class="row sidebar-row" is-open="MovieFilterService.settings.lastModifiedIsExpanded">
+                <uib-accordion-heading>
+                    <h4 class="col-xs-1">
+                        <i class="glyphicon"
+                           ng-class="{'glyphicon glyphicon-minus': MovieFilterService.settings.lastModifiedIsExpanded,
+                           'glyphicon glyphicon-plus': !MovieFilterService.settings.lastModifiedIsExpanded}"></i>
+                    </h4>
+                    <h4 class="col-xs-11">last modified</h4>
+                </uib-accordion-heading>
+                <div class="col-xs-12 col-xs-offset-1">
+                    <div class="col-xs-6">
+                        <label class="control-label">from</label>
+                        <date-input ng-model="MovieFilterService.data.lastModifiedFrom"
+                                    popup-placement="bottom-left"></date-input>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="control-label">to</label>
+                        <date-input ng-model="MovieFilterService.data.lastModifiedTo"
+                                    popup-placement="bottom-right"></date-input>
+                    </div>
+                </div>
+            </uib-accordion-group>
+
+            <uib-accordion-group class="row sidebar-row" is-open="MovieFilterService.settings.yearIsExpanded">
+                <uib-accordion-heading>
+                    <h4 class="col-xs-1">
+                        <i class="glyphicon"
+                           ng-class="{'glyphicon glyphicon-minus': MovieFilterService.settings.yearIsExpanded,
+                           'glyphicon glyphicon-plus': !MovieFilterService.settings.yearIsExpanded}"></i>
+                    </h4>
+                    <h4 class="col-xs-11">year</h4>
+                </uib-accordion-heading>
+                <div class="col-xs-12 col-xs-offset-1">
+                    <div class="col-xs-6">
+                        <label class="control-label">from</label>
+                        <year-input ng-model="MovieFilterService.data.yearFrom"
+                                    popup-placement="bottom-left"></year-input>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="control-label">to</label>
+                        <year-input ng-model="MovieFilterService.data.yearTo"
+                                    popup-placement="bottom-right"></year-input>
+                    </div>
+                </div>
+            </uib-accordion-group>
+
+            <uib-accordion-group class="row sidebar-row" is-open="MovieFilterService.settings.averageRatingIsExpanded">
+                <uib-accordion-heading>
+                    <h4 class="col-xs-1">
+                        <i class="glyphicon"
+                           ng-class="{'glyphicon glyphicon-minus': MovieFilterService.settings.averageRatingIsExpanded,
+                           'glyphicon glyphicon-plus': !MovieFilterService.settings.averageRatingIsExpanded}"></i>
+                    </h4>
+                    <h4 class="col-xs-11">average rating</h4>
+                </uib-accordion-heading>
+                <div class="col-xs-12 col-xs-offset-1">
+                    <div class="col-xs-6">
+                        <label class="control-label">from</label>
+                        <div class="input-group pull-right form-group">
+                            <number-input ng-model="MovieFilterService.data.averageRatingFrom" min="0" max="10"
+                                          step="0.5"></number-input>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="control-label">to</label>
+                        <div class="input-group pull-right form-group">
+                            <number-input ng-model="MovieFilterService.data.averageRatingTo" min="0" max="10"
+                                          step="0.5"></number-input>
                         </div>
                     </div>
                 </div>
-            </div>
+            </uib-accordion-group>
 
-            <div class="row sidebar-row">
-                <div class="col-xs-1 col-filter">
-                    <a class="btn btn-filter" type="button"
-                       ng-click="MovieFilterService.settings.createdIsExpanded = !MovieFilterService.settings.createdIsExpanded">
-                        <i ng-if="MovieFilterService.settings.createdIsExpanded" class="glyphicon glyphicon-minus"></i>
-                        <i ng-if="!MovieFilterService.settings.createdIsExpanded" class="glyphicon glyphicon-plus"></i>
-                    </a>
-                </div>
-                <div class="col-xs-11 col-filter">
-                    <h4>
-                        Created
+            <uib-accordion-group class="row sidebar-row"
+                                 is-open="MovieFilterService.settings.genresAndActorsIsExpanded">
+                <uib-accordion-heading>
+                    <h4 class="col-xs-1">
+                        <i class="glyphicon"
+                           ng-class="{'glyphicon glyphicon-minus': MovieFilterService.settings.genresAndActorsIsExpanded,
+                           'glyphicon glyphicon-plus': !MovieFilterService.settings.genresAndActorsIsExpanded}"></i>
                     </h4>
-                    <div ng-show="MovieFilterService.settings.createdIsExpanded">
-                        <div class="col-md-6">
-                            <label class="control-label">from</label>
-                            <date-input ng-model="MovieFilterService.data.createdFrom"
-                                        popup-placement="bottom-left"></date-input>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="control-label">to</label>
-                            <date-input ng-model="MovieFilterService.data.createdTo"
-                                        popup-placement="bottom-right"></date-input>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row sidebar-row">
-                <div class="col-xs-1 col-filter">
-                    <a class="btn btn-filter" type="button"
-                       ng-click="MovieFilterService.settings.lastModifiedIsExpanded = !MovieFilterService.settings.lastModifiedIsExpanded">
-                        <i ng-if="MovieFilterService.settings.lastModifiedIsExpanded"
-                           class="glyphicon glyphicon-minus"></i>
-                        <i ng-if="!MovieFilterService.settings.lastModifiedIsExpanded"
-                           class="glyphicon glyphicon-plus"></i>
-                    </a>
-                </div>
-                <div class="col-xs-11 col-filter">
-                    <h4>
-                        Last Modified
-                    </h4>
-                    <div ng-show="MovieFilterService.settings.lastModifiedIsExpanded">
-                        <div class="col-md-6">
-                            <label class="control-label">from</label>
-                            <date-input ng-model="MovieFilterService.data.lastModifiedFrom"
-                                        popup-placement="bottom-left"></date-input>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="control-label">to</label>
-                            <date-input ng-model="MovieFilterService.data.lastModifiedTo"
-                                        popup-placement="bottom-right"></date-input>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row sidebar-row">
-                <div class="col-xs-1 col-filter">
-                    <a class="btn btn-filter" type="button"
-                       ng-click="MovieFilterService.settings.yearIsExpanded = !MovieFilterService.settings.yearIsExpanded">
-                        <i ng-if="MovieFilterService.settings.yearIsExpanded" class="glyphicon glyphicon-minus"></i>
-                        <i ng-if="!MovieFilterService.settings.yearIsExpanded" class="glyphicon glyphicon-plus"></i>
-                    </a>
-                </div>
-                <div class="col-xs-11 col-filter">
-                    <h4>
-                        Year
-                    </h4>
-                    <div ng-show="MovieFilterService.settings.yearIsExpanded">
-                        <div class="col-md-6">
-                            <label class="control-label">from</label>
-                            <year-input ng-model="MovieFilterService.data.yearFrom"
-                                        popup-placement="bottom-left"></year-input>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="control-label">to</label>
-                            <year-input ng-model="MovieFilterService.data.yearTo"
-                                        popup-placement="bottom-right"></year-input>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row sidebar-row">
-                <div class="col-xs-1 col-filter">
-                    <a class="btn btn-filter" type="button"
-                       ng-click="MovieFilterService.settings.averageRatingIsExpanded = !MovieFilterService.settings.averageRatingIsExpanded">
-                        <i ng-if="MovieFilterService.settings.averageRatingIsExpanded"
-                           class="glyphicon glyphicon-minus"></i>
-                        <i ng-if="!MovieFilterService.settings.averageRatingIsExpanded"
-                           class="glyphicon glyphicon-plus"></i>
-                    </a>
-                </div>
-                <div class="col-xs-11 col-filter">
-                    <h4>
-                        Average Rating
-                    </h4>
-                    <div ng-show="MovieFilterService.settings.averageRatingIsExpanded">
-                        <div class="col-md-6">
-                            <label class="control-label">from</label>
-                            <div class="input-group pull-right form-group">
-                                <number-input ng-model="MovieFilterService.data.averageRatingFrom" min="0" max="10"
-                                              step="0.5"></number-input>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="control-label">to</label>
-                            <div class="input-group pull-right form-group">
-                                <number-input ng-model="MovieFilterService.data.averageRatingTo" min="0" max="10"
-                                              step="0.5"></number-input>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row sidebar-row">
-                <div class="col-xs-1 col-filter">
-                    <a class="btn btn-filter" type="button"
-                       ng-click="MovieFilterService.settings.GenresAndActorsIsExpanded = !MovieFilterService.settings.GenresAndActorsIsExpanded">
-                        <i ng-if="MovieFilterService.settings.GenresAndActorsIsExpanded"
-                           class="glyphicon glyphicon-minus"></i>
-                        <i ng-if="!MovieFilterService.settings.GenresAndActorsIsExpanded"
-                           class="glyphicon glyphicon-plus"></i>
-                    </a>
-                </div>
-                <div ng-show="!MovieFilterService.settings.GenresAndActorsIsExpanded" class="col-xs-11 col-filter">
-                    <h4>Genres & Actors</h4>
-                </div>
-                <div ng-show="MovieFilterService.settings.GenresAndActorsIsExpanded" class="col-xs-11 col-filter">
+                    <h4 class="col-xs-11" ng-if="!MovieFilterService.settings.genresAndActorsIsExpanded">genres &
+                        actors</h4>
+                    <h4 class="col-xs-6" ng-if="MovieFilterService.settings.genresAndActorsIsExpanded">genres</h4>
+                    <h4 class="col-xs-5" ng-if="MovieFilterService.settings.genresAndActorsIsExpanded">actors</h4>
+                </uib-accordion-heading>
+                <div class="col-xs-12 col-xs-offset-1">
                     <div class="col-md-6">
-                        <h4>Genres</h4>
                         <string-checklist class="filter-checklist"
                                           values="genres"
                                           ng-model="MovieFilterService.data.genres"></string-checklist>
                     </div>
                     <div class="col-md-6">
-                        <h4>Actors</h4>
                         <string-checklist class="filter-checklist"
                                           values="actors"
                                           ng-model="MovieFilterService.data.actors"></string-checklist>
                     </div>
                 </div>
-            </div>
+            </uib-accordion-group>
 
-            <div class="row sidebar-row">
-                <div class="col-xs-1 col-filter">
-                    <a class="btn btn-filter" type="button"
-                       ng-click="MovieFilterService.settings.TagsIsExpanded = !MovieFilterService.settings.TagsIsExpanded">
-                        <i ng-if="MovieFilterService.settings.TagsIsExpanded"
-                           class="glyphicon glyphicon-minus"></i>
-                        <i ng-if="!MovieFilterService.settings.TagsIsExpanded"
-                           class="glyphicon glyphicon-plus"></i>
-                    </a>
-                </div>
-                <div class="col-xs-11 col-filter">
-                    <h4>
-                        Tags
+            <uib-accordion-group class="row sidebar-row"
+                                 is-open="MovieFilterService.settings.tagsIsExpanded">
+                <uib-accordion-heading>
+                    <h4 class="col-xs-1">
+                        <i class="glyphicon"
+                           ng-class="{'glyphicon glyphicon-minus': MovieFilterService.settings.tagsIsExpanded,
+                           'glyphicon glyphicon-plus': !MovieFilterService.settings.tagsIsExpanded}"></i>
                     </h4>
-                    <div ng-show="MovieFilterService.settings.TagsIsExpanded">
-                        <div class="col-md-12">
-                            <string-checklist class="filter-checklist"
-                                              values="tags"
-                                              ng-model="MovieFilterService.data.tags"></string-checklist>
-                        </div>
-                    </div>
+                    <h4 class="col-xs-11">tags</h4>
+                </uib-accordion-heading>
+                <div class="col-xs-12 col-xs-offset-1">
+                    <string-checklist class="filter-checklist"
+                                      values="tags"
+                                      ng-model="MovieFilterService.data.tags"></string-checklist>
                 </div>
-            </div>
-        </div>
+            </uib-accordion-group>
+        </uib-accordion>
 
         <div class="sidebar-bottom">
             <div class="pull-right">

@@ -15,7 +15,7 @@ app.config(['$stateProvider', function ($stateProvider) {
         '{averageRatingFrom:int}&{averageRatingTo:int}&' +
         '{genres:array}&' +
         '{actors:array}&' +
-        '{tags:array}&',
+        '{tags:array}',
         views: {
             "main": {
                 templateUrl: 'sections/movie/list/list-movie.html',
@@ -32,7 +32,7 @@ app.config(['$stateProvider', function ($stateProvider) {
                 squash: true
             },
             limit: {
-                value: 12,
+                value: 15,
                 squash: true
             },
             sort: {
@@ -99,12 +99,8 @@ app.config(['$stateProvider', function ($stateProvider) {
 app.controller('MovieListCtrl', ['$scope', '$state', '$stateParams', '$window', '$timeout', '$document', 'EventHandler', 'UiUtil', 'MovieRepository', 'MovieFilterService', 'SearchbarService', function ($scope, $state, $stateParams, $window, $timeout, $document, EventHandler, UiUtil, MovieRepository, MovieFilterService, SearchbarService) {
 
     $scope.init = function () {
-        SearchbarService.show = true;
-        MovieFilterService.data = $stateParams;
         $scope.UiUtil = UiUtil;
-        $scope.MovieFilterService = MovieFilterService;
-        $scope.updateSearchbarFromMovieFilter();
-        $scope.reload($stateParams);
+        $scope.initSettingsAndData();
         $scope.sort = {
             items: [
                 {name: 'title', caption: 'title'},
@@ -124,14 +120,25 @@ app.controller('MovieListCtrl', ['$scope', '$state', '$stateParams', '$window', 
             ]
         };
         $scope.limit.field = $scope.extractLimitFieldFromParams($stateParams);
+        MovieFilterService.settings.limit = $scope.limit.field.value;
+        $scope.reload($stateParams);
     };
+
+    $scope.initSettingsAndData = function () {
+        SearchbarService.show = true;
+        $scope.updateSearchbarFromMovieFilter();
+        SearchbarService.settings.isOpen = SearchbarService.settings.isOpen || MovieFilterService.settings.isOpen;
+        MovieFilterService.settings.isOpen = SearchbarService.settings.isOpen || MovieFilterService.settings.isOpen;
+    };
+
 
     $scope.limitBy = function (item) {
         if (item.name == $scope.limit.field.value) {
             return
         }
         $scope.limit.field = item;
-        MovieFilterService.data.limit = $scope.limit.field.value;
+        MovieFilterService.data.page = 0;
+        MovieFilterService.settings.limit = $scope.limit.field.value;
         $scope.updateFromSearchEvents();
     };
 
@@ -167,9 +174,8 @@ app.controller('MovieListCtrl', ['$scope', '$state', '$stateParams', '$window', 
         return '';
     };
 
-
     $scope.updateFromSearchEvents = function () {
-        $scope.reloadWithParams(MovieFilterService.data);
+        $scope.reloadWithParams(angular.extend({}, MovieFilterService.data, MovieFilterService.settings));
     };
 
     $scope.updateSearchbarFromMovieFilter = function () {
@@ -202,13 +208,19 @@ app.controller('MovieListCtrl', ['$scope', '$state', '$stateParams', '$window', 
         MovieFilterService.settings.isOpen = false;
     });
 
+    $scope.filterIsOpen = function () {
+        return MovieFilterService.settings.isOpen || SearchbarService.settings.isOpen;
+    };
+
     $scope.reloadWithParams = function (params) {
         $state.transitionTo($state.current.name, params);
         $scope.reload(params);
     };
 
     $scope.reload = function (params) {
+        $scope.whileLoading = true;
         MovieRepository.getAll(params).then(function (data) {
+            $scope.whileLoading = false;
             $scope.movies = data.movies;
             $scope.totalItems = data.pagination.totalCount;
             $scope.currentPage = data.pagination.page + 1;
@@ -223,14 +235,24 @@ app.controller('MovieListCtrl', ['$scope', '$state', '$stateParams', '$window', 
             $scope.sort.order = '';
         }
         $scope.sort.field = item;
-        MovieFilterService.data.sort = $scope.sort.order + $scope.sort.field.name;
+        MovieFilterService.settings.sort = $scope.sort.order + $scope.sort.field.name;
         $scope.updateFromSearchEvents();
+    };
+
+    $scope.getCurrentStateWithParams = function () {
+        return {
+            name: $state.current.name,
+            params: $stateParams
+        }
+    };
+
+    $scope.add = function () {
+        $state.go('addmovie', {destinationState: $scope.getCurrentStateWithParams()}, {reload: true});
     };
 
     $scope.update = function (index) {
         var movie = $scope.movies[index];
-        var destinationState = {name: 'movies'};
-        $state.go('updatemovie', {movieId: movie.id, destinationState: destinationState});
+        $state.go('updatemovie', {movieId: movie.id, destinationState: $scope.getCurrentStateWithParams()});
     };
 
     $scope.setWatched = function (index) {
@@ -244,12 +266,10 @@ app.controller('MovieListCtrl', ['$scope', '$state', '$stateParams', '$window', 
 
     $scope.setRating = function (index, value) {
         var movie = $scope.movies[index];
-        if ($scope.isMovieRateable(movie)) {
-            MovieRepository.setRating(movie, value).then(function (updatedMovie) {
-                angular.extend($scope.movies[index], updatedMovie);
-                $scope.movies[index].oldAverageRating = updatedMovie.averageRating;
-            });
-        }
+        MovieRepository.setRating(movie, value).then(function (updatedMovie) {
+            angular.extend($scope.movies[index], updatedMovie);
+            $scope.movies[index].oldAverageRating = updatedMovie.averageRating;
+        });
     };
 
     $scope.postComment = function (index, comment) {
@@ -279,7 +299,7 @@ app.controller('MovieListCtrl', ['$scope', '$state', '$stateParams', '$window', 
 
     $scope.pageChanged = function (nextPage) {
         MovieFilterService.data.page = nextPage - 1;
-        $scope.reloadWithParams(MovieFilterService.data);
+        $scope.updateFromSearchEvents();
     };
 
     $scope.scrollTo = function (id, top) {

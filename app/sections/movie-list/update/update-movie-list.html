@@ -1,0 +1,150 @@
+<section id="addMovie" ng-init="init()" ng-mouseleave="hideTooltips()">
+    <div class="container">
+        <form name="movieListForm" class="row form-horizontal" ng-submit="save(data)">
+
+            <div class="col-md-8 col-md-offset-2">
+                <div class="form-group">
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-link" ng-show="!whileEditing" title="edit">
+                            <i ng-click="whileEditing = true" class="glyphicon glyphicon-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-link" ng-show="whileEditing" title="cancel">
+                            <i ng-click="whileEditing = false" class="glyphicon glyphicon-remove"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="title">title</label>
+                    <span class="col-sm-10 input-label" ng-show="!whileEditing">{{data.title}}</span>
+                    <div class="col-sm-10" ng-show="whileEditing">
+                        <input class="form-control" id="title" placeholder="add your list title"
+                               required
+                               type="text"
+                               ng-model="data.title"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="description">description</label>
+                    <span class="col-sm-10 input-label" ng-show="!whileEditing">{{data.description}}</span>
+                    <div class="col-sm-10" ng-show="whileEditing">
+                        <textarea required class="form-control vresize" rows="3" id="description"
+                                  tip-is-open="tooltips.title"
+                                  too placeholder="add some description"
+                                  ng-model="data.description"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group has-feedback">
+                    <label class="col-sm-2 control-label" for="movies">movies</label>
+                    <div class="col-sm-10" ng-show="!whileEditing">
+                        <div class="col-xs-4 col-sm-3 col-lg-2 movie-list-movie" ng-repeat="movieItem in data.movies">
+                            <div class="content-wrapper">
+                                <div href="" class="img-wrapper">
+                                    <img class="img-movie-poster-sm" check-image ng-src="{{movieItem.movie.poster}}"
+                                         alt="Image for {{movieItem.movie.title}}">
+                                </div>
+                                <div class="movie-caption">{{movieItem.movie.title}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-10" ng-show="whileEditing">
+                        <movie-input id="movies"
+                                     required
+                                     placeholder="search for movies..."
+                                     uib-tooltip="enter your movie-title for autocompletion"
+                                     toolltip-placement="top-left"
+                                     is-loading="movieInputIsLoading"
+                                     on-select="selectMovie"
+                                     ng-model="movieSearch"></movie-input>
+                        <span class="form-control-feedback" ng-show="movieInputIsLoading">
+                            <i class="fa fa-spinner fa-spin fa-fw"></i>
+                        </span>
+                    </div>
+
+                    <div class="col-sm-10 col-sm-offset-2" ng-show="whileEditing">
+                        <div class="col-xs-4 col-sm-3 col-lg-2 movie-list-movie" ng-repeat="movieItem in data.movies">
+                            <div class="content-wrapper" ng-click="removeMovie(movieItem.movie)">
+                                <a href="" class="img-wrapper">
+                                    <img class="img-movie-poster-sm" check-image ng-src="{{movieItem.movie.poster}}"
+                                         alt="Image for {{movieItem.movie.title}}">
+                                </a>
+                                <div class="movie-caption">{{movieItem.movie.title}}</div>
+                            </div>
+                            <div class="remove">
+                                <button type="button" class="btn btn-link" title="clear"
+                                        ng-click="removeMovie(movieItem.movie)">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="description">access</label>
+                    <span class="col-sm-10 input-label" ng-show="!whileEditing">{{data.access}}</span>
+                    <div class="col-sm-10" ng-show="whileEditing">
+                        <div class="btn-group">
+                            <label class="btn btn-primary" ng-model="data.access"
+                                   uib-btn-radio="'public'">public</label>
+                            <label class="btn btn-primary" ng-model="data.access"
+                                   uib-btn-radio="'private'">private</label>
+                            <label class="btn btn-primary" ng-model="data.access"
+                                   uib-btn-radio="'group'">group</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-show="data.access != 'private'">
+                    <label class="col-sm-2 control-label" for="description">editable users</label>
+                    <div class="col-sm-10 tag-wrapper" ng-show="!whileEditing">
+                        <span class="input-label"
+                              ng-if="(data.editableUsers || []).length === 0">none</span>
+                        <span class="tag label label-user"
+                              ng-repeat="item in data.editableUsers">{{UiUtil.userToString(item.user)}}</span>
+                    </div>
+                    <div class="col-sm-10" ng-show="whileEditing">
+                        <user-check-list class="filter-checklist"
+                                         on-change="onEditableUsersChange()"
+                                         ng-model="editableUsers"></user-check-list>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="tags">tags</label>
+                    <div class="col-sm-10 tag-wrapper" ng-show="!whileEditing">
+                        <span class="input-label"
+                              ng-if="(data.tags || []).length === 0">none</span>
+                        <span class="tag label label-default"
+                              ng-repeat="tag in data.tags">{{tag}}</span>
+                    </div>
+                    <div class="col-sm-10" ng-show="whileEditing">
+                        <tag-input id="tags" placeholder="add the different tags"
+                                   ng-model="data.tags"></tag-input>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-link" title="back" ng-click="goBack()">
+                                <span>back </span>
+                                <i class="glyphicon glyphicon-remove"></i>
+                            </button>
+                            <button type="submit" class="btn btn-link" title="save">
+                                <span>save </span>
+                                <i class="glyphicon glyphicon-ok"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+</section>

@@ -92,7 +92,6 @@ app.provider('errorHandler', function () {
                     return result;
                 },
 
-
                 // Automatically record rejections of the provided [promise].
                 async: function (func, promise) {
                     promise['catch'](function (err) {

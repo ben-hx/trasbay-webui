@@ -7,7 +7,8 @@ app.config(['$stateProvider', function ($stateProvider) {
         url: '/movies/:movieId',
         params: {
             destinationState: {name: 'movies'},
-            movieId: null
+            movieId: null,
+            edit: true
         },
         views: {
             "main": {
@@ -18,11 +19,11 @@ app.config(['$stateProvider', function ($stateProvider) {
     });
 }]);
 
-app.controller('UpdateMovieCtrl', ['$scope', '$state', 'MovieRepository', 'NotificationService', 'ConfirmationViewManager', function ($scope, $state, MovieRepository, NotificationService, ConfirmationViewManager) {
+app.controller('UpdateMovieCtrl', ['$scope', '$state', 'MovieRepository', function ($scope, $state, MovieRepository) {
 
     $scope.init = function () {
         $scope.refresh();
-        $scope.whileEditing = true;
+        $scope.whileEditing = $state.params.edit;
     };
 
     $scope.refresh = function () {
@@ -33,29 +34,33 @@ app.controller('UpdateMovieCtrl', ['$scope', '$state', 'MovieRepository', 'Notif
 
     $scope.setWatched = function (movie) {
         MovieRepository.setWatched(movie, movie.ownWatched.value).then(function (updatedMovie) {
-            movie = updatedMovie;
+            $scope.movie = updatedMovie;
         });
     };
 
     $scope.setRating = function (movie, value) {
-        if ($scope.isMovieRateable(movie)) {
-            MovieRepository.setRating(movie, value).then(function (updatedMovie) {
-                movie = updatedMovie;
-                movie.oldAverageRating = updatedMovie.averageRating;
-            });
-        }
+        MovieRepository.setRating(movie, value).then(function (updatedMovie) {
+            $scope.movie = updatedMovie;
+            $scope.movie.oldAverageRating = updatedMovie.averageRating;
+        });
     };
 
-    $scope.isMovieRateable = function (movie) {
-        if (!movie) {
-            return false;
-        }
-        return movie.ownWatched.value == true;
+    $scope.postComment = function (movie, comment) {
+        MovieRepository.postComment(movie, comment).then(function (updatedMovie) {
+            angular.extend($scope.movie, updatedMovie);
+            $scope.movie.currentComment = '';
+        });
+    };
+
+    $scope.deleteComment = function (movie, comment) {
+        MovieRepository.deleteComment(movie, comment).then(function (updatedMovie) {
+            angular.extend($scope.movie, updatedMovie);
+        });
     };
 
     $scope.save = function (movie) {
         MovieRepository.update(movie).then(function (updatedMovie) {
-            movie = updatedMovie;
+            $scope.movie = updatedMovie;
             $scope.goBack();
         });
     };
@@ -67,8 +72,9 @@ app.controller('UpdateMovieCtrl', ['$scope', '$state', 'MovieRepository', 'Notif
     };
 
     $scope.goBack = function () {
-        if ($state.params.destinationState) {
-            $state.go($state.params.destinationState.name, {}, {reload: true});
+        var destinationState = $state.params.destinationState;
+        if (destinationState) {
+            $state.go(destinationState.name, destinationState.params, {reload: true});
         }
     }
 

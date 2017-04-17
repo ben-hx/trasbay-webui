@@ -2,11 +2,30 @@
 <html lang="en" ng-app="myApp" class="no-js">
 <head>
     <meta charset="utf-8">
-    <meta name="author" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Trashbay.org</title>
-    <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Trashmovie's viewport">
+    <meta name="author" content="Mr. No">
+    <title>Trashbay.org</title>
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="img/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="img/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="img/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="img/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="img/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="img/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="img/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="img/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="img/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="img/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="img/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
 
     <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
     <link href="bower_components/angular-loading-bar/build/loading-bar.css" rel="stylesheet">
@@ -95,13 +114,10 @@
 <script src="models/category/category-repository.js"></script>
 <script src="models/movie/movie-repository.js"></script>
 <script src="models/movie/movie-database-repository.js"></script>
+<script src="models/movie-list/movie-list-repository.js"></script>
 
 <script src="errors/error.js"></script>
 <script src="errors/error-handler.js"></script>
-<script src="errors/api-is-offline-error.js"></script>
-<script src="errors/vestigal-error.js"></script>
-<script src="errors/validation-error.js"></script>
-<script src="errors/not-authorized-error.js"></script>
 
 <script src="services/authentication/basic-authentication-service.js"></script>
 <script src="services/authentication/authentication-service.js"></script>
@@ -122,6 +138,9 @@
 <script src="sections/temp/temp.js"></script>
 <script src="sections/landingpage/landingpage.js"></script>
 
+<script src="sections/home/home.js"></script>
+<script src="sections/home/movie/movie.js"></script>
+
 <script src="sections/user/user.js"></script>
 <script src="sections/user/manage-users/manage-users.js"></script>
 <script src="sections/user/manage-inaktive-users/manage-inaktive-users.js"></script>
@@ -134,5 +153,11 @@
 <script src="sections/movie/add/add-movie.js"></script>
 <script src="sections/movie/update/update-movie.js"></script>
 <script src="sections/movie/decorator/movie-repository-decorator.js"></script>
+
+<script src="sections/movie-list/movie-list.js"></script>
+<script src="sections/movie-list/list/list-movie-list.js"></script>
+<script src="sections/movie-list/add/add-movie-list.js"></script>
+<script src="sections/movie-list/update/update-movie-list.js"></script>
+<script src="sections/movie-list/decorator/movie-list-repository-decorator.js"></script>
 
 </body>

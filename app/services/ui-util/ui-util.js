@@ -20,7 +20,10 @@ app.service('UiUtil', ['EventHandler', 'NotificationService', function (EventHan
             if (currentUser.equals(user)) {
                 return "me";
             }
-            return this.email;
+            if (user.username) {
+                return user.username;
+            }
+            return user.email;
         }
     };
 }]);

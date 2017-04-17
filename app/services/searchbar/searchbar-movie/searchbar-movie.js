@@ -1,6 +1,6 @@
 var app = angular.module('myApp.searchbar');
 
-app.controller('SearchbarMovieCtrl', ['$scope', '$rootScope', '$state', 'SearchbarService', 'MovieRepository', function ($scope, $rootScope, $state, SearchbarService, MovieRepository) {
+app.controller('SearchbarMovieCtrl', ['$scope', 'EventHandler', 'SearchbarService', 'MovieRepository', function ($scope, EventHandler, SearchbarService, MovieRepository) {
 
     $scope.init = function () {
         $scope.SearchbarService = SearchbarService;
@@ -33,16 +33,16 @@ app.controller('SearchbarMovieCtrl', ['$scope', '$rootScope', '$state', 'Searchb
 
     $scope.searchOnOpen = function () {
         SearchbarService.data.isOpen = true;
-        $rootScope.$broadcast('searchbarOpened', SearchbarService.data);
+        EventHandler.emit('searchbarOpened', SearchbarService.data);
     };
 
     $scope.searchOnChange = function () {
-        $rootScope.$broadcast('searchbarChanged', SearchbarService.data);
+        EventHandler.emit('searchbarChanged', SearchbarService.data);
     };
 
     $scope.searchOnSubmit = function () {
         SearchbarService.data.filterIsOpen = false;
-        $rootScope.$broadcast('searchbarSubmitted', SearchbarService.data);
+        EventHandler.emit('searchbarSubmitted', SearchbarService.data);
     };
 
     $scope.searchOnCleaned = function () {
@@ -52,7 +52,7 @@ app.controller('SearchbarMovieCtrl', ['$scope', '$rootScope', '$state', 'Searchb
             $scope.searchOnChange();
         }
         SearchbarService.data.searchText = '';
-        $rootScope.$broadcast('searchbarCleared', SearchbarService.data);
+        EventHandler.emit('searchbarCleared', SearchbarService.data);
     };
 
     $scope.toggleFilterDropdown = function ($event) {
@@ -64,9 +64,6 @@ app.controller('SearchbarMovieCtrl', ['$scope', '$rootScope', '$state', 'Searchb
     $scope.checklistOnChange = function (type, name, value) {
         SearchbarService.data[type] = $scope.transformCheckListModelToArray($scope[type]);
         $scope.searchOnChange();
-    };
-    $scope.dateOnChange = function (value) {
-        console.log(value);
     };
 
 }]);

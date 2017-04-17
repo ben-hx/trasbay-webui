@@ -1,6 +1,6 @@
 <section id="updatemovie" ng-init="init()">
     <div class="container">
-        <form name="movieForm" class="row form-horizontal" ng-submit="save(movie)">
+        <form name="movieForm" class="row form-horizontal">
 
             <div class="form-group">
                 <div class="col-sm-12">
@@ -15,7 +15,9 @@
                 </div>
             </div>
 
-            <div class="col-md-3 text-center">
+            <div class="col-md-3 text-center"
+                 ng-mouseenter="showOwnRating = true"
+                 ng-mouseleave="showOwnRating = false">
                 <div class="img-wrapper">
                     <img class="img-movie-gallery"
                          check-image
@@ -30,11 +32,19 @@
                     </editable-image>
                 </div>
                 <div class="ratings">
-                    <ranking-stars
-                            ng-model="movie.averageRating"
-                            ng-click="setRating(movie, movie.averageRating)"
-                            read-only="!isMovieRateable(movie)">
-                    </ranking-stars>
+                    <div ng-show="!showOwnRating">
+                        <ranking-stars class="average-rating"
+                                       ng-model="movie.averageRating"
+                                       read-only="true">
+                        </ranking-stars>
+                    </div>
+                    <div ng-show="showOwnRating">
+                        <ranking-stars class="own-rating"
+                                       ng-model="movie.ownRating.value"
+                                       read-only="!movie.isRateable()"
+                                       ng-click="setRating(movie, movie.ownRating.value)">
+                        </ranking-stars>
+                    </div>
                     <div>
                         <button type="button" class="btn btn-default btn-lg btn-watched" ng-click="setWatched(movie)"
                                 ng-model="movie.ownWatched.value" uib-btn-checkbox>
@@ -58,6 +68,18 @@
                                         class="glyphicon glyphicon-trash"></i></button>
                             </span>
                         </p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="titleAlias">alias</label>
+                    <div class="col-sm-10 tag-wrapper" ng-show="!whileEditing">
+                        <span class="tag label label-default"
+                              ng-repeat="alias in movie.titleAlias">{{alias}}</span>
+                    </div>
+                    <div class="col-sm-10" ng-show="whileEditing">
+                        <tag-input id="titleAlias" placeholder="add different alias"
+                                   ng-model="movie.titleAlias"></tag-input>
                     </div>
                 </div>
 
@@ -166,12 +188,63 @@
                                    ng-model="movie.tags"></tag-input>
                     </div>
                 </div>
+
+                <div class="form-group comments">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <h4>
+                            comments
+                            <small class="pull-right">{{movie.userComments.length}} comments</small>
+                        </h4>
+                        <div class="col-xs-12 comment" ng-repeat="comment in movie.userComments">
+                            <div class="comment-heading">
+                                <h4 class="col-sm-4">{{UiUtil.userToString(comment.user)}}</h4>
+                                <div class="col-sm-8">
+                                    <div class="pull-right" ng-show="movie.isCommentDeletable(comment)">
+                                        <small>{{comment.date | timeAgo}}</small>
+                                        <button type="button" class="btn btn-link"
+                                                ng-click="deleteComment(movie, comment)"
+                                                title="delete comment">
+                                            <i class="glyphicon glyphicon-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="comment-text">
+                                <p class="col-sm-12">{{comment.text}}</p>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 media">
+                            <form name="commentForm" ng-submit="postComment(movie, movie.currentComment)"
+                                  class="media-body">
+                                        <textarea class="form-control vresize" rows="3"
+                                                  placeholder="leave a comment"
+                                                  ng-enter="postComment(movie, movie.currentComment)"
+                                                  ng-model="movie.currentComment"></textarea>
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-link btn-comment"
+                                            ng-disabled="!movie.currentComment"
+                                            title="post comment">
+                                        <span>post </span>
+                                        <i class="glyphicon glyphicon-ok"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
                 <div class="col-sm-12">
                     <div class="pull-right">
-                        <button type="submit" class="btn btn-link" ng-show="whileEditing" title="save"
+                        <button type="button" class="btn btn-link" title="back" ng-click="goBack()">
+                            <span>back </span>
+                            <i class="glyphicon glyphicon-remove"></i>
+                        </button>
+                        <button type="button" class="btn btn-link"
+                                ng-show="whileEditing" title="save"
+                                ng-click="save(movie)"
                                 ng-disabled="movieForm.$invalid || !movieForm.$dirty">
                             <span>save </span>
                             <i class="glyphicon glyphicon-ok"></i>

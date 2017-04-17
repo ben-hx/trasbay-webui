@@ -28,16 +28,18 @@ app.run(['$rootScope', '$state', 'AuthenticationService', 'LoginViewManager', 'S
             $state.go('landing');
         }
 
+
         if (toState.name == 'home') {
             if (AuthenticationService.isLoggedIn()) {
                 event.preventDefault();
-                $state.go('movies');
+                $state.go('privateHome');
 
             } else {
                 event.preventDefault();
                 $state.go('landing');
             }
         }
+
 
         var stopEventPropagation = angular.equals(fromState, toState) && angular.equals(fromParams, toParams);
 
@@ -101,6 +103,12 @@ app.factory('NavigationElements', ['$state', 'NavigationElement', 'Authenticatio
             }
         }),
 
+        movieListsElement: NavigationElement.build({
+            name: 'movieLists', caption: 'Lists', goToState: 'movieLists', clickHandler: function () {
+                $state.go('movieLists', {}, {reload: true});
+            }
+        }),
+
         loginElement: NavigationElement.build({
             name: 'login', caption: 'Login', anchor: 'page-top', clickHandler: function () {
                 LoginViewManager.login();
@@ -122,7 +130,7 @@ app.factory('NavigationService', ['NavigationElements', 'AuthenticationService',
     function getAdminElements() {
         return [
             NavigationElements.moviesElement,
-            NavigationElements.addMovieElement,
+            NavigationElements.movieListsElement,
             NavigationElements.adminElement,
             NavigationElements.logoutElement
         ];
@@ -131,7 +139,7 @@ app.factory('NavigationService', ['NavigationElements', 'AuthenticationService',
     function getModeratorElements() {
         return [
             NavigationElements.moviesElement,
-            NavigationElements.addMovieElement,
+            NavigationElements.movieListsElement,
             NavigationElements.userElement,
             NavigationElements.logoutElement
         ];
@@ -140,6 +148,7 @@ app.factory('NavigationService', ['NavigationElements', 'AuthenticationService',
     function getLooserElements() {
         return [
             NavigationElements.moviesElement,
+            NavigationElements.movieListsElement,
             NavigationElements.userElement,
             NavigationElements.logoutElement
         ];
@@ -170,12 +179,13 @@ app.factory('NavigationService', ['NavigationElements', 'AuthenticationService',
 
 }]);
 
-app.controller('NavigationCtrl', ['$scope', '$window', 'NavigationService', function ($scope, $window, NavigationService) {
+app.controller('NavigationCtrl', ['$scope', '$rootScope', '$window', 'NavigationService', function ($scope, $rootScope, $window, NavigationService) {
 
     $scope.NavigationService = NavigationService;
     $scope.didScroll = false;
     $scope.showShrink = false;
     $scope.changeHeaderOnPixels = 300;
+    $scope.isNavCollapsed = true;
 
     $window.addEventListener('scroll', function (e) {
         if (!$scope.didScroll) {
@@ -183,6 +193,11 @@ app.controller('NavigationCtrl', ['$scope', '$window', 'NavigationService', func
             setTimeout($scope.scrollPage, 250);
         }
     });
+
+    $scope.navigationElementClick = function (element) {
+        $scope.isNavCollapsed = true;
+        element.clickHandler();
+    };
 
     $scope.scrollPage = function () {
         $scope.showShrink = $scope.scrollY() >= $scope.changeHeaderOnPixels;

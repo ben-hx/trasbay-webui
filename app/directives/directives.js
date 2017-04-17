@@ -51,6 +51,20 @@ app.directive('checkImage', function ($http, $compile) {
     };
 });
 
+app.directive('loadingSpinner', function ($parse) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            class: '@'
+        },
+        link: function (scope, elem, attrs, ngModel) {
+            scope.imgUrl = '/trashbay/webui/app/img/movie/movie-default-thumbnail.png';
+        },
+        templateUrl: 'directives/loading-spinner.html'
+    };
+});
+
 app.directive('loadingImage', function ($parse) {
     return {
         restrict: 'E',
@@ -169,7 +183,6 @@ app.directive('checklist', function () {
             onChange: '&'
         },
         templateUrl: 'directives/checklist.html'
-
     };
 });
 
@@ -236,6 +249,56 @@ app.directive('movieDatabaseInput', function ($parse) {
     };
 });
 
+app.directive('movieInput', function ($parse) {
+    return {
+        restrict: 'E',
+        replace: true,
+        require: 'ngModel',
+        scope: {
+            data: '=ngModel',
+            placeholder: '@',
+            isLoading: '=',
+            onSelect: '='
+        },
+        templateUrl: 'directives/movie-input.html',
+        link: function (scope, elem, attrs, ngModel) {
+            scope.$watch('data', function () {
+                if (scope.data) {
+                    ngModel.$setViewValue(scope.data);
+                    ngModel.$render();
+                }
+            });
+
+            scope.$watch('typeaheadIsOpen', function (newVal, oldVal) {
+                if (newVal == oldVal) {
+                    return;
+                }
+                if (newVal) {
+                    var searchField = elem.find('input');
+                    var width = searchField[0].offsetWidth;
+                    var dropdown = elem.find('.dropdown-menu');
+                    angular.element(dropdown[0]).css('width', (width + 'px'));
+                }
+            });
+        },
+        controller: ['$scope', 'MovieRepository', function ($scope, MovieRepository) {
+            $scope.getTitles = function (searchText) {
+                var params = {title: searchText};
+                return MovieRepository.getAll(params).then(function (result) {
+                    return result.movies;
+                });
+            };
+
+            $scope.titleOnSelect = function (movie) {
+                $scope.data = movie;
+                if ($scope.onSelect) {
+                    $scope.onSelect(movie);
+                }
+            };
+        }]
+    };
+});
+
 app.directive('stringChecklist', function ($parse) {
     return {
         restrict: 'E',
@@ -274,6 +337,164 @@ app.directive('stringChecklist', function ($parse) {
         }]
     };
 });
+
+function UserCheckedList() {
+    this.items = [];
+}
+
+UserCheckedList.prototype.indexOf = function (user) {
+    for (var i = 0; i < this.items.length; i++) {
+        if (this.items[i].user._id == user._id) {
+            return i;
+        }
+    }
+    return -1;
+};
+
+UserCheckedList.prototype.clear = function (user) {
+    this.items = [];
+};
+
+UserCheckedList.prototype.put = function (user, checked) {
+    var index = this.indexOf(user);
+    if (index < 0) {
+        this.items.push({user: user, checked: checked});
+        return true;
+    } else {
+        this.items[index].checked = checked;
+    }
+    return false;
+};
+
+UserCheckedList.prototype.pop = function (user) {
+    var index = this.indexOf(user);
+    if (index > -1) {
+        this.items.splice(index, 1);
+        return true;
+    }
+    return false;
+};
+
+UserCheckedList.prototype.getCheckedUsers = function () {
+    var result = [];
+    for (var i = 0; i < this.items.length; i++) {
+        if (this.items[i].checked === true) {
+            result.push(this.items[i].user);
+        }
+    }
+    return result;
+};
+
+UserCheckedList.prototype.getAll = function () {
+    return this.items;
+};
+
+UserCheckedList.prototype.getAllUsers = function () {
+    var result = [];
+    for (var i = 0; i < this.items.length; i++) {
+        result.push(this.items[i].user);
+    }
+    return result;
+};
+
+app.directive('userCheckList', function ($parse) {
+    return {
+        restrict: 'E',
+        replace: true,
+        require: 'ngModel',
+        scope: {
+            ngModel: '=',
+            onChange: '&',
+        },
+        templateUrl: 'directives/editable-user-checklist.html',
+        link: function (scope, elem, attrs, ngModel) {
+
+            scope.updateList = function () {
+                angular.forEach(scope.ngModel, function (item) {
+                    scope.list.put(item, true);
+                });
+            };
+
+            ngModel.$viewChangeListeners.push(function () {
+                if (scope.list && scope.checkedUsers) {
+                    scope.updateList();
+                }
+            });
+
+            scope.onClick = function (item) {
+                ngModel.$setViewValue(scope.list.getCheckedUsers());
+                ngModel.$render();
+                if (scope.onChange) {
+                    scope.onChange(item);
+                }
+            }
+
+        },
+        controller: ['$scope', 'UserRepository', function ($scope, UserRepository) {
+            
+            $scope.init = function () {
+                $scope.searchText = '';
+                $scope.ngModel = $scope.ngModel || [];
+                UserRepository.getOtherUsers().then(function (result) {
+                    $scope.list = new UserCheckedList();
+                    angular.forEach(result.users, function (value, key) {
+                        $scope.list.put(value, false);
+                    });
+                    $scope.updateList();
+                });
+            };
+
+        }]
+    };
+});
+
+/*
+ app.directive('userChecklist', function ($parse) {
+ return {
+ restrict: 'E',
+ replace: true,
+ require: 'ngModel',
+ scope: {
+ data: '=ngModel',
+ values: '='
+ },
+ templateUrl: 'directives/user-checklist.html',
+ link: function (scope, elem, attrs, ngModel) {
+ scope.$watch('data', function () {
+ if (scope.data) {
+ ngModel.$setViewValue(scope.data);
+ ngModel.$render();
+ }
+ });
+ },
+ controller: ['$scope', 'UserRepository', function ($scope, UserRepository) {
+
+ $scope.init = function () {
+ $scope.searchText = '';
+ UserRepository.getOtherUsers().then(function (result) {
+ $scope.users = result.users;
+ });
+ };
+
+ $scope.checkDefaultValue = function () {
+ $scope.data = $scope.data || [];
+ };
+
+ $scope.onChange = function (value, isChecked) {
+ $scope.checkDefaultValue();
+ if (isChecked) {
+ $scope.data.push(value);
+ } else {
+ var index = $scope.data.indexOf(value);
+ if (index > -1) {
+ $scope.data.splice(index, 1);
+ }
+ }
+ }
+ }]
+ };
+ });
+ */
 
 app.directive('sidebar', function ($document) {
     return {

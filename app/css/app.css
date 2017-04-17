@@ -27,6 +27,19 @@ body {
     font-family: "Haunt", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.panel {
+    background-color: transparent;
+}
+
+.panel-default {
+    border-color: transparent;
+}
+
+.panel-default > .panel-heading {
+    color: inherit;
+    background-color: transparent;
+}
+
 .modal {
     color: black;
 }
@@ -103,6 +116,10 @@ span.input-label {
     padding-top: 6px;
 }
 
+.label-user {
+    background-color: green;
+}
+
 .img-centered {
     margin: 0 auto;
 }
@@ -150,9 +167,9 @@ span.input-label {
 .btn-primary:active,
 .btn-primary.active,
 .open .dropdown-toggle.btn-primary {
-    border-color: #E2001A;
-    color: #fff;
-    background-color: #E2001A;
+    border-color: #fff;
+    color: #222;
+    background-color: #fff;
 }
 
 .btn-primary:active,
@@ -647,6 +664,11 @@ section .section-page-settings button {
     white-space: normal;
 }
 
+section .section-page-settings [class*="col-"] {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
 section h3.section-subheading {
     margin-bottom: 75px;
     text-transform: none;
@@ -668,6 +690,7 @@ section h3.section-subheading {
 
 #main-content.toggled .sidebar {
     left: 0;
+    width: 100%;
 }
 
 .sidebar {
@@ -685,18 +708,18 @@ section h3.section-subheading {
 }
 
 .sidebar-wrapper {
-    width: 320px;
     height: 100%;
 }
 
-.sidebar-content {
+.sidebar-content .panel-group {
     overflow-y: auto;
     height: 100%;
     width: 100%;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    padding: 25px;
+    padding: 10px;
+    padding-bottom: 60px;
 }
 
 .sidebar-bottom {
@@ -709,17 +732,34 @@ section h3.section-subheading {
 }
 
 .sidebar-row {
+    width: 100%;
     margin-bottom: 20px;
 }
 
-#main-content.toggled {
-    padding-left: 320px;;
+.sidebar-row .panel-heading + .panel-collapse > .panel-body, .panel-group .panel-heading + .panel-collapse > .list-group {
+    border: transparent;
+}
+
+.sidebar-row .panel-body {
+    width: 100%;
+    padding-left: 0px;
+    padding-right: 20px;
+    padding-top: 0px;
+    padding-bottom: 20px;
 }
 
 @media (min-width: 768px) {
 
-    .sidebar {
-        padding-top: 110px;
+    #main-content.toggled {
+        padding-left: 320px;
+    }
+
+    #main-content.toggled .sidebar {
+        width: inherit;
+    }
+
+    .sidebar-wrapper {
+        width: 320px;
     }
 }
 
@@ -822,4 +862,24 @@ section h3.section-subheading {
 .bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-primary,
 .bootstrap-switch .bootstrap-switch-handle-off.bootstrap-switch-primary {
     background: green;
+}
+
+.loading-spinner-xs {
+    height: 100px;
+    width: auto;
+}
+
+.loading-spinner-sm {
+    height: 150px;
+    width: auto;
+}
+
+.loading-spinner-md {
+    height: 300px;
+    width: auto;
+}
+
+.loading-spinner-lg {
+    height: 420px;
+    width: auto;
 }
